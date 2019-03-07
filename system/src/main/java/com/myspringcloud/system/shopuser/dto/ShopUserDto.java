@@ -1,4 +1,4 @@
-package com.myspringcloud.system.shopuser.entity;
+package com.myspringcloud.system.shopuser.dto;
 
 import lombok.Data;
 
@@ -10,15 +10,13 @@ import javax.persistence.Id;
  */
 
 @Data
-@Entity
-public class ShopUser {
+public class ShopUserDto {
 
     @Id
     /**
      * 商城用户id
      */
     private String id;
-
 
     /**
      * 账号
