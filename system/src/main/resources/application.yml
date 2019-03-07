@@ -6,3 +6,13 @@ eureka:
 spring:
   application:
     name: system
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: liaofuxing
+    url: jdbc:mysql://localhost:3306/springcloud?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
