@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 商城用户服务测试类
+ * 用户服务测试类
  */
 @Component
 public class ShopUserServiceImplTest extends SystemApplicationTests {

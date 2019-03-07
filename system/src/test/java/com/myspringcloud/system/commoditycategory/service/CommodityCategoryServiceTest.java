@@ -32,7 +32,7 @@ public class CommodityCategoryServiceTest extends SystemApplicationTests {
     @Test
     public void addCommodityCategory() {
         CommodityCategoryDto commodityCategoryDto = new CommodityCategoryDto();
-        commodityCategoryDto.setCategoryName("喝的");
+        commodityCategoryDto.setCategoryName("玩的");
         CommodityCategory commodityCategory = commodityCategoryService.addCommodityCategory(commodityCategoryDto);
         Assert.assertNotNull(commodityCategory.getCategoryName());
     }
