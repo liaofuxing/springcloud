@@ -1,8 +1,7 @@
-package com.myspringcloud.system.shopuser.entity;
+package com.myspringcloud.system.systemuser.dto;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
@@ -10,15 +9,12 @@ import javax.persistence.Id;
  */
 
 @Data
-@Entity
-public class ShopUser {
+public class SystemUserDto {
 
-    @Id
     /**
-     * 商城用户id
+     * 系统用户用户id
      */
     private String id;
-
 
     /**
      * 账号
@@ -26,12 +22,12 @@ public class ShopUser {
     private String account;
 
     /**
-     * 商城用户用户名
+     * 系统用户用户名
      */
     private String username;
 
     /**
-     * 商城用户密码
+     * 系统用户密码
      */
     private String password;
 

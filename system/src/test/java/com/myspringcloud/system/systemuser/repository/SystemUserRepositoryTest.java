@@ -1,7 +1,7 @@
-package com.myspringcloud.system.shopuser.repository;
+package com.myspringcloud.system.systemuser.repository;
 
 import com.myspringcloud.system.SystemApplicationTests;
-import com.myspringcloud.system.shopuser.entity.ShopUser;
+import com.myspringcloud.system.systemuser.entity.SystemUser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +11,14 @@ import java.util.List;
 
 
 @Component
-public class ShopUserRepositoryTest extends SystemApplicationTests {
+public class SystemUserRepositoryTest extends SystemApplicationTests {
 
     @Autowired
-    private ShopUserRepository shopUserRepository;
+    private SystemUserRepository systemUserRepository;
 
     @Test
     public void findAll(){
-        List<ShopUser> all = shopUserRepository.findAll();
+        List<SystemUser> all = systemUserRepository.findAll();
         System.out.println(all);
         Assert.assertTrue(all.size() > 0);
     }
