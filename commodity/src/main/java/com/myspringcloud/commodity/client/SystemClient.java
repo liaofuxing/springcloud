@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * @author liaofuxing
+ * @date 2019/03/08 2:40
+ */
+
+/**
  * 调用商城后台系统接口
  * name 表示访问那个应用的接口
  */

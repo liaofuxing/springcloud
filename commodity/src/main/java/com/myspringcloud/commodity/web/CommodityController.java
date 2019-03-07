@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author liaofuxing
+ * @date 2019/03/08 2:40
+ */
 @RestController
 @RequestMapping("/commodity")
 public class CommodityController {
