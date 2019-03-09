@@ -21,7 +21,7 @@ public interface SystemClient {
 
     /**
      *
-     * 这是一个Feign实例方法
+     * 这是一个Feign示例方法
      *
      * Feign调用必须是全路径,而不是方法上的路径 (/systemUser/api/findSystemUserById)
      * @param id
