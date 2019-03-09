@@ -15,9 +15,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.myspringcloud</groupId>
-    <artifactId>commodity</artifactId>
+    <artifactId>mall</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>commodity</name>
+    <name>mall</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
