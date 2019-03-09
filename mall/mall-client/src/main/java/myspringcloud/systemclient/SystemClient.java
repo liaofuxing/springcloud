@@ -1,6 +1,7 @@
 package myspringcloud.systemclient;
 
 
+import com.myspringcloud.common.vo.ResultVO;
 import myspringcloud.entity.SystemUserResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,5 +29,5 @@ public interface SystemClient {
      * @return
      */
     @GetMapping("/systemUser/api/findSystemUserById")
-    SystemUserResult findSystemUserById(@RequestParam String id);
+    ResultVO<SystemUserResult> findSystemUserById(@RequestParam String id);
 }

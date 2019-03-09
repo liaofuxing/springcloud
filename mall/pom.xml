@@ -26,6 +26,7 @@
         <mall-common.version>0.0.1-SNAPSHOT</mall-common.version>
         <mall-client.version>0.0.1-SNAPSHOT</mall-client.version>
         <system-client.version>0.0.1-SNAPSHOT</system-client.version>
+        <common.version>0.0.1-SNAPSHOT</common.version>
     </properties>
 
 
@@ -55,6 +56,12 @@
                 <groupId>com.myspringcloud</groupId>
                 <artifactId>mall-client</artifactId>
                 <version>${mall-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.myspringcloud</groupId>
+                <artifactId>common</artifactId>
+                <version>${common.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

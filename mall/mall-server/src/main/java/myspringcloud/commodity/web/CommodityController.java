@@ -1,6 +1,8 @@
 package myspringcloud.commodity.web;
 
 
+import com.myspringcloud.common.utils.ResultVOUtils;
+import com.myspringcloud.common.vo.ResultVO;
 import myspringcloud.entity.SystemUserResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +30,14 @@ public class CommodityController {
      * @return
      */
     @GetMapping("/findSystemUser")
-    public SystemUserResult findSystemUser(@RequestParam String id){
-        SystemUserResult systemUserResult = systemClient.findSystemUserById(id);
-        System.out.println(systemUserResult.getId());
-        return systemUserResult;
+    public ResultVO<SystemUserResult> findSystemUser(@RequestParam String id){
+
+        ResultVO<SystemUserResult> resultVO = systemClient.findSystemUserById(id);
+        return resultVO;
+    }
+
+    @GetMapping("/list")
+    public String list(){
+        return "ok";
     }
 }

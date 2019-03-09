@@ -24,8 +24,9 @@
         <java.version>1.8</java.version>
         <spring-cloud.version>Finchley.SR2</spring-cloud.version>
         <system-common.version>0.0.1-SNAPSHOT</system-common.version>
+        <system-client.version>0.0.1-SNAPSHOT</system-client.version>
+        <common.version>0.0.1-SNAPSHOT</common.version>
     </properties>
-
 
 
     <dependencyManagement>
@@ -43,6 +44,18 @@
                 <groupId>com.myspringcloud</groupId>
                 <artifactId>system-common</artifactId>
                 <version>${system-common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.myspringcloud</groupId>
+                <artifactId>system-client</artifactId>
+                <version>${system-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.myspringcloud</groupId>
+                <artifactId>common</artifactId>
+                <version>${common.version}</version>
             </dependency>
         </dependencies>
 

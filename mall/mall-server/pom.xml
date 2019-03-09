@@ -53,6 +53,11 @@
             <groupId>com.myspringcloud</groupId>
             <artifactId>mall-client</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.myspringcloud</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
