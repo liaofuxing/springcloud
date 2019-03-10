@@ -2,15 +2,18 @@ package myspringcloud.entity;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 商城用户
  */
 @Data
-public class SystemUserResult{
+public class SystemUserInfo{
 
     /**
      * 商城用户id
      */
+    @NotNull(message = "primary is not null")
     private String id;
 
 

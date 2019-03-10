@@ -2,9 +2,11 @@ package myspringcloud.systemclient;
 
 
 import com.myspringcloud.common.vo.ResultVO;
-import myspringcloud.entity.SystemUserResult;
+import myspringcloud.entity.SystemUserInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -29,5 +31,17 @@ public interface SystemClient {
      * @return
      */
     @GetMapping("/systemUser/api/findSystemUserById")
-    ResultVO<SystemUserResult> findSystemUserById(@RequestParam String id);
+    ResultVO<SystemUserInfo> findSystemUserById(@RequestParam String id);
+
+    /**
+     *
+     * 这是一个Feign示例方法
+     *
+     * Feign调用必须是全路径,而不是方法上的路径 (/systemUser/api/findSystemUserById)
+     * @param systemUserInfo
+     * @return
+     */
+    @PostMapping("/systemUser/api/findSystemUser")
+    ResultVO<SystemUserInfo> findSystemUser(@RequestBody SystemUserInfo systemUserInfo);
+
 }

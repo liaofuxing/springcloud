@@ -1,14 +1,12 @@
 package myspringcloud.commodity.web;
 
 
-import com.myspringcloud.common.utils.ResultVOUtils;
+import com.myspringcloud.common.enums.ExceptionEnums;
+import com.myspringcloud.common.exception.ExceptionUtils;
 import com.myspringcloud.common.vo.ResultVO;
-import myspringcloud.entity.SystemUserResult;
+import myspringcloud.entity.SystemUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import myspringcloud.systemclient.SystemClient;
 
 
@@ -29,15 +27,29 @@ public class CommodityController {
      * @param id
      * @return
      */
-    @GetMapping("/findSystemUser")
-    public ResultVO<SystemUserResult> findSystemUser(@RequestParam String id){
+    @GetMapping("/findSystemUserById")
+    public ResultVO<SystemUserInfo> findSystemUserById(@RequestParam String id){
 
-        ResultVO<SystemUserResult> resultVO = systemClient.findSystemUserById(id);
+        ResultVO<SystemUserInfo> resultVO = systemClient.findSystemUserById(id);
         return resultVO;
     }
 
-    @GetMapping("/list")
-    public String list(){
-        return "ok";
+    /**
+     *
+     * 这是一个Feign示例方法
+     *
+     * Feign调用必须是全路径,而不是方法上的路径 (/systemUser/api/findSystemUserById)
+     * @param systemUserInfo
+     * @return
+     */
+    @PostMapping("/findSystemUser")
+    public ResultVO<SystemUserInfo> findSystemUser(@RequestBody SystemUserInfo systemUserInfo) {
+        System.out.println(systemUserInfo);
+        try {
+            ResultVO<SystemUserInfo> resultVO = systemClient.findSystemUser(systemUserInfo);
+            return resultVO;
+        } catch (Exception e) {
+            throw new ExceptionUtils(ExceptionEnums.SYSTEM_EXCEPTION);
+        }
     }
 }
