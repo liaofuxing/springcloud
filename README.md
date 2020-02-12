@@ -4,7 +4,7 @@
 第一次初始化
 
 #### 软件架构
-手残架构图![商城手残架构图](https://images.gitee.com/uploads/images/2019/0310/205050_3cbb8324_2025409.jpeg "{64DF1BA2-B4C4-4889-ABD5-8C2FEFB5EE44}.png.jpg")
+手残架构图!![输入图片说明](https://images.gitee.com/uploads/images/2020/0212/124201_8558e083_2025409.png "批注 2020-02-12 121013.png")
 
 
 #### 安装教程
