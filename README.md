@@ -1,10 +1,10 @@
 # springcloud
 
 #### 介绍
-第一次初始化
+基于springcloud，基于微服务架构开发的商城系统
 
-#### 软件架构
-大体架构图！!![架构图](https://images.gitee.com/uploads/images/2020/0212/152129_80eee873_2025409.png "架构图.png")
+#### 软件架构图
+![架构图](https://images.gitee.com/uploads/images/2020/0212/152129_80eee873_2025409.png "架构图.png")
 
 #### 安装教程
 
