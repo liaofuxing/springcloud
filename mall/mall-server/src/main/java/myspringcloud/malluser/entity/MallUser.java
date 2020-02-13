@@ -18,7 +18,7 @@ import java.util.Date;
 public class MallUser {
 
     @Id
-    String id;
+    private String id;
 
     /**
      * 商城用户名
