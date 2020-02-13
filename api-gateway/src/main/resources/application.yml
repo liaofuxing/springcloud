@@ -4,24 +4,56 @@ server:
 spring:
   application:
     name: api-geteway
-#  security:
-#    user:
-#      password: user  # ֱ�ӵ�¼ʱ������
-#    ignored: /
-#    sessions: never   # session����
-#    oauth2:
-#      sso:
-#        loginPath: /login   # ��¼·��
-#      client:
-#        clientId: ���clientId
-#        clientSecret: ���clientSecret
-#        accessTokenUri: https://github.com/login/oauth/access_token
-#        userAuthorizationUri: https://github.com/login/oauth/authorize
-#      resource:
-#        userInfoUri: https://api.github.com/user
-#        preferTokenInfo: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springcloud?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    #最大活跃数
+    maxActive: 20
+    #初始化数量
+    initialSize: 1
+    #最大连接等待超时时间
+    maxWait: 60000
+    #打开PSCache，并且指定每个连接PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    #通过connectionProperties属性来打开mergeSql功能；慢SQL记录
+    #connectionProperties: druidConfig.stat.mergeSql=true;druidConfig.stat.slowSqlMillis=5000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1 from dual
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    #配置监控统计拦截的filters，去掉后监控界面sql将无法统计,'wall'用于防火墙
+    filters: stat, wall, log4j
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        format_sql: true
+  redis:
+    host: 192.168.31.207
+    port: 6379
+    password: 123456
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+zuul:
+  routes:
+    # 这里可以自定义
+    system:
+      # 匹配的路由规则
+      path: /system/**
+      # 路由的目标服务名
+      serviceId: system
+    mall:
+      path: /mall/**
+      # 路由的目标服务名
+      serviceId: mall
