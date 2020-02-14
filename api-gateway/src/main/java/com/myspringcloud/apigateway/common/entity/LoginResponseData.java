@@ -3,15 +3,15 @@ package com.myspringcloud.apigateway.common.entity;
 import lombok.Data;
 
 @Data
-public class ResponseData {
+public class LoginResponseData {
 
     private String username;
     private String token;
 
-    public ResponseData() {
+    public LoginResponseData() {
 
     }
-    public ResponseData(String username, String token) {
+    public LoginResponseData(String username, String token) {
         this.username = username;
         this.token = token;
     }

@@ -1,7 +1,7 @@
 package com.myspringcloud.apigateway.security.securityhandle;
 
 import com.alibaba.fastjson.JSON;
-import com.myspringcloud.apigateway.common.entity.ResponseData;
+import com.myspringcloud.apigateway.common.entity.LoginResponseData;
 import com.myspringcloud.apigateway.common.entity.ResponseResult;
 import com.myspringcloud.apigateway.common.enums.StatusCodeEnum;
 import com.myspringcloud.apigateway.security.entity.SecurityUser;
@@ -34,7 +34,7 @@ public class TokenLogoutSuccessHandler implements LogoutSuccessHandler {
         redisTemplate.expire("SECURITY_TOKEN : " + token, 0, TimeUnit.MICROSECONDS);
 
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseResult<ResponseData> responseResult = new ResponseResult(String.valueOf(status), StatusCodeEnum.getName(status), null);
+        ResponseResult<LoginResponseData> responseResult = new ResponseResult(String.valueOf(status), StatusCodeEnum.getName(status), null);
         response.getWriter().print(JSON.toJSONString(responseResult));
         response.flushBuffer();
     }

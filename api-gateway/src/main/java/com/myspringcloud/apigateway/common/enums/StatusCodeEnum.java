@@ -5,6 +5,7 @@ package com.myspringcloud.apigateway.common.enums;
  */
 public enum StatusCodeEnum {
     LOGIN_SUCCESS("登录成功", 20000),
+    SUCCESS("请求成功", 20001),
     LOGIN_FAILURE("用户名或密码错误", 50001),
     LOGOUT_SUCCESS("用户已退出登录",50002),
     NOT_LOGIN("用户未登录",50003),

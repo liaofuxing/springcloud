@@ -1,7 +1,7 @@
 package com.myspringcloud.apigateway.security.securityhandle;
 
 import com.alibaba.fastjson.JSON;
-import com.myspringcloud.apigateway.common.entity.ResponseData;
+import com.myspringcloud.apigateway.common.entity.LoginResponseData;
 import com.myspringcloud.apigateway.common.entity.ResponseResult;
 import com.myspringcloud.apigateway.common.enums.StatusCodeEnum;
 import org.springframework.http.MediaType;
@@ -23,7 +23,7 @@ public class DefaultAuthenticationFailureHandler implements AuthenticationFailur
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         int status = StatusCodeEnum.LOGIN_FAILURE.getCode();
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseResult<ResponseData> responseResult = new ResponseResult(String.valueOf(status),StatusCodeEnum.getName(status), null);
+        ResponseResult<LoginResponseData> responseResult = new ResponseResult(String.valueOf(status),StatusCodeEnum.getName(status), null);
         response.getWriter().print(JSON.toJSONString(responseResult));
         response.flushBuffer();
     }

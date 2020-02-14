@@ -1,7 +1,7 @@
 package com.myspringcloud.apigateway.security.securityhandle;
 
 import com.alibaba.fastjson.JSON;
-import com.myspringcloud.apigateway.common.entity.ResponseData;
+import com.myspringcloud.apigateway.common.entity.LoginResponseData;
 import com.myspringcloud.apigateway.common.entity.ResponseResult;
 import com.myspringcloud.apigateway.common.enums.StatusCodeEnum;
 import com.myspringcloud.apigateway.security.entity.SecurityUser;
@@ -41,8 +41,8 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
         stringRedisTemplate.opsForValue().set("SECURITY_TOKEN:" + token, user.getUsername());
         response.setStatus(200);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseData responseData = new ResponseData(user.getUsername(), token);
-        ResponseResult<ResponseData> responseResult = new ResponseResult(String.valueOf(status), StatusCodeEnum.getName(status), responseData);
+        LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);
+        ResponseResult<LoginResponseData> responseResult = new ResponseResult(String.valueOf(status), StatusCodeEnum.getName(status), responseData);
         response.getWriter().print(JSON.toJSONString(responseResult));
         response.flushBuffer();
     }
