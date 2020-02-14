@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,12 +33,20 @@ public class SystemUserController {
     public String getUserInfoByToken(HttpServletRequest request, HttpServletResponse response){
         String token = request.getHeader("token");
         String userInfoStr = stringRedisTemplate.opsForValue().get("USER_INFO:"+ token);
-        JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
-        MallUser mallUser = JSON.toJavaObject(jsonObject, MallUser.class);
-        response.setStatus(200);
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseResult<MallUser> responseResult = new ResponseResult(String.valueOf(StatusCodeEnum.SUCCESS.getCode()), StatusCodeEnum.getName(StatusCodeEnum.SUCCESS.getCode()), mallUser);
-        JSON.toJSONString(responseResult);
+        ResponseResult<MallUser> responseResult;
+        if(!StringUtils.isEmpty(userInfoStr)){
+            JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
+            MallUser mallUser = JSON.toJavaObject(jsonObject, MallUser.class);
+            response.setStatus(200);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            responseResult = new ResponseResult(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.getName(StatusCodeEnum.SUCCESS.getCode()), mallUser);
+            JSON.toJSONString(responseResult);
+        }else {
+            //redis中没有用户信息
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            responseResult = new ResponseResult(StatusCodeEnum.ERROR.getCode(),
+                    StatusCodeEnum.getName(StatusCodeEnum.ERROR.getCode()), null);
+        }
         return JSON.toJSONString(responseResult);
     }
 

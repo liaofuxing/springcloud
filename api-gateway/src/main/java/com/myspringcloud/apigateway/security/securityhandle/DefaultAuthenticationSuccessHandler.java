@@ -42,7 +42,7 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
         response.setStatus(200);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);
-        ResponseResult<LoginResponseData> responseResult = new ResponseResult(String.valueOf(status), StatusCodeEnum.getName(status), responseData);
+        ResponseResult<LoginResponseData> responseResult = new ResponseResult(status, StatusCodeEnum.getName(status), responseData);
         response.getWriter().print(JSON.toJSONString(responseResult));
         response.flushBuffer();
     }

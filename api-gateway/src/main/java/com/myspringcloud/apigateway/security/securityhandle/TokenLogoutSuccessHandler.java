@@ -34,7 +34,7 @@ public class TokenLogoutSuccessHandler implements LogoutSuccessHandler {
         redisTemplate.expire("SECURITY_TOKEN : " + token, 0, TimeUnit.MICROSECONDS);
 
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseResult<LoginResponseData> responseResult = new ResponseResult(String.valueOf(status), StatusCodeEnum.getName(status), null);
+        ResponseResult<LoginResponseData> responseResult = new ResponseResult(status, StatusCodeEnum.getName(status), null);
         response.getWriter().print(JSON.toJSONString(responseResult));
         response.flushBuffer();
     }

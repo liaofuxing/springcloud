@@ -22,7 +22,7 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
         int status = StatusCodeEnum.UNAUTHORIZED.getCode();
         response.setStatus(403);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseResult<LoginResponseData> responseResult = new ResponseResult(String.valueOf(status),StatusCodeEnum.getName(status), null);
+        ResponseResult<LoginResponseData> responseResult = new ResponseResult(status,StatusCodeEnum.getName(status), null);
         response.getWriter().print(JSON.toJSONString(responseResult));
         response.flushBuffer();
     }

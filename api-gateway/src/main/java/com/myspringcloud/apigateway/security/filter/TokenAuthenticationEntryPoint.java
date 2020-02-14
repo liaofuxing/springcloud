@@ -20,7 +20,7 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
         int status = StatusCodeEnum.NOT_LOGIN.getCode();
         response.setStatus(200);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseResult responseResult = new ResponseResult(String.valueOf(status), StatusCodeEnum.getName(status), null);
+        ResponseResult responseResult = new ResponseResult(status, StatusCodeEnum.getName(status), null);
         response.getWriter().print(JSON.toJSONString(responseResult));
         response.flushBuffer();
     }
