@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/springcloud?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
     username: root
-    password: liaofuxing
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     #最大活跃数
     maxActive: 20

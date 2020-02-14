@@ -15,7 +15,7 @@ public class ResultVOUtils {
         ResultVO resultVO = new ResultVO();
         resultVO.setData(object);
         resultVO.setCode(ResultStatusCodeEnums.OK.getCode());
-        resultVO.setMsg("成功");
+        resultVO.setMsg(ResultStatusCodeEnums.OK.getMessage());
         return resultVO;
     }
 }

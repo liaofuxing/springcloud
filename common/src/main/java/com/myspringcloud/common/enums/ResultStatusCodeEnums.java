@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public enum ResultStatusCodeEnums {
 
-    OK(200, "成功"),
+    OK(20001, "请求成功"),
     ;
 
     private Integer code;
