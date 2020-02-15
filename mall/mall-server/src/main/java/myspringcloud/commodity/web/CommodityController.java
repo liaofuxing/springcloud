@@ -3,6 +3,7 @@ package myspringcloud.commodity.web;
 
 import com.myspringcloud.common.enums.ExceptionEnums;
 import com.myspringcloud.common.exception.ExceptionUtils;
+import com.myspringcloud.common.upload.UploadUtils;
 import com.myspringcloud.common.utils.ResultVOUtils;
 import com.myspringcloud.common.vo.ResultVO;
 import myspringcloud.commodity.entity.CommodityInfo;
@@ -11,6 +12,7 @@ import myspringcloud.entity.SystemUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import myspringcloud.systemclient.SystemClient;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -70,6 +72,23 @@ public class CommodityController {
         try {
             List<CommodityInfo> resultVO = commodityService.findCommodityAll();
             return ResultVOUtils.success(resultVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ExceptionUtils(ExceptionEnums.SYSTEM_EXCEPTION);
+        }
+    }
+
+    /**
+     *  上传文件实例
+     *  @return
+     */
+    @PostMapping("/upload")
+    public ResultVO<String> findCommodityAll(@RequestParam("file") MultipartFile file) {
+        UploadUtils uploadUtils = new UploadUtils();
+        String result;
+        try {
+            result = uploadUtils.upload(file);
+            return ResultVOUtils.success(result);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ExceptionUtils(ExceptionEnums.SYSTEM_EXCEPTION);

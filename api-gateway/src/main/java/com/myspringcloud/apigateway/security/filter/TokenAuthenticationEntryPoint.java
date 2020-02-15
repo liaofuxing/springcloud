@@ -23,5 +23,7 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
         ResponseResult responseResult = new ResponseResult(status, StatusCodeEnum.getName(status), null);
         response.getWriter().print(JSON.toJSONString(responseResult));
         response.flushBuffer();
+        RuntimeException runtimeException = new RuntimeException(StatusCodeEnum.getName(status));
+        throw runtimeException;
     }
 }

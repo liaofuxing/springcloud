@@ -3,6 +3,7 @@ package com.myspringcloud.apigateway.security.filter;
 import com.myspringcloud.apigateway.security.service.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,6 +45,8 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
+        }else {
+            throw new  AuthenticationServiceException("token已过期");
         }
         chain.doFilter(request, response);
     }
