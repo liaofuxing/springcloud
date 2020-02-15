@@ -45,8 +45,6 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        }else {
-            throw new  AuthenticationServiceException("token已过期");
         }
         chain.doFilter(request, response);
     }
