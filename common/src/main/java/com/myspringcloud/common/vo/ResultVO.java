@@ -22,4 +22,14 @@ public class ResultVO<T> {
      * 具体数据
      */
     private T data;
+
+    public ResultVO() {
+
+    }
+
+    public ResultVO(Integer code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
 }

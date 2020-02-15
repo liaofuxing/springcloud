@@ -11,6 +11,7 @@ import lombok.Getter;
 public enum ResultStatusCodeEnums {
 
     OK(20001, "请求成功"),
+    ERROR(50000, "系统异常"),
     ;
 
     private Integer code;
