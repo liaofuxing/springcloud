@@ -2,11 +2,8 @@ package com.myspringcloud.apigateway.security.securityhandle;
 
 import com.alibaba.fastjson.JSON;
 import com.myspringcloud.apigateway.common.entity.LoginResponseData;
-import com.myspringcloud.apigateway.common.entity.ResponseResult;
-import com.myspringcloud.apigateway.common.enums.StatusCodeEnum;
 import com.myspringcloud.apigateway.security.entity.SecurityUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import com.myspringcloud.common.utils.ResultVOUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -32,7 +29,7 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        int status = StatusCodeEnum.LOGIN_SUCCESS.getCode();
+
         SecurityUser user = (SecurityUser) authentication.getPrincipal();
         String token = UUID.randomUUID().toString();
         String userInfoJsonStr = JSON.toJSONString(user);
@@ -42,8 +39,7 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
         response.setStatus(200);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);
-        ResponseResult<LoginResponseData> responseResult = new ResponseResult(status, StatusCodeEnum.getName(status), responseData);
-        response.getWriter().print(JSON.toJSONString(responseResult));
+        response.getWriter().print(JSON.toJSONString(ResultVOUtils.login_success(responseData)));
         response.flushBuffer();
     }
 }

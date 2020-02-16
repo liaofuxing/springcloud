@@ -14,6 +14,7 @@
     <name>common</name>
     <description>Demo project for Spring Boot</description>
 
+
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>Finchley.SR2</spring-cloud.version>
@@ -34,6 +35,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>

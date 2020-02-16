@@ -1,8 +1,8 @@
 package com.myspringcloud.apigateway.security.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.myspringcloud.apigateway.common.entity.ResponseResult;
-import com.myspringcloud.apigateway.common.enums.StatusCodeEnum;
+import com.myspringcloud.common.enums.StatusCodeEnum;
+import com.myspringcloud.common.utils.ResultVOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 用户未登录
+ */
 @Component
 public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -21,8 +24,7 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
         int status = StatusCodeEnum.NOT_LOGIN.getCode();
         response.setStatus(200);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseResult responseResult = new ResponseResult(status, StatusCodeEnum.getName(status), null);
-        response.getWriter().print(JSON.toJSONString(responseResult));
+        response.getWriter().print(JSON.toJSONString(ResultVOUtils.not_login(null)));
         response.flushBuffer();
         throw new AuthenticationServiceException(StatusCodeEnum.getName(status));
     }

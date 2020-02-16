@@ -1,10 +1,8 @@
 package com.myspringcloud.apigateway.security.securityhandle;
 
 import com.alibaba.fastjson.JSON;
-import com.myspringcloud.apigateway.common.entity.LoginResponseData;
-import com.myspringcloud.apigateway.common.entity.ResponseResult;
-import com.myspringcloud.apigateway.common.enums.StatusCodeEnum;
 import com.myspringcloud.apigateway.security.entity.SecurityUser;
+import com.myspringcloud.common.utils.ResultVOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
@@ -27,15 +25,14 @@ public class TokenLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException , ServletException {
-        int status = StatusCodeEnum.LOGOUT_SUCCESS.getCode();
+
         SecurityUser user = (SecurityUser) authentication.getPrincipal();
         String token = redisTemplate.opsForValue().get("SECURITY_USERNAME : " + user.getUsername());
         redisTemplate.expire("SECURITY_USERNAME : " + user.getUsername(), 0, TimeUnit.MICROSECONDS);
         redisTemplate.expire("SECURITY_TOKEN : " + token, 0, TimeUnit.MICROSECONDS);
 
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        ResponseResult<LoginResponseData> responseResult = new ResponseResult(status, StatusCodeEnum.getName(status), null);
-        response.getWriter().print(JSON.toJSONString(responseResult));
+        response.getWriter().print(JSON.toJSONString(ResultVOUtils.logout_success(null)));
         response.flushBuffer();
     }
 }
