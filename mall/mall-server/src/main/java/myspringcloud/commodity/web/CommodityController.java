@@ -54,7 +54,6 @@ public class CommodityController {
      */
     @PostMapping("/findSystemUser")
     public ResultVO<SystemUserInfo> findSystemUser(@RequestBody SystemUserInfo systemUserInfo) {
-        System.out.println(systemUserInfo);
         try {
             ResultVO<SystemUserInfo> resultVO = systemClient.findSystemUser(systemUserInfo);
             return resultVO;
