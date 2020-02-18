@@ -73,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DefaultAuthenticationFailureHandler defaultAuthenticationFailureHandler;
 
     @Autowired
-    private SpringSocialConfigurer imoocSpringSocialConfigurer;
+    private SpringSocialConfigurer defaultSpringSocialConfigurer;
 
     @Autowired
     private JsonAuthenticationConfigurer jsonAuthenticationConfigurer;
@@ -85,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .apply(jsonAuthenticationConfigurer)
                 .and()
-                .apply(imoocSpringSocialConfigurer)
+                .apply(defaultSpringSocialConfigurer)
                 .and()
                 //未登录结果处理
                 .httpBasic().authenticationEntryPoint(authenticationEntryPoint)
