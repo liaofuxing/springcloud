@@ -57,3 +57,13 @@ zuul:
       path: /mall/**
       # 路由的目标服务名
       serviceId: mall
+
+spring-social:
+  security:
+    social:
+      we-chat:
+        app-id: "100550231"
+        app-secret: "69b6ab57b22f3c2fe6a6149274e3295e"
+        providerId: "weChat"
+      filterProcessesUrl: "/weChatLogin"
+      signUpUrl: "/demo-signUp.html"

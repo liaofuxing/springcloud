@@ -16,15 +16,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.social.security.SpringSocialConfigurer;
 
+
+/**
+ *
+ * Security主配置类
+ * @author liaofuxing
+ * @date 2020/02/18 11:00
+ *
+ */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
+
     @Autowired
     private UserDetailServiceImpl userDetailsService;
 
@@ -64,47 +72,46 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DefaultAuthenticationFailureHandler defaultAuthenticationFailureHandler;
 
+    @Autowired
+    private SpringSocialConfigurer imoocSpringSocialConfigurer;
+
+    @Autowired
+    private JsonAuthenticationConfigurer jsonAuthenticationConfigurer;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-        //关闭session，不再使用
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .csrf().disable()
-        //未登录结果处理
-        .httpBasic().authenticationEntryPoint(authenticationEntryPoint)
-        .and()
-        //权限不足结果处理
-        .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
-        .and()
-        //权限设置管理
-        .authorizeRequests()
-        //放行以下url
-        .antMatchers("/user/register","/users/test/*").permitAll()
-        //给对应的url设置权限（只有ADMIN才可以访问，除去ROLE_前缀，spring帮我们处理了）
-        //在数据库中用户的role字段是要加ROLE_的ROLE_ADMIN才可以匹配到这里的ADMIN
-        .antMatchers("/user/lala/**").hasRole("ADMIN")
-        //所有请求都需要授权（除了放行的）
-        .anyRequest().authenticated()
-        .and()
-        //设置登出url
-        .logout().logoutUrl("/user/logout")
-        //设置登出成功处理器（下面介绍）
-        .logoutSuccessHandler(logoutSuccessHandler)
-        .and().cors().and()
-        //开启登录
-        .formLogin();
-
-        //  http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
-        /*  authorizationFilter是用来拦截登录请求判断请求种是否带有token,并且token是否有对应的已经登录的用户,如果有应该直接授权通过
+                .apply(jsonAuthenticationConfigurer)
+                .and()
+                .apply(imoocSpringSocialConfigurer)
+                .and()
+                //未登录结果处理
+                .httpBasic().authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                //权限不足结果处理
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
+                .and()
+                //设置登出url
+                .logout().logoutUrl("/user/logout")
+                //设置登出成功处理器（下面介绍）
+                .logoutSuccessHandler(logoutSuccessHandler).and()
+                .authorizeRequests()
+                .antMatchers("/authentication/require",
+                        "/code/*",
+                        "/user/regist").permitAll()
+                .antMatchers("/user/lala/**").hasRole("ADMIN")
+                .anyRequest()
+                .authenticated()
+                .and().csrf().disable();
+        /*  authorizationFilter是用来拦截登录请求判断请求中是否带有token,并且token是否有对应的已经登录的用户,如果有应该直接授权通过
          *  所以这个过滤器应该在UsernamePasswordAuthenticationFilter过滤器之前执行,所以放在LogoutFilter之后
          */
-        http.addFilterBefore(authorizationFilter, LogoutFilter.class);
-        //用自定义的授权过滤器覆盖UsernamePasswordAuthenticationFilter
-        http.addFilterAt(getJsonFilter(super.authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(authorizationFilter, LogoutFilter.class);
 
+        //      用自定义的授权过滤器覆盖UsernamePasswordAuthenticationFilter
+        //      http.addFilterAt(getJsonFilter(super.authenticationManager()), UsernamePasswordAuthenticationFilter.class);
     }
 
     /**
@@ -134,7 +141,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
-    
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
