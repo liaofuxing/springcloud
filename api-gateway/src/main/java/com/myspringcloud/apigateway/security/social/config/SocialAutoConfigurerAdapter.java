@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
  */
 public abstract class SocialAutoConfigurerAdapter extends SocialConfigurerAdapter {
     public SocialAutoConfigurerAdapter() {
+
     }
     public void addConnectionFactories(ConnectionFactoryConfigurer configurer, Environment environment) {
         configurer.addConnectionFactory(this.createConnectionFactory());
