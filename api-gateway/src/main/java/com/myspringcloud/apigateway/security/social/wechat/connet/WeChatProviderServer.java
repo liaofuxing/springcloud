@@ -5,20 +5,23 @@ import com.myspringcloud.apigateway.security.social.wechat.api.WeChatImpl;
 import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
 
 /**
+ *
+ * 微信登录服务提供者
+ *
  * @author liaofuxing
- * @date 2019/03/14 19:07
+ * @date 2020/02/19 13:27
  * @E-mail liaofuxing@outlook.com
  */
 public class WeChatProviderServer extends AbstractOAuth2ServiceProvider<WeChat> {
 
     private String appId;
 
-    private static final String URL_AUTHORIZE = "https://graph.qq.com/oauth2.0/authorize";
+    private static final String URL_AUTHORIZE = "https://open.weixin.qq.com/connect/qrconnect";
 
-    private static final String URL_ACCESSTOKEN = "https://graph.qq.com/oauth2.0/token";
+    private static final String URL_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token";
 
     public WeChatProviderServer(String appId, String appSecret) {
-        super(new WeChatOAuth2Template(appId, appSecret, URL_AUTHORIZE,URL_ACCESSTOKEN));
+        super(new WeChatOAuth2Template(appId, appSecret, URL_AUTHORIZE,URL_ACCESS_TOKEN));
         this.appId = appId;
     }
 

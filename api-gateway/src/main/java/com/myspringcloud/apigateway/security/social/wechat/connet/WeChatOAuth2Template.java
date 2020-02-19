@@ -5,19 +5,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.social.oauth2.AccessGrant;
+import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.social.oauth2.OAuth2Template;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 
+
 /**
+ * 微信OAuth2登录模板类
+ *
  * @author liaofuxing
- * @date 2019/03/15 3:11
+ * @date 2020/02/19 13:07
  * @E-mail liaofuxing@outlook.com
  */
 public class WeChatOAuth2Template extends OAuth2Template {
-
+    private String clientId;
+    private String clientSecret;
+    private String accessTokenUrl;
     private Logger logger = LoggerFactory.getLogger(WeChatOAuth2Template.class);
 
     /**
@@ -31,6 +37,10 @@ public class WeChatOAuth2Template extends OAuth2Template {
      */
     public WeChatOAuth2Template(String clientId, String clientSecret, String authorizeUrl, String accessTokenUrl) {
         super(clientId, clientSecret, authorizeUrl, accessTokenUrl);
+        //请求中添加client_id和client_secret参数
+        setUseParametersForClientAuthentication(true);
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
     }
 
     /**
@@ -74,7 +84,22 @@ public class WeChatOAuth2Template extends OAuth2Template {
         String accessToken = StringUtils.substringAfterLast(items[0], "=");
         Long expiresIn = Long.parseLong(StringUtils.substringAfterLast(items[1], "="));
         String refreshToken = StringUtils.substringAfterLast(items[2], "=");
-        AccessGrant accessGrant = new AccessGrant(accessToken,null, refreshToken, expiresIn);
+        AccessGrant accessGrant = new AccessGrant(accessToken, null, refreshToken, expiresIn);
         return accessGrant;
     }
+
+    /**
+     * 构建获取授权码的请求。也就是引导用户跳转到微信的地址。
+     */
+    public String buildAuthenticateUrl(OAuth2Parameters parameters) {
+        String url = super.buildAuthenticateUrl(parameters);
+        url = url + "&appid=" + clientId + "&scope=snsapi_login";
+        return url;
+    }
+
+    public String buildAuthorizeUrl(OAuth2Parameters parameters) {
+        return buildAuthenticateUrl(parameters);
+    }
+
+
 }

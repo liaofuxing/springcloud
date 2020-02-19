@@ -19,9 +19,7 @@ public class WeChatImpl extends AbstractOAuth2ApiBinding implements WeChat {
 
     private Logger logger = LoggerFactory.getLogger(WeChatImpl.class);
 
-    private static final String URL_GET_OPENID = "https://graph.qq.com/oauth2.0/me?access_token=%S";
-
-    private static final String URL_GET_USERINFO = "https://graph.qq.com/user/get_user_info?oauth_consumer_key=%S&openid=%S";
+    private static final String URL_GET_USERINFO = "https://api.weixin.qq.com/sns/userinfo?openid=%S";
 
     private String appId;
 
@@ -33,7 +31,7 @@ public class WeChatImpl extends AbstractOAuth2ApiBinding implements WeChat {
     public WeChatImpl(String accessToken, String appId) {
         super(accessToken, TokenStrategy.ACCESS_TOKEN_PARAMETER);
 
-        String url = String.format(URL_GET_OPENID, accessToken);
+        String url = String.format(URL_GET_USERINFO, accessToken);
         String resutl =  getRestTemplate().getForObject(url, String.class);
 
         this.appId = appId;
@@ -61,7 +59,7 @@ public class WeChatImpl extends AbstractOAuth2ApiBinding implements WeChat {
 
         try {
             weChatUserInfo = objectMapper.readValue(resutl, WeChatUserInfo.class);
-            weChatUserInfo.setOpenId(openId);
+            weChatUserInfo.setOpenid(openId);
             return weChatUserInfo;
         } catch (IOException e) {
            throw  new RuntimeException("获取用户信息失败", e);

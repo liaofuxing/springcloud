@@ -8,7 +8,9 @@ package com.myspringcloud.apigateway.security.social.properties;
 public class SocialProperties {
 
     private WeChatProperties weChat;
-    private String filterProcessesUrl = "/auth";
+
+    private QQProperties qq;
+    private String filterProcessesUrl;
     private String signUpUrl;
 
     public String getFilterProcessesUrl() {
@@ -33,5 +35,13 @@ public class SocialProperties {
 
     public void setWeChat(WeChatProperties weChat) {
         this.weChat = weChat;
+    }
+
+    public QQProperties getQq() {
+        return qq;
+    }
+
+    public void setQq(QQProperties qq) {
+        this.qq = qq;
     }
 }

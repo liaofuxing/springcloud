@@ -1,183 +1,130 @@
 package com.myspringcloud.apigateway.security.social.wechat.api;
 
+/**
+ * 微信用户实体类
+ */
 public class WeChatUserInfo {
-
-    private int ret;
-    private String msg;
-    private int is_lost;
+    /**
+     * 普通用户的标识，对当前开发者账号唯一
+     */
+    private String openid;
+    /**
+     * 普通用户昵称
+     */
     private String nickname;
-    private String gender;
+
+    /**
+     * 语言
+     */
+    private String language;
+
+    /**
+     * 普通用户性别，1为男性，2为女性
+     */
+    private String sex;
+    /**
+     * 普通用户个人资料填写的省份
+     */
     private String province;
+    /**
+     * 普通用户个人资料填写的城市
+     */
     private String city;
-    private String year;
-    private String constellation;
-    private String figureurl;
-    private String figureurl_1;
-    private String figureurl_2;
-    private String figureurl_qq_1;
-    private String figureurl_qq_2;
-    private String figureurl_qq;
-    private String figureurl_type;
-    private String is_yellow_vip;
-    private String vip;
-    private String yellow_vip_level;
-    private String level;
-    private String is_yellow_year_vip;
+    /**
+     * 国家，如中国为CN
+     */
+    private String country;
+    /**
+     * 用户头像，最后一个数值代表正方形头像大小（有0，46，64，96，132数值可选，0代表640*640正方形）
+     */
+    private String headimgurl;
+    /**
+     * 用户特权信息，json数组，如微信沃卡用户为（chinaunicom）
+     */
+    private String[] privilege;
+    /**
+     * 用户统一标识，针对一个微信开放平台账号下的应用，同一用户的unionid是唯一的。
+     */
+    private String unionid;
 
-    public String getOpenId() {
-        return openId;
-    }
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
-
-    private String openId;
-    public void setRet(int ret) {
-        this.ret = ret;
-    }
-    public int getRet() {
-        return ret;
+    public String getOpenid() {
+        return openid;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-    public String getMsg() {
-        return msg;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
-    public void setIs_lost(int is_lost) {
-        this.is_lost = is_lost;
-    }
-    public int getIs_lost() {
-        return is_lost;
+    public String getNickname() {
+        return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-    public String getNickname() {
-        return nickname;
+
+    public String getLanguage() {
+        return language;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setLanguage(String language) {
+        this.language = language;
     }
-    public String getGender() {
-        return gender;
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getProvince() {
+        return province;
     }
 
     public void setProvince(String province) {
         this.province = province;
     }
-    public String getProvince() {
-        return province;
+
+    public String getCity() {
+        return city;
     }
 
     public void setCity(String city) {
         this.city = city;
     }
-    public String getCity() {
-        return city;
+
+    public String getCountry() {
+        return country;
     }
 
-    public void setYear(String year) {
-        this.year = year;
-    }
-    public String getYear() {
-        return year;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public void setConstellation(String constellation) {
-        this.constellation = constellation;
-    }
-    public String getConstellation() {
-        return constellation;
+    public String getHeadimgurl() {
+        return headimgurl;
     }
 
-    public void setFigureurl(String figureurl) {
-        this.figureurl = figureurl;
-    }
-    public String getFigureurl() {
-        return figureurl;
+    public void setHeadimgurl(String headimgurl) {
+        this.headimgurl = headimgurl;
     }
 
-    public void setFigureurl_1(String figureurl_1) {
-        this.figureurl_1 = figureurl_1;
-    }
-    public String getFigureurl_1() {
-        return figureurl_1;
+    public String[] getPrivilege() {
+        return privilege;
     }
 
-    public void setFigureurl_2(String figureurl_2) {
-        this.figureurl_2 = figureurl_2;
-    }
-    public String getFigureurl_2() {
-        return figureurl_2;
+    public void setPrivilege(String[] privilege) {
+        this.privilege = privilege;
     }
 
-    public void setFigureurl_qq_1(String figureurl_qq_1) {
-        this.figureurl_qq_1 = figureurl_qq_1;
-    }
-    public String getFigureurl_qq_1() {
-        return figureurl_qq_1;
+    public String getUnionid() {
+        return unionid;
     }
 
-    public void setFigureurl_qq_2(String figureurl_qq_2) {
-        this.figureurl_qq_2 = figureurl_qq_2;
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
     }
-    public String getFigureurl_qq_2() {
-        return figureurl_qq_2;
-    }
-
-    public void setFigureurl_qq(String figureurl_qq) {
-        this.figureurl_qq = figureurl_qq;
-    }
-    public String getFigureurl_qq() {
-        return figureurl_qq;
-    }
-
-    public void setFigureurl_type(String figureurl_type) {
-        this.figureurl_type = figureurl_type;
-    }
-    public String getFigureurl_type() {
-        return figureurl_type;
-    }
-
-    public void setIs_yellow_vip(String is_yellow_vip) {
-        this.is_yellow_vip = is_yellow_vip;
-    }
-    public String getIs_yellow_vip() {
-        return is_yellow_vip;
-    }
-
-    public void setVip(String vip) {
-        this.vip = vip;
-    }
-    public String getVip() {
-        return vip;
-    }
-
-    public void setYellow_vip_level(String yellow_vip_level) {
-        this.yellow_vip_level = yellow_vip_level;
-    }
-    public String getYellow_vip_level() {
-        return yellow_vip_level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-    public String getLevel() {
-        return level;
-    }
-
-    public void setIs_yellow_year_vip(String is_yellow_year_vip) {
-        this.is_yellow_year_vip = is_yellow_year_vip;
-    }
-    public String getIs_yellow_year_vip() {
-        return is_yellow_year_vip;
-    }
-
 }

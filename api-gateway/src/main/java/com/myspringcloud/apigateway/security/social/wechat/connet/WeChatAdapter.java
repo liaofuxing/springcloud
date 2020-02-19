@@ -12,18 +12,27 @@ import org.springframework.social.connect.UserProfile;
  * @E-mail liaofuxing@outlook.com
  */
 public class WeChatAdapter implements ApiAdapter<WeChat> {
+    private String openid;
+
     @Override
     public boolean test(WeChat api) {
         return true;
+    }
+
+    public WeChatAdapter() {
+    }
+
+    public WeChatAdapter(String openid) {
+        this.openid = openid;
     }
 
     @Override
     public void setConnectionValues(WeChat weChat, ConnectionValues connectionValues) {
         WeChatUserInfo userInfo = weChat.getUserInfo();
         connectionValues.setDisplayName(userInfo.getNickname());
-        connectionValues.setImageUrl(userInfo.getFigureurl_qq_1());
+        connectionValues.setImageUrl(userInfo.getHeadimgurl());
         connectionValues.setProfileUrl(null);
-        connectionValues.setProviderUserId(userInfo.getOpenId());
+        connectionValues.setProviderUserId(userInfo.getOpenid());
     }
 
     @Override
@@ -35,5 +44,6 @@ public class WeChatAdapter implements ApiAdapter<WeChat> {
     public void updateStatus(WeChat weChat, String s) {
 
     }
+
 
 }
