@@ -6,6 +6,9 @@
 #### 软件架构图
 ![架构图](https://images.gitee.com/uploads/images/2020/0212/152129_80eee873_2025409.png "架构图.png")
 
+Spring Security 过滤器链示意图
+![Spring Security 过滤器链示意图](https://images.gitee.com/uploads/images/2020/0219/185107_c429d896_2025409.png "过滤器示意图.png")
+
 #### 安装教程
 
 1. xxxx
