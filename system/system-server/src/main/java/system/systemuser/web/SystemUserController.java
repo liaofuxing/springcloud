@@ -4,7 +4,7 @@ import com.myspringcloud.common.enums.ExceptionEnums;
 import com.myspringcloud.common.exception.ExceptionUtils;
 import com.myspringcloud.common.utils.ResultVOUtils;
 import com.myspringcloud.common.vo.ResultVO;
-import myspringcloud.entity.SystemUserInfo;
+import com.myspringcloud.entity.SystemUserInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
