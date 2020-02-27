@@ -11,7 +11,7 @@ Spring Security 过滤器链示意图
 
 #### 版本
 
-0.0.1 2020-02-07 updates
+0.0.1版本 2020-02-07 updates
 1. update spring boot 2.0.0.RELEASE --> spring boot 2.2.2.RELEASE
 2. update spring cloud Finchley.SR2 --> spring cloud Hoxton.SR1
 3. 添加日志系统日志
