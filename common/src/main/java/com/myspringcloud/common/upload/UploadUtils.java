@@ -1,5 +1,6 @@
 package com.myspringcloud.common.upload;
 
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -30,4 +31,6 @@ public class UploadUtils {
             return "error";
         }
     }
+
+
 }
