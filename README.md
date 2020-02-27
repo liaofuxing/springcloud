@@ -16,9 +16,4 @@ Spring Security 过滤器链示意图
 2. update spring cloud Finchley.SR2 --> spring cloud Hoxton.SR1
 3. 添加日志系统日志
 4. 新增基于spi服务的短息模块
-
-#### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxxx
+5. 新增vue前端 地址[前端地址](http://gitee.com/liaofuxing/vue-admin-template) ps：基于 @花裤衩 / vue-admin-template 的项目改写
