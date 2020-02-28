@@ -19,10 +19,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * Json 用户名密码登录过滤器
+ * 短信验证码登录过滤器
  *
  * @author liaofuxing
- * @date 2020/02/18 11:50
+ * @date 2020/02/28 20:21
  */
 public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 	private boolean postOnly = true;
