@@ -12,5 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MallUserDao extends JpaRepository<MallUser, Integer> {
 
-    MallUser findSystemUserByUsername(String userName);
+    MallUser findSystemUserByUsername(String username);
+
+    MallUser findSystemUserByPhone(String phone);
 }
