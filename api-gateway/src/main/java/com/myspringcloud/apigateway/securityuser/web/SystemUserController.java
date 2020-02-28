@@ -3,7 +3,6 @@ package com.myspringcloud.apigateway.securityuser.web;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.myspringcloud.apigateway.securityuser.entity.MallUser;
-import com.myspringcloud.apigateway.securityuser.service.MallUserService;
 import com.myspringcloud.common.enums.ResultStatusCodeEnums;
 import com.myspringcloud.common.utils.ResultVOUtils;
 import com.myspringcloud.common.vo.ResultVO;
@@ -32,8 +31,6 @@ public class SystemUserController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private MallUserService mallUserService;
 
     @GetMapping("/info")
     @ResponseBody
@@ -44,7 +41,6 @@ public class SystemUserController {
         if(!StringUtils.isEmpty(userInfoStr)){
             JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
             MallUser mallUser = JSON.toJavaObject(jsonObject, MallUser.class);
-            response.setStatus(200);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             resultVO = ResultVOUtils.success(mallUser);
         }else {
