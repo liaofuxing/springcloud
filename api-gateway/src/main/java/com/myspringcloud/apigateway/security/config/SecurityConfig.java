@@ -56,17 +56,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private TokenLogoutSuccessHandler logoutSuccessHandler;
 
-    /**
-     * 默认登陆成功处理器
-     */
-    @Autowired
-    private DefaultAuthenticationSuccessHandler defaultAuthenticationSuccessHandler;
-
-    /**
-     * 默认登陆失败处理器
-     */
-    @Autowired
-    private DefaultAuthenticationFailureHandler defaultAuthenticationFailureHandler;
 
     /**
      * 社交登录配置器
@@ -83,8 +72,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http
+        //处理跨域请求
+        http.cors().and().csrf().disable()
                 .apply(jsonAuthenticationConfigurer)
                 .and()
                 .apply(springSocialConfigurer)
@@ -105,8 +94,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/regist").permitAll()
                 .antMatchers("/user/lala/**").hasRole("ADMIN")
                 .anyRequest()
-                .authenticated()
-                .and().csrf().disable();
+                .authenticated();
+
         /*  authorizationFilter是用来拦截登录请求判断请求中是否带有token,并且token是否有对应的已经登录的用户,如果有应该直接授权通过
          *  所以这个过滤器应该在UsernamePasswordAuthenticationFilter过滤器之前执行,所以放在LogoutFilter之后
          */
