@@ -3,7 +3,6 @@ package com.myspringcloud.apigateway.security.securityhandle;
 import com.alibaba.fastjson.JSON;
 import com.myspringcloud.apigateway.common.entity.LoginResponseData;
 import com.myspringcloud.apigateway.security.entity.SecurityUser;
-import com.myspringcloud.common.spi.sms.SmsManager;
 import com.myspringcloud.common.utils.ResultVOUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
@@ -38,11 +37,9 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
         stringRedisTemplate.opsForValue().set("USER_INFO:" + token, userInfoJsonStr);
         stringRedisTemplate.opsForValue().set("SECURITY_TOKEN:" + token, user.getUsername());
         response.setStatus(200);
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.login_success(responseData)));
-        SmsManager smsManager = new SmsManager();
-        smsManager.sendSms("132975800233");
         response.flushBuffer();
     }
 }
