@@ -12,7 +12,7 @@ public class SmsManager {
 
     static {
         loadInitialSmsImpl();
-        System.out.println(" SmsManager initialized");
+        System.out.println("SmsManager initialized");
     }
 
     private static void loadInitialSmsImpl() {
@@ -29,10 +29,12 @@ public class SmsManager {
         }
     }
 
-    public void sendSms(String no) {
+    public String sendSms(String no) {
+        String SmsCode = "";
         for (Sms sms : smsImplList) {
-            sms.sendSmsCode(no);
+            SmsCode = sms.sendSmsCode(no);
         }
+        return SmsCode;
     }
 
 }

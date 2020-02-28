@@ -1,5 +1,5 @@
 package com.myspringcloud.common.spi.sms;
 
 public interface Sms {
-    void sendSmsCode(String phoneNo);
+    String sendSmsCode(String phoneNo);
 }
