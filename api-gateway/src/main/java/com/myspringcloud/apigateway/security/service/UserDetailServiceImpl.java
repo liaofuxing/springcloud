@@ -4,10 +4,13 @@ import com.myspringcloud.apigateway.security.entity.SecurityUser;
 import com.myspringcloud.apigateway.securityuser.dao.MallUserDao;
 import com.myspringcloud.apigateway.securityuser.entity.MallUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.security.SocialUser;
 import org.springframework.social.security.SocialUserDetails;
@@ -29,6 +32,9 @@ public class UserDetailServiceImpl implements UserDetailsService, SocialUserDeta
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,9 +42,21 @@ public class UserDetailServiceImpl implements UserDetailsService, SocialUserDeta
         MallUser mallUser = mallUserDao.findSystemUserByUsername(username);
 
         if (mallUser == null){
-            UsernameNotFoundException usernameNotFoundException = new UsernameNotFoundException("用户名不存在");
-            usernameNotFoundException.printStackTrace();
-            throw usernameNotFoundException;
+            //使用phone登录，ps：使用手机话和验证码登录
+            //如果username查询user为空，尝试使用手机号查询user
+            mallUser = mallUserDao.findSystemUserByPhone(username);
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            //1. 根据前端的手机号在redis上查找验证码,按照bCryptPasswordEncoder方式加密，
+            //2. 将smsCode赋值给password
+            //3. 模拟username，password方式验证
+            String smsCode = redisTemplate.opsForValue().get("SMS_CODE:"+ username);
+            String encode = bCryptPasswordEncoder.encode(smsCode);
+            mallUser.setPassword(encode);
+            if(mallUser == null){
+                UsernameNotFoundException usernameNotFoundException = new UsernameNotFoundException("用户名不存在");
+                usernameNotFoundException.printStackTrace();
+                throw usernameNotFoundException;
+            }
         }
         SecurityUser securityUser = new SecurityUser(mallUser);
         return securityUser;

@@ -40,16 +40,16 @@ public class SystemUserController {
     public String getUserInfoByToken(HttpServletRequest request, HttpServletResponse response){
         String token = request.getHeader("token");
         String userInfoStr = stringRedisTemplate.opsForValue().get("USER_INFO:"+ token);
-        ResultVO<MallUser> resultVO = new ResultVO<>();
+        ResultVO<MallUser> resultVO;
         if(!StringUtils.isEmpty(userInfoStr)){
             JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
             MallUser mallUser = JSON.toJavaObject(jsonObject, MallUser.class);
             response.setStatus(200);
-            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             resultVO = ResultVOUtils.success(mallUser);
         }else {
             //redis中没有用户信息
-            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             ResultVOUtils.error(null);
             throw new RuntimeException(ResultStatusCodeEnums.ERROR.getMessage());
         }

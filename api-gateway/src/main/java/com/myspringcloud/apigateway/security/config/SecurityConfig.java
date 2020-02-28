@@ -3,8 +3,6 @@ package com.myspringcloud.apigateway.security.config;
 
 import com.myspringcloud.apigateway.security.filter.TokenAuthenticationEntryPoint;
 import com.myspringcloud.apigateway.security.filter.TokenAuthorizationFilter;
-import com.myspringcloud.apigateway.security.securityhandle.DefaultAuthenticationFailureHandler;
-import com.myspringcloud.apigateway.security.securityhandle.DefaultAuthenticationSuccessHandler;
 import com.myspringcloud.apigateway.security.securityhandle.TokenAccessDeniedHandler;
 import com.myspringcloud.apigateway.security.securityhandle.TokenLogoutSuccessHandler;
 import com.myspringcloud.apigateway.security.service.UserDetailServiceImpl;
@@ -69,6 +67,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JsonAuthenticationConfigurer jsonAuthenticationConfigurer;
 
+    /**
+     * json {"username":"","password":""}登录配置器
+     */
+    @Autowired
+    private SmsCodeAuthenticationConfigurer smsCodeAuthenticationConfigurer;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -78,11 +82,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .apply(springSocialConfigurer)
                 .and()
-                //未登录结果处理
-                .httpBasic().authenticationEntryPoint(authenticationEntryPoint)
+                .apply(smsCodeAuthenticationConfigurer)
                 .and()
                 //权限不足结果处理
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
                 .and()
                 //设置登出url
                 .logout().logoutUrl("/user/logout")
@@ -90,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(logoutSuccessHandler).and()
                 .authorizeRequests()
                 .antMatchers("/authentication/require",
-                        "/code/*",
+                        "/sms/*",
                         "/user/regist").permitAll()
                 .antMatchers("/user/lala/**").hasRole("ADMIN")
                 .anyRequest()
