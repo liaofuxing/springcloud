@@ -13,7 +13,7 @@ import javax.persistence.Id;
 public class CommodityInfo {
 
     @Id
-    private String id;
+    private Integer id;
 
     /**
      * 商品名称

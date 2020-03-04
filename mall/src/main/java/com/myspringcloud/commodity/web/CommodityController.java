@@ -70,9 +70,6 @@ public class CommodityController {
     @GetMapping("/findCommodityAll")
     public ResultVO<List<CommodityInfo>> findCommodityAll() {
         try {
-            SmsManager smsManager = new SmsManager();
-            smsManager.sendSms("1329750233");
-            System.out.println(1111);
             List<CommodityInfo> resultVO = commodityService.findCommodityAll();
             return ResultVOUtils.success(resultVO);
         } catch (Exception e) {
