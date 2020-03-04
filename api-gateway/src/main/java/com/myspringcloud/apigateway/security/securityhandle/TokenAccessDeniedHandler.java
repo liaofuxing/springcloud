@@ -21,7 +21,7 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException , ServletException {
         int status = StatusCodeEnum.UNAUTHORIZED.getCode();
         response.setStatus(403);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.unauthorized(null)));
         response.flushBuffer();
         throw new AuthenticationServiceException(StatusCodeEnum.getName(status));

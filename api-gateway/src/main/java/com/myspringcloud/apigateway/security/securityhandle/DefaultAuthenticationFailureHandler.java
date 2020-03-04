@@ -22,7 +22,7 @@ public class DefaultAuthenticationFailureHandler implements AuthenticationFailur
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         int status = StatusCodeEnum.LOGIN_FAILURE.getCode();
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.login_failure(null)));
         response.flushBuffer();
         throw new AuthenticationServiceException(StatusCodeEnum.getName(status));

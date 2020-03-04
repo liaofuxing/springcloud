@@ -37,7 +37,7 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
         stringRedisTemplate.opsForValue().set("USER_INFO:" + token, userInfoJsonStr);
         stringRedisTemplate.opsForValue().set("SECURITY_TOKEN:" + token, user.getUsername());
         response.setStatus(200);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType("application/json;charset=UTF-8");
         LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.login_success(responseData)));
         response.flushBuffer();

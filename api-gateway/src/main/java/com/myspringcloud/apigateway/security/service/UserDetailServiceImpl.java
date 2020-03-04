@@ -45,6 +45,11 @@ public class UserDetailServiceImpl implements UserDetailsService, SocialUserDeta
             //使用phone登录，ps：使用手机话和验证码登录
             //如果username查询user为空，尝试使用手机号查询user
             mallUser = mallUserDao.findSystemUserByPhone(username);
+            if(mallUser == null){
+                UsernameNotFoundException usernameNotFoundException = new UsernameNotFoundException("用户名不存在");
+                usernameNotFoundException.printStackTrace();
+                throw usernameNotFoundException;
+            }
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             //1. 根据前端的手机号在redis上查找验证码,按照bCryptPasswordEncoder方式加密，
             //2. 将smsCode赋值给password
@@ -52,11 +57,7 @@ public class UserDetailServiceImpl implements UserDetailsService, SocialUserDeta
             String smsCode = redisTemplate.opsForValue().get("SMS_CODE:"+ username);
             String encode = bCryptPasswordEncoder.encode(smsCode);
             mallUser.setPassword(encode);
-            if(mallUser == null){
-                UsernameNotFoundException usernameNotFoundException = new UsernameNotFoundException("用户名不存在");
-                usernameNotFoundException.printStackTrace();
-                throw usernameNotFoundException;
-            }
+
         }
         SecurityUser securityUser = new SecurityUser(mallUser);
         return securityUser;

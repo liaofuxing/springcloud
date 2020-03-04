@@ -23,7 +23,7 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         int status = StatusCodeEnum.NOT_LOGIN.getCode();
         response.setStatus(200);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.not_login(null)));
         response.flushBuffer();
         throw new AuthenticationServiceException(StatusCodeEnum.getName(status));
