@@ -12,14 +12,14 @@ Spring Security 过滤器链示意图
 #### 版本
 
 0.0.1版本 2020-02-26 updates
-1. update spring boot 2.0.0.RELEASE --> spring boot 2.2.2.RELEASE
-2. update spring cloud Finchley.SR2 --> spring cloud Hoxton.SR1
-3. 添加日志系统日志
-4. 新增基于spi服务的短息模块
-5. 新增spring security登录模块，json格式登录
-6. 新增vue前端项目[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template) ps：基于 @花裤衩 [vue-admin-template](https://gitee.com/panjiachen/vue-admin-template.git)的项目改写
+1. 【update】update spring boot 2.0.0.RELEASE --> spring boot 2.2.2.RELEASE
+2. 【update】update spring cloud Finchley.SR2 --> spring cloud Hoxton.SR1
+3. 【add】添加日志系统日志
+4. 【add】新增基于spi服务的短息模块
+5. 【add】新增spring security登录模块，json格式登录
+6. 【add】新增vue前端项目[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template) ps：基于 @花裤衩 [vue-admin-template](https://gitee.com/panjiachen/vue-admin-template.git)的项目改写
 
 0.0.2版本 2020-02-28 updates
-1. 新增手机号短信验证码登录方式，路径user/smsCode-login
-2. 优化security过滤器链
-3. 优化spi短信接口
+1. 【add】新增手机号短信验证码登录方式，路径user/smsCode-login
+2. 【fix】优化security过滤器链
+3. 【fix】优化spi短信接口
