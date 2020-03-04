@@ -18,11 +18,21 @@ public class ResultVOUtils {
      * @param object
      * @return
      */
+    /**
+     * 请求成功 20001
+     * @param object
+     * @return
+     */
     public static ResultVO success(Object object) {
         ResultVO resultVO = new ResultVO(ResultStatusCodeEnums.OK.getCode(), ResultStatusCodeEnums.OK.getMessage(), object);
         return resultVO;
     }
 
+    /**
+     * 请求失败 50000
+     * @param object
+     * @return
+     */
     public static ResultVO error(Object object) {
         ResultVO resultVO = new ResultVO(ResultStatusCodeEnums.ERROR.getCode(), ResultStatusCodeEnums.ERROR.getMessage(), object);
         return resultVO;
