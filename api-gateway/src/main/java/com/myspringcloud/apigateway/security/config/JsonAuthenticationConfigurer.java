@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 /**
- * Json 用户明密码登录配置文件(配置器)
+ * Json 用户名密码登录配置文件(配置器)
  *
  * @author liaofuxing
  * @date 2020/02/18 11:50

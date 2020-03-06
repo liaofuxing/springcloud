@@ -1,5 +1,4 @@
 package com.myspringcloud.apigateway.security.config;
-
 import com.myspringcloud.apigateway.security.filter.SmsCodeAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
