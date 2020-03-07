@@ -24,5 +24,7 @@ Spring Security 过滤器链示意图
 2. 【fix】优化security过滤器链
 3. 【fix】优化spi短信接口
 
-0.0.2.1版本 2020-03-27 updates
+0.0.2.1版本 2020-03-07 updates
 1. 【fix】优化token验证流程，token验证每次请求不用再查询数据库，查询redis比较验证，减少数据库访问次数
+2. 【update】update spring cloud Hoxton.SR1 --> spring cloud Hoxton.SR3
+3. 【add】 新增分页查询实例
