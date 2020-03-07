@@ -1,6 +1,10 @@
 package com.myspringcloud.apigateway.security.filter;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.myspringcloud.apigateway.security.entity.SecurityUser;
 import com.myspringcloud.apigateway.security.service.UserDetailServiceImpl;
+import com.myspringcloud.apigateway.securityuser.entity.MallUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -17,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @Component
 public class TokenAuthorizationFilter extends OncePerRequestFilter {
@@ -24,23 +29,20 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    @Autowired
-    private UserDetailServiceImpl userDetailsService;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         //从请求头中取出token
         String token = request.getHeader("token");
         if(!StringUtils.isEmpty(token)) {
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                //从redis中获取用户名
-                String username = redisTemplate.opsForValue().get("SECURITY_TOKEN:"+ token);
-                //从数据库中根据用户名获取用户
-                UserDetails systemUser = userDetailsService.loadUserByUsername(username);
-                if (systemUser != null) {
+                //用token从redis中获取用户信息，构造一个SecurityUser
+                String userInfoStr = redisTemplate.opsForValue().get("USER_INFO:"+ token);
+                Map<String,String> userMap = (Map<String,String>) JSONObject.parse(userInfoStr);
+                SecurityUser securityUser = new SecurityUser(userMap.get("username"),userMap.get("password"));
+                if (securityUser != null) {
                     //解析并设置认证信息（具体实现不清楚）
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(systemUser, null, systemUser.getAuthorities());
+                            new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

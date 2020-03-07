@@ -31,6 +31,12 @@ public class SecurityUser implements UserDetails {
         this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));;
     }
 
+    public SecurityUser(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));;
+    }
+
     private static final long serialVersionUID = 1L;
 
     @Override
