@@ -23,3 +23,6 @@ Spring Security 过滤器链示意图
 1. 【add】新增手机号短信验证码登录方式，路径user/smsCode-login
 2. 【fix】优化security过滤器链
 3. 【fix】优化spi短信接口
+
+0.0.2.1版本 2020-03-27 updates
+1. 【fix】优化token验证流程，token验证每次请求不用再查询数据库，查询redis比较验证，减少数据库访问次数
