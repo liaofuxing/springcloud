@@ -6,15 +6,14 @@ import com.myspringcloud.commodity.entity.CommodityInfo;
 import com.myspringcloud.commodity.entity.SystemUser;
 import com.myspringcloud.common.enums.ExceptionEnums;
 import com.myspringcloud.common.exception.ExceptionUtils;
-import com.myspringcloud.common.spi.sms.SmsManager;
 import com.myspringcloud.common.upload.UploadUtils;
 import com.myspringcloud.common.utils.ResultVOUtils;
 import com.myspringcloud.common.vo.ResultVO;
 import com.myspringcloud.commodity.service.CommodityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -26,10 +25,10 @@ import java.util.List;
 @RequestMapping("/commodity")
 public class CommodityController {
 
-    @Autowired
+    @Resource
     private SystemClient systemClient;
 
-    @Autowired
+    @Resource
     private CommodityService commodityService;
 
     /**
