@@ -1,4 +1,4 @@
-package com.myspringcloud.system.commoditycategory.dto;
+package com.springcloud.system.commoditycategory.dto;
 
 import lombok.Data;
 

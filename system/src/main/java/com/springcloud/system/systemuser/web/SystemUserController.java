@@ -1,12 +1,12 @@
-package com.myspringcloud.system.systemuser.web;
+package com.springcloud.system.systemuser.web;
 
 
 import com.springcloud.common.enums.ExceptionEnums;
 import com.springcloud.common.exception.ExceptionUtils;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
-import com.myspringcloud.system.systemuser.entity.SystemUser;
-import com.myspringcloud.system.systemuser.service.SystemUserService;
+import com.springcloud.system.systemuser.entity.SystemUser;
+import com.springcloud.system.systemuser.service.SystemUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;

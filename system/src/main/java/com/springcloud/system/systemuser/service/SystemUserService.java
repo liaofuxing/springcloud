@@ -1,8 +1,8 @@
-package com.myspringcloud.system.systemuser.service;
+package com.springcloud.system.systemuser.service;
 
 
-import com.myspringcloud.system.systemuser.dto.SystemUserDto;
-import com.myspringcloud.system.systemuser.entity.SystemUser;
+import com.springcloud.system.systemuser.dto.SystemUserDto;
+import com.springcloud.system.systemuser.entity.SystemUser;
 
 /**
  * 商城用户服务接口

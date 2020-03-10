@@ -1,9 +1,9 @@
-package com.myspringcloud.system.systemuser.service.impl;
+package com.springcloud.system.systemuser.service.impl;
 
-import com.myspringcloud.system.systemuser.dto.SystemUserDto;
-import com.myspringcloud.system.systemuser.entity.SystemUser;
-import com.myspringcloud.system.systemuser.repository.SystemUserRepository;
-import com.myspringcloud.system.systemuser.service.SystemUserService;
+import com.springcloud.system.systemuser.dto.SystemUserDto;
+import com.springcloud.system.systemuser.entity.SystemUser;
+import com.springcloud.system.systemuser.repository.SystemUserRepository;
+import com.springcloud.system.systemuser.service.SystemUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

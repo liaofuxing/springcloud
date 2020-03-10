@@ -1,9 +1,9 @@
-package com.myspringcloud.system.commoditycategory.service.impl;
+package com.springcloud.system.commoditycategory.service.impl;
 
-import com.myspringcloud.system.commoditycategory.dto.CommodityCategoryDto;
-import com.myspringcloud.system.commoditycategory.entity.CommodityCategory;
-import com.myspringcloud.system.commoditycategory.repository.CommodityCategoryRepository;
-import com.myspringcloud.system.commoditycategory.service.CommodityCategoryService;
+import com.springcloud.system.commoditycategory.dto.CommodityCategoryDto;
+import com.springcloud.system.commoditycategory.entity.CommodityCategory;
+import com.springcloud.system.commoditycategory.repository.CommodityCategoryRepository;
+import com.springcloud.system.commoditycategory.service.CommodityCategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

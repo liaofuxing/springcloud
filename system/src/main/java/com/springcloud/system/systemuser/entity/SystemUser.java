@@ -1,20 +1,25 @@
-package com.myspringcloud.system.systemuser.dto;
+package com.springcloud.system.systemuser.entity;
+
 
 import lombok.Data;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
-/**
- * 商城用户
- */
 
+/**
+ * 系统用户(运营平台用户)
+ */
 @Data
-public class SystemUserDto {
+@Entity
+public class SystemUser {
 
     /**
-     * 系统用户用户id
+     * 系统用户id
      */
+    @Id
     private String id;
+
 
     /**
      * 账号

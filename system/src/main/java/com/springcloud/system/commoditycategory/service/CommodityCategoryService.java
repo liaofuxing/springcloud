@@ -1,7 +1,7 @@
-package com.myspringcloud.system.commoditycategory.service;
+package com.springcloud.system.commoditycategory.service;
 
-import com.myspringcloud.system.commoditycategory.dto.CommodityCategoryDto;
-import com.myspringcloud.system.commoditycategory.entity.CommodityCategory;
+import com.springcloud.system.commoditycategory.dto.CommodityCategoryDto;
+import com.springcloud.system.commoditycategory.entity.CommodityCategory;
 
 /**
  * 商城用户服务接口
