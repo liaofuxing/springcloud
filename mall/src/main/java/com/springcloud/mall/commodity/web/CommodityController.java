@@ -1,15 +1,14 @@
-package com.myspringcloud.commodity.web;
+package com.springcloud.mall.commodity.web;
 
-
-import com.myspringcloud.client.systemclient.SystemClient;
-import com.myspringcloud.commodity.entity.CommodityInfo;
-import com.myspringcloud.commodity.entity.SystemUser;
-import com.myspringcloud.common.enums.ExceptionEnums;
-import com.myspringcloud.common.exception.ExceptionUtils;
-import com.myspringcloud.common.upload.UploadUtils;
-import com.myspringcloud.common.utils.ResultVOUtils;
-import com.myspringcloud.common.vo.ResultVO;
-import com.myspringcloud.commodity.service.CommodityService;
+import com.springcloud.common.enums.ExceptionEnums;
+import com.springcloud.common.exception.ExceptionUtils;
+import com.springcloud.common.upload.UploadUtils;
+import com.springcloud.common.utils.ResultVOUtils;
+import com.springcloud.common.vo.ResultVO;
+import com.springcloud.mall.client.systemclient.SystemClient;
+import com.springcloud.mall.commodity.entity.CommodityInfo;
+import com.springcloud.mall.commodity.entity.SystemUser;
+import com.springcloud.mall.commodity.service.CommodityService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

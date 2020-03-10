@@ -1,6 +1,6 @@
-package com.myspringcloud.spi.service;
+package com.springcloud.mall.spi.service;
 
-import com.myspringcloud.common.spi.sms.Sms;
+import com.springcloud.common.spi.sms.Sms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

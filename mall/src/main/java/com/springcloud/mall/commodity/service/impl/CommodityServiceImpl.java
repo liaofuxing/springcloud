@@ -1,8 +1,8 @@
-package com.myspringcloud.commodity.service.impl;
+package com.springcloud.mall.commodity.service.impl;
 
-import com.myspringcloud.commodity.entity.CommodityInfo;
-import com.myspringcloud.commodity.repository.CommodityRepository;
-import com.myspringcloud.commodity.service.CommodityService;
+import com.springcloud.mall.commodity.entity.CommodityInfo;
+import com.springcloud.mall.commodity.repository.CommodityRepository;
+import com.springcloud.mall.commodity.service.CommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

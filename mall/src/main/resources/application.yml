@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/springcloud?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://192.168.31.100:3306/springcloud?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
   jpa:
     show-sql: true
     properties:
@@ -18,7 +18,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://192.168.31.100:8761/eureka/
 
 feign:
   hystrix:

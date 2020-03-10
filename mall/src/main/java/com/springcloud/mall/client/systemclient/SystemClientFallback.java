@@ -1,10 +1,13 @@
-package com.myspringcloud.client.systemclient;
+package com.springcloud.mall.client.systemclient;
 
-import com.myspringcloud.commodity.entity.SystemUser;
-import com.myspringcloud.common.utils.ResultVOUtils;
-import com.myspringcloud.common.vo.ResultVO;
+import com.springcloud.common.utils.ResultVOUtils;
+import com.springcloud.common.vo.ResultVO;
+import com.springcloud.mall.commodity.entity.SystemUser;
 import org.springframework.stereotype.Component;
 
+/**
+ * hystrix熔断器生效回调
+ */
 @Component
 public class SystemClientFallback implements SystemClient {
     @Override

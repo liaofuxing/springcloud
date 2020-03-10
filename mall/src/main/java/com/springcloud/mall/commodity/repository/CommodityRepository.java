@@ -1,6 +1,6 @@
-package com.myspringcloud.commodity.repository;
+package com.springcloud.mall.commodity.repository;
 
-import com.myspringcloud.commodity.entity.CommodityInfo;
+import com.springcloud.mall.commodity.entity.CommodityInfo;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**

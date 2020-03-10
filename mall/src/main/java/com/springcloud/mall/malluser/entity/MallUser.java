@@ -1,4 +1,4 @@
-package com.myspringcloud.malluser.entity;
+package com.springcloud.mall.malluser.entity;
 
 import lombok.Data;
 
