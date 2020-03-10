@@ -2,9 +2,9 @@
 
 #### 介绍
 基于spring cloud 实现的微服务脚手架工具，主要用于初步了解spring cloud项目，包含一下模块
-1.spring security 基于前后端分离json串登录，和短信验证码登录
-2.spring social QQ 微信登录
-3.新增基于spi服务的短息模块
+1. spring security 基于前后端分离json串登录，和短信验证码登录
+2. spring social QQ 微信登录
+3. 新增基于spi服务的短息模块
 
 #### 软件架构图
 ![项目架构图](https://images.gitee.com/uploads/images/2020/0307/142228_9cd47c8b_2025409.png "项目大体架构图.png")
