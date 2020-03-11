@@ -35,3 +35,6 @@ Spring Security 过滤器链示意图
 0.0.3版本 2020-03-10 updates
 1. 【fix】优化打包方式，现在可以在springcloud 路径下运行 mvn package 进行整体项目打包
 2. 【add】新增hystrix熔断器
+
+0.0.3.1版本 2020-03-11 updates
+1. 【add】新增前端项目vue项目动态路由，现在可从数据库取菜单，不用在项目中写死，前端地址
