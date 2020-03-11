@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 /**
- * 商城用户服务实现
+ * 系统用户（运营平台）服务实现
  */
 
 @Service

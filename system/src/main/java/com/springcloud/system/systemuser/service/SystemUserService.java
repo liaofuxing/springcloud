@@ -5,7 +5,7 @@ import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 
 /**
- * 商城用户服务接口
+ * 系统用户（运营平台）服务接口
  */
 public interface SystemUserService {
 

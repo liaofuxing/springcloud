@@ -4,7 +4,7 @@ import com.springcloud.system.commoditycategory.dto.CommodityCategoryDto;
 import com.springcloud.system.commoditycategory.entity.CommodityCategory;
 
 /**
- * 商城用户服务接口
+ * 服务接口
  */
 public interface CommodityCategoryService {
 
