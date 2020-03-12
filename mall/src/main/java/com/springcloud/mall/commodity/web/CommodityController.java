@@ -37,7 +37,7 @@ public class CommodityController {
      * @return
      */
     @GetMapping("/findSystemUserById")
-    public ResultVO<SystemUser> findSystemUserById(@RequestParam String id){
+    public ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id){
 
         ResultVO<SystemUser> resultVO = systemClient.findSystemUserById(id);
         return resultVO;

@@ -30,7 +30,7 @@ public interface SystemClient {
      * @return
      */
     @GetMapping("/systemUser/api/findSystemUserById")
-    ResultVO<SystemUser> findSystemUserById(@RequestParam String id);
+    ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id);
 
     /**
      *

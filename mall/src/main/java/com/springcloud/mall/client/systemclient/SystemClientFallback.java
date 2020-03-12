@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemClientFallback implements SystemClient {
     @Override
-    public ResultVO<SystemUser> findSystemUserById(String id) {
+    public ResultVO<SystemUser> findSystemUserById(Integer id) {
         return ResultVOUtils.error("hystrix 生效");
     }
 
