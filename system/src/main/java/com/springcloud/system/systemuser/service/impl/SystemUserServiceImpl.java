@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,18 +22,32 @@ public class SystemUserServiceImpl implements SystemUserService {
     private SystemUserRepository systemUserRepository;
 
     /**
-     * 根据id查询ShopUser
+     * 根据id查询SystemUser
      */
     @Override
-    public SystemUser findSystemUserById(String ShopUserId) {
-        return systemUserRepository.findById(ShopUserId).get();
+    public SystemUser findSystemUserById(Integer systemUserId) {
+        return systemUserRepository.findById(systemUserId).get();
     }
 
+    /**
+     * 查询用户列表
+     * @param systemUser
+     * @return
+     */
+    @Override
+    public List<SystemUser> findSystemUserList(SystemUser systemUser) {
+        return systemUserRepository.findSystemUserList(systemUser);
+    }
+
+    /**
+     * 新增用户
+     * @param systemUserDto
+     * @return
+     */
     @Override
     public SystemUser addSystemUser(SystemUserDto systemUserDto) {
         SystemUser systemUser = new SystemUser();
         BeanUtils.copyProperties(systemUserDto, systemUser);
-        systemUser.setId(UUID.randomUUID().toString());
         return systemUserRepository.save(systemUser);
     }
 }

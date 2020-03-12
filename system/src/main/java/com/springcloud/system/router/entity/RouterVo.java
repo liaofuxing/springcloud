@@ -5,6 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 返回给前端的路由vo
+ *
  * @author liaofuxing
  * @E-mail liaofuxing@outlook.com
  * @date 2019/08/09 15:26

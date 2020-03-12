@@ -5,6 +5,7 @@ import com.springcloud.common.enums.ExceptionEnums;
 import com.springcloud.common.exception.ExceptionUtils;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
+import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.service.SystemUserService;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 /**
@@ -29,8 +31,17 @@ public class SystemUserController {
     @Autowired
     public SystemUserService systemUserService;
 
+    @PostMapping("/findSystemUserList")
+    public ResultVO<SystemUser> findSystemUserList(SystemUserDto systemUserDto) {
+        SystemUser systemUser = new SystemUser();
+        BeanUtils.copyProperties(systemUserDto, systemUser);
+        List<SystemUser> systemUserList = systemUserService.findSystemUserList(systemUser);
+
+        return ResultVOUtils.success(systemUserList);
+    }
+
     @GetMapping("/findSystemUserById")
-    public ResultVO<SystemUser> findSystemUserById(@RequestParam String id) {
+    public ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         return ResultVOUtils.success(systemUserById);
     }
@@ -59,7 +70,7 @@ public class SystemUserController {
      * @return
      */
     @GetMapping("/api/findSystemUserById")
-    public ResultVO<SystemUser> findSystemUserByIdApi(@RequestParam String id) {
+    public ResultVO<SystemUser> findSystemUserByIdApi(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         SystemUser systemUserInfo = new SystemUser();
         BeanUtils.copyProperties(systemUserById,systemUserInfo);

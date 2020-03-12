@@ -8,6 +8,8 @@ import javax.persistence.Table;
 import java.util.List;
 
 /**
+ * 前端路由实体类
+ *
  * @author liaofuxing
  * @E-mail liaofuxing@outlook.com
  * @date: 2019/08/07 11:45

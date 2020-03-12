@@ -3,8 +3,8 @@ package com.springcloud.system.systemuser.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -18,7 +18,9 @@ public class SystemUser {
      * 系统用户id
      */
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
 
 
     /**
@@ -35,5 +37,45 @@ public class SystemUser {
      * 系统用户密码
      */
     private String password;
+
+    /**
+     * 年龄
+     */
+    private Integer age;
+
+    /**
+     * 地址
+     */
+    private String address;
+
+    /**
+     * 电话
+     */
+    private String phone;
+
+    /**
+     * 性别
+     */
+    private String gender;
+
+    /**
+     * 所属部门id
+     */
+    private Integer departmentId;
+
+    /**
+     * 部门名称
+     */
+    private String departmentName;
+
+    /**
+     * 创建时间
+     */
+    private String creationTime;
+
+    /**
+     * 修改时间
+     */
+    private String updateTime;
 
 }
