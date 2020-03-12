@@ -14,6 +14,9 @@ Spring Security 过滤器链示意图
 
 #### 版本
 
+0.0.0.1版本 2019-03-07 updates
+1. project Initial commit
+
 0.0.1版本 2020-02-26 updates
 1. 【update】update spring boot 2.0.0.RELEASE --> spring boot 2.2.2.RELEASE
 2. 【update】update spring cloud Finchley.SR2 --> spring cloud Hoxton.SR1
