@@ -13,7 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-cloud</name>
     <packaging>pom</packaging>
-    <description>Demo project for Spring Boot</description>
+    <description>spring-cloud project</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -61,10 +61,10 @@
     </dependencyManagement>
 
     <modules>
-        <module>api-gateway</module>
-        <module>common</module>
-        <module>eureka</module>
-        <module>mall</module>
-        <module>system</module>
+        <module>api-gateway</module> <!-- 网关 -->
+        <module>common</module>      <!-- 公共类 -->
+        <module>eureka</module>      <!-- 注册中心 -->
+        <module>mall</module>        <!-- 商城 -->
+        <module>system</module>      <!-- 运营平台 -->
     </modules>
 </project>
