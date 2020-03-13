@@ -5,6 +5,9 @@
 
  **架构技术：** 基于 spring boot 2.2.2.RELEASE，spring cloud Finchley.SR2 构建，使用zuul、eureka、hystrix、feign微服务架构体系，spring security 作为安全模块
 
+#### 项目前端
+前端Vue项目地址[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template) ps：前端项目框架并不是本人自己开发，基于[@花裤衩](http://gitee.com/panjiachen/vue-admin-template.git)开源项目修改而来
+
 
 #### 软件架构图
 ![项目架构图](https://images.gitee.com/uploads/images/2020/0307/142228_9cd47c8b_2025409.png "项目大体架构图.png")
@@ -23,7 +26,7 @@ Spring Security 过滤器链示意图
 3. 【add】添加日志系统日志
 4. 【add】新增基于spi服务的短息模块
 5. 【add】新增spring security登录模块，json格式登录
-6. 【add】新增vue前端项目[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template) ps：基于 @花裤衩 [vue-admin-template](https://gitee.com/panjiachen/vue-admin-template.git)的项目改写
+6. 【add】新增vue前端项目[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template) ps：基于 @花裤衩 [vue-admin-template]([https://gitee.com/panjiachen/vue-admin-template.git]的项目改写
 
 0.0.2版本 2020-02-28 updates
 1. 【add】新增手机号短信验证码登录方式，路径user/smsCode-login
