@@ -2,6 +2,7 @@
 
 #### 项目介绍
 基于spring cloud 实现的微服务脚手架工具，包含简洁美观的Vue前端项目，非常适合中小企业在此项目上做二次开发（OA，商城等类型项目），也可以当作spring cloud入门项目加以学习
+
  **架构技术：** 基于 spring boot 2.2.2.RELEASE，spring cloud Finchley.SR2 ，使用eureka、hystrix、feign、config、gateway 微服务架构体系，spring security 作为安全模块
 
 
