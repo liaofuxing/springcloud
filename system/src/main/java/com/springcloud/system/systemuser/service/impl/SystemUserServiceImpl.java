@@ -1,20 +1,33 @@
 package com.springcloud.system.systemuser.service.impl;
 
+import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.repository.SystemUserRepository;
 import com.springcloud.system.systemuser.service.SystemUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 /**
- * 系统用户（运营平台）服务实现
+ * 系统用户（运营平台）Service 实现
+ *
+ * @author liaofuxing
+ * @date 2020/03/13 20:01
  */
-
 @Service
 public class SystemUserServiceImpl implements SystemUserService {
 
@@ -31,6 +44,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     /**
      * 查询用户列表
+     *
      * @param systemUser
      * @return
      */
@@ -40,7 +54,36 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     /**
+     * 分页查询
+     * @param systemUserDto
+     * @return
+     */
+    public DatePageVO<SystemUser> findSystemUserPage(SystemUserDto systemUserDto) {
+
+        Pageable pageable = PageRequest.of(systemUserDto.getPage() - 1, systemUserDto.getPageSize(), Sort.Direction.ASC, "id");
+
+        Specification<SystemUser> specification = (Specification<SystemUser>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> list = new ArrayList();
+//
+//            if (!StringUtils.isEmpty(username)) {
+//                list.add(cb.like(root.get("username").as(String.class), "%" + username + "%"));
+//            }
+//
+//            if (!StringUtils.isEmpty(password)) {
+//                list.add(cb.equal(root.get("password").as(String.class), password));
+//            }
+            return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+        };
+
+        Page<SystemUser> systemUserPage = systemUserRepository.findAll(specification, pageable);
+        DatePageVO<SystemUser> datePageVO = new DatePageVO(systemUserPage.getTotalElements(), systemUserPage.getContent());
+        return datePageVO;
+    }
+
+
+    /**
      * 新增用户
+     *
      * @param systemUserDto
      * @return
      */

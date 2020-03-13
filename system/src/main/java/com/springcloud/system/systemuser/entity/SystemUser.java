@@ -4,11 +4,12 @@ package com.springcloud.system.systemuser.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
 
 
 /**
  * 系统用户(运营平台用户)
+ * @author liaofuxing
+ * @date 2020/03/13 22:04
  */
 @Data
 @Entity

@@ -1,13 +1,16 @@
 package com.springcloud.system.systemuser.service;
 
 
+import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 
 import java.util.List;
 
 /**
- * 系统用户（运营平台）服务接口
+ * 系统用户（运营平台）Service 接口
+ * @author liaofuxing
+ * @date 2020/03/13 20:01
  */
 public interface SystemUserService {
 
@@ -24,6 +27,13 @@ public interface SystemUserService {
      * @return
      */
     List<SystemUser> findSystemUserList(SystemUser systemUser);
+
+    /**
+     * 分页查询
+     * @param systemUserDto
+     * @return
+     */
+    DatePageVO<SystemUser> findSystemUserPage(SystemUserDto systemUserDto);
 
     /**
      * 新增商城用户

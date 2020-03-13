@@ -1,6 +1,7 @@
 package com.springcloud.system.systemuser.web;
 
 
+import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.common.enums.ExceptionEnums;
 import com.springcloud.common.exception.ExceptionUtils;
 import com.springcloud.common.utils.ResultVOUtils;
@@ -38,6 +39,17 @@ public class SystemUserController {
         List<SystemUser> systemUserList = systemUserService.findSystemUserList(systemUser);
 
         return ResultVOUtils.success(systemUserList);
+    }
+
+    /**
+     * 运营平台用户分页查询
+     * @param systemUserDto
+     * @return
+     */
+    @PostMapping("/findSystemUserPage")
+    public ResultVO<SystemUser> findSystemUserPage(SystemUserDto systemUserDto) {
+        DatePageVO<SystemUser> systemUserPage = systemUserService.findSystemUserPage(systemUserDto);
+        return ResultVOUtils.success(systemUserPage);
     }
 
     @GetMapping("/findSystemUserById")

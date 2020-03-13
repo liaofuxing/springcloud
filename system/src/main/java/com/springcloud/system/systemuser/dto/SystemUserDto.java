@@ -1,16 +1,18 @@
 package com.springcloud.system.systemuser.dto;
 
+import com.springcloud.common.entity.PageInfo;
 import lombok.Data;
 
-import javax.persistence.Id;
-import java.util.Date;
+
 
 /**
- * 商城用户
+ * 系统用户(运营平台用户)Dto
+ * @author liaofuxing
+ * @date 2020/03/13 22:01
  */
 
 @Data
-public class SystemUserDto {
+public class SystemUserDto extends PageInfo {
 
     /**
      * 系统用户id
