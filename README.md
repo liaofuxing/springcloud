@@ -26,7 +26,7 @@ Spring Security 过滤器链示意图
 3. 【add】添加日志系统日志
 4. 【add】新增基于spi服务的短息模块
 5. 【add】新增spring security登录模块，json格式登录
-6. 【add】新增vue前端项目[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template) ps：基于 @花裤衩 [vue-admin-template]([https://gitee.com/panjiachen/vue-admin-template.git]的项目改写
+6. 【add】新增vue前端项目[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template) ps：基于 @花裤衩 [vue-admin-template]([https://gitee.com/panjiachen/vue-admin-template.git])的项目改写
 
 0.0.2版本 2020-02-28 updates
 1. 【add】新增手机号短信验证码登录方式，路径user/smsCode-login
