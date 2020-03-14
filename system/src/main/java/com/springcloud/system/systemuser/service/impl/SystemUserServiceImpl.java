@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -63,15 +64,19 @@ public class SystemUserServiceImpl implements SystemUserService {
         Pageable pageable = PageRequest.of(systemUserDto.getPage() - 1, systemUserDto.getPageSize(), Sort.Direction.ASC, "id");
 
         Specification<SystemUser> specification = (Specification<SystemUser>) (root, criteriaQuery, criteriaBuilder) -> {
+            //分页条件组装
             List<Predicate> list = new ArrayList();
-//
-//            if (!StringUtils.isEmpty(username)) {
-//                list.add(cb.like(root.get("username").as(String.class), "%" + username + "%"));
-//            }
-//
-//            if (!StringUtils.isEmpty(password)) {
-//                list.add(cb.equal(root.get("password").as(String.class), password));
-//            }
+            if (!StringUtils.isEmpty(systemUserDto.getAccount())) {
+                list.add(criteriaBuilder.like(root.get("account").as(String.class), "%" + systemUserDto.getAccount() + "%"));
+            }
+
+            if (!StringUtils.isEmpty(systemUserDto.getUsername())) {
+                list.add(criteriaBuilder.like(root.get("username").as(String.class), systemUserDto.getUsername() + "%"));
+            }
+
+            if (!StringUtils.isEmpty(systemUserDto.getPhone())) {
+                list.add(criteriaBuilder.equal(root.get("phone").as(String.class), systemUserDto.getPhone()));
+            }
             return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
         };
 
