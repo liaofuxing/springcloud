@@ -15,10 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +52,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     /**
-     * 分页查询
+     * 运营平台用户分页查询
      * @param systemUserDto
      * @return
      */
