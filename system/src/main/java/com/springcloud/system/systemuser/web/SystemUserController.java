@@ -9,6 +9,7 @@ import com.springcloud.common.vo.ResultVO;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.service.SystemUserService;
+import com.springcloud.system.systemuser.vo.SystemUserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,8 +51,8 @@ public class SystemUserController {
      */
     @PostMapping("/findSystemUserPage")
     @ResponseBody
-    public ResultVO<SystemUser> findSystemUserPage(SystemUserDto systemUserDto) {
-        DatePageVO<SystemUser> systemUserPage = systemUserService.findSystemUserPage(systemUserDto);
+    public ResultVO<SystemUserVO> findSystemUserPage(SystemUserDto systemUserDto) {
+        DatePageVO<SystemUserVO> systemUserPage = systemUserService.findSystemUserPage(systemUserDto);
         return ResultVOUtils.success(systemUserPage);
     }
 
@@ -60,6 +61,13 @@ public class SystemUserController {
     public ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         return ResultVOUtils.success(systemUserById);
+    }
+
+    @PostMapping("/editSystemUser")
+    @ResponseBody
+    public ResultVO<SystemUser> editSystemUser(SystemUser systemUser) {
+        systemUserService.editSystemUser(systemUser);
+        return ResultVOUtils.success(null);
     }
 
     /**

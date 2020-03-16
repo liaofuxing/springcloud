@@ -57,7 +57,7 @@ public class SystemUser {
     /**
      * 性别
      */
-    private String gender;
+    private Integer gender;
 
     /**
      * 所属部门id

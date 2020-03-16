@@ -5,6 +5,7 @@ import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.repository.SystemUserRepository;
 import com.springcloud.system.systemuser.service.SystemUserService;
+import com.springcloud.system.systemuser.vo.SystemUserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,8 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -28,6 +33,8 @@ import java.util.List;
  */
 @Service
 public class SystemUserServiceImpl implements SystemUserService {
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private SystemUserRepository systemUserRepository;
@@ -56,7 +63,7 @@ public class SystemUserServiceImpl implements SystemUserService {
      * @param systemUserDto
      * @return
      */
-    public DatePageVO<SystemUser> findSystemUserPage(SystemUserDto systemUserDto) {
+    public DatePageVO<SystemUserVO> findSystemUserPage(SystemUserDto systemUserDto) {
         Pageable pageable = PageRequest.of(systemUserDto.getPage() - 1, systemUserDto.getPageSize(), Sort.Direction.ASC, "id");
 
         Specification<SystemUser> specification = (Specification<SystemUser>) (root, criteriaQuery, criteriaBuilder) -> {
@@ -77,7 +84,20 @@ public class SystemUserServiceImpl implements SystemUserService {
         };
 
         Page<SystemUser> systemUserPage = systemUserRepository.findAll(specification, pageable);
-        DatePageVO<SystemUser> datePageVO = new DatePageVO(systemUserPage.getTotalElements(), systemUserPage.getContent());
+        List<SystemUser> systemUserList = systemUserPage.getContent();
+        List<SystemUserVO> systemUserVOList = new ArrayList();
+        BeanUtils.copyProperties(systemUserList, systemUserVOList);
+        for (SystemUser systemUser: systemUserList) {
+            SystemUserVO systemUserVO = new SystemUserVO();
+            BeanUtils.copyProperties(systemUser, systemUserVO);
+            if(systemUserVO.getGender().intValue() == 1){
+                systemUserVO.setGenderLabel("男");
+            }else{
+                systemUserVO.setGenderLabel("女");
+            }
+            systemUserVOList.add(systemUserVO);
+        }
+        DatePageVO<SystemUserVO> datePageVO = new DatePageVO(systemUserPage.getTotalElements(), systemUserVOList);
         return datePageVO;
     }
 
@@ -93,5 +113,17 @@ public class SystemUserServiceImpl implements SystemUserService {
         SystemUser systemUser = new SystemUser();
         BeanUtils.copyProperties(systemUserDto, systemUser);
         return systemUserRepository.save(systemUser);
+    }
+
+    /**
+     * 编辑SystemUser
+     * @param systemUser
+     */
+    @Override
+    public void editSystemUser(SystemUser systemUser) {
+        Optional<SystemUser> byId = systemUserRepository.findById(systemUser.getId());
+        SystemUser systemUserDB = byId.get();
+        BeanUtils.copyProperties(systemUser, systemUserDB);
+        systemUserRepository.save(systemUserDB);
     }
 }

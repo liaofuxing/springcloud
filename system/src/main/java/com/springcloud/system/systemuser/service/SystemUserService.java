@@ -4,6 +4,7 @@ package com.springcloud.system.systemuser.service;
 import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
+import com.springcloud.system.systemuser.vo.SystemUserVO;
 
 import java.util.List;
 
@@ -33,12 +34,20 @@ public interface SystemUserService {
      * @param systemUserDto
      * @return
      */
-    DatePageVO<SystemUser> findSystemUserPage(SystemUserDto systemUserDto);
+    DatePageVO<SystemUserVO> findSystemUserPage(SystemUserDto systemUserDto);
 
     /**
-     * 新增商城用户
+     * 新增运营平台用户
      * @param systemUserDto
      * @return
      */
     SystemUser addSystemUser(SystemUserDto systemUserDto);
+
+
+    /**
+     * 修改运营平台用户信息
+     * @param systemUser
+     * @return
+     */
+    void editSystemUser(SystemUser systemUser);
 }

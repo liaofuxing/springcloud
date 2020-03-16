@@ -53,7 +53,7 @@ public class SystemUserDto extends PageInfo {
     /**
      * 性别
      */
-    private String gender;
+    private Integer gender;
 
     /**
      * 所属部门id
