@@ -16,14 +16,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/router")
-
 public class RouterController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RouterController.class);
 
     @Autowired
     private RouterService routerService;
 
-    @RequestMapping("/getRouters")
+    @GetMapping("/getRouters")
     @ResponseBody
     public ResultVO<Router> getRouters( HttpServletRequest request) {
         LOGGER.info("收到请求...");

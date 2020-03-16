@@ -11,6 +11,7 @@ import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.service.SystemUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ import java.util.List;
  * @date 2019/03/10 4:39
  * @E-mail liaofuxing@outlook.com
  */
-@RestController
+@Controller
 @RequestMapping("/systemUser")
 public class SystemUserController {
 
@@ -33,6 +34,7 @@ public class SystemUserController {
     public SystemUserService systemUserService;
 
     @PostMapping("/findSystemUserList")
+    @ResponseBody
     public ResultVO<SystemUser> findSystemUserList(SystemUserDto systemUserDto) {
         SystemUser systemUser = new SystemUser();
         BeanUtils.copyProperties(systemUserDto, systemUser);
@@ -47,12 +49,14 @@ public class SystemUserController {
      * @return
      */
     @PostMapping("/findSystemUserPage")
+    @ResponseBody
     public ResultVO<SystemUser> findSystemUserPage(SystemUserDto systemUserDto) {
         DatePageVO<SystemUser> systemUserPage = systemUserService.findSystemUserPage(systemUserDto);
         return ResultVOUtils.success(systemUserPage);
     }
 
     @GetMapping("/findSystemUserById")
+    @ResponseBody
     public ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         return ResultVOUtils.success(systemUserById);
@@ -64,6 +68,7 @@ public class SystemUserController {
      * @return
      */
     @PostMapping("/api/findSystemUser")
+    @ResponseBody
     public ResultVO<SystemUser> findSystemUserById(@RequestBody @Valid SystemUser systemUserInfo, BindingResult result) {
         if (result.hasErrors()) {
             for (ObjectError error : result.getAllErrors()) {
@@ -82,6 +87,7 @@ public class SystemUserController {
      * @return
      */
     @GetMapping("/api/findSystemUserById")
+    @ResponseBody
     public ResultVO<SystemUser> findSystemUserByIdApi(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         SystemUser systemUserInfo = new SystemUser();

@@ -25,14 +25,14 @@ public class DatePageVO<T>{
     /**
      * 分页的的实际数据
      */
-    private List<T> pageDate;
+    private List<T> pageData;
 
     public DatePageVO() {
 
     }
 
-    public DatePageVO(Long total, List<T> pageDate) {
+    public DatePageVO(Long total, List<T> pageData) {
         this.total = total;
-        this.pageDate = pageDate;
+        this.pageData = pageData;
     }
 }
