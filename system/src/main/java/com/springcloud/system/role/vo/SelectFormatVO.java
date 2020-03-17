@@ -10,11 +10,11 @@ import lombok.Data;
  *
  **/
 @Data
-public class RoleInfoVO {
+public class SelectFormatVO {
     private Integer value;
     private String label;
 
-    public RoleInfoVO(Integer value, String label) {
+    public SelectFormatVO(Integer value, String label) {
         this.value = value;
         this.label = label;
     }

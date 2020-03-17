@@ -13,4 +13,6 @@ import javax.annotation.Resource;
  **/
 @Resource
 public interface SystemUserRoleRepository extends JpaRepository<SystemUserRole, Integer> {
+
+    SystemUserRole findBySystemUserId(Integer systemUserId);
 }

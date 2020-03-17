@@ -2,9 +2,7 @@ package com.springcloud.system.role.etity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 角色表
@@ -19,7 +17,10 @@ import javax.persistence.Table;
 public class RoleInfo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String roleName;
+
+    private String description;
 }

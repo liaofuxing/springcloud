@@ -30,7 +30,6 @@ public class SystemUserRoleServiceImpl implements SystemUserRoleService {
 
     @Override
     public SystemUserRole findSystemUserRoleBySystemUserId(Integer systemUserId) {
-        Optional<SystemUserRole> byId = systemUserRoleRepository.findById(systemUserId);
-        return byId.get();
+        return systemUserRoleRepository.findBySystemUserId(systemUserId);
     }
 }
