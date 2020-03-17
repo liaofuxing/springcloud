@@ -37,7 +37,7 @@ public class SystemUserController {
 
     @PostMapping("/findSystemUserList")
     @ResponseBody
-    public ResultVO<SystemUser> findSystemUserList(SystemUserDto systemUserDto) {
+    public ResultVO<SystemUser> findSystemUserList(@RequestBody SystemUserDto systemUserDto) {
         SystemUser systemUser = new SystemUser();
         BeanUtils.copyProperties(systemUserDto, systemUser);
         List<SystemUser> systemUserList = systemUserService.findSystemUserList(systemUser);
@@ -53,7 +53,7 @@ public class SystemUserController {
      */
     @PostMapping("/findSystemUserPage")
     @ResponseBody
-    public ResultVO<SystemUserVO> findSystemUserPage(SystemUserDto systemUserDto) {
+    public ResultVO<SystemUserVO> findSystemUserPage(@RequestBody SystemUserDto systemUserDto) {
         DatePageVO<SystemUserVO> systemUserPage = systemUserService.findSystemUserPage(systemUserDto);
         return ResultVOUtils.success(systemUserPage);
     }
@@ -67,7 +67,7 @@ public class SystemUserController {
 
     @PostMapping("/editSystemUser")
     @ResponseBody
-    public ResultVO<SystemUser> editSystemUser(SystemUserDto systemUserDto) {
+    public ResultVO<SystemUser> editSystemUser(@RequestBody SystemUserDto systemUserDto) {
         systemUserService.editSystemUser(systemUserDto);
         return ResultVOUtils.success(null);
     }
@@ -90,7 +90,6 @@ public class SystemUserController {
         SystemUser systemUserById = systemUserService.findSystemUserById(systemUserInfo.getId());
         return ResultVOUtils.success(systemUserById);
     }
-
 
     /**
      * 给API调用

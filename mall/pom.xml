@@ -48,6 +48,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+
         <!-- mysql驱动包依赖 -->
         <dependency>
             <groupId>mysql</groupId>

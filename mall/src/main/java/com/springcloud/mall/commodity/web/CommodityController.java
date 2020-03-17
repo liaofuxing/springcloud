@@ -9,6 +9,7 @@ import com.springcloud.mall.client.systemclient.SystemClient;
 import com.springcloud.mall.commodity.entity.CommodityInfo;
 import com.springcloud.mall.commodity.entity.SystemUser;
 import com.springcloud.mall.commodity.service.CommodityService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,7 @@ import java.util.List;
  * @author liaofuxing
  * @date 2019/03/08 2:40
  */
-@RestController
+@Controller
 @RequestMapping("/commodity")
 public class CommodityController {
 
@@ -37,6 +38,7 @@ public class CommodityController {
      * @return
      */
     @GetMapping("/findSystemUserById")
+    @ResponseBody
     public ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id){
 
         ResultVO<SystemUser> resultVO = systemClient.findSystemUserById(id);
@@ -52,6 +54,7 @@ public class CommodityController {
      * @return
      */
     @PostMapping("/findSystemUser")
+    @ResponseBody
     public ResultVO<SystemUser> findSystemUser(@RequestBody SystemUser systemUserInfo) {
         try {
             ResultVO<SystemUser> resultVO = systemClient.findSystemUser(systemUserInfo);
@@ -66,6 +69,7 @@ public class CommodityController {
      *  @return
      */
     @GetMapping("/findCommodityAll")
+    @ResponseBody
     public ResultVO<List<CommodityInfo>> findCommodityAll() {
         try {
             List<CommodityInfo> resultVO = commodityService.findCommodityAll();
@@ -81,6 +85,7 @@ public class CommodityController {
      *  @return
      */
     @PostMapping("/upload")
+    @ResponseBody
     public ResultVO<String> findCommodityAll(@RequestParam("file") MultipartFile file) {
         UploadUtils uploadUtils = new UploadUtils();
         String result;
