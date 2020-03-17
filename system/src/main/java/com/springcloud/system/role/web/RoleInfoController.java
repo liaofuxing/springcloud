@@ -10,10 +10,7 @@ import com.springcloud.system.role.vo.RoleInfoVO;
 import com.springcloud.system.role.vo.SelectFormatVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,7 +46,7 @@ public class RoleInfoController {
      */
     @GetMapping("/getRoleList")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> getRoleList(RoleInfoDto roleInfoDto) {
+    public ResultVO<RoleInfoVO> getRoleList(RoleInfoDto roleInfoDto) {
         DatePageVO<RoleInfoVO> roleInfoPage = roleInfoService.findRoleInfoPage(roleInfoDto);
         return ResultVOUtils.success(roleInfoPage);
     }
@@ -61,7 +58,7 @@ public class RoleInfoController {
      */
     @PostMapping("/editRole")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> editRole(RoleInfoDto roleInfoDto) {
+    public ResultVO<Object> editRole(@RequestBody RoleInfoDto roleInfoDto) {
         roleInfoService.editRole(roleInfoDto);
         return ResultVOUtils.success(null);
     }
@@ -73,7 +70,7 @@ public class RoleInfoController {
      */
     @PostMapping("/addRole")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> addRole(RoleInfoDto roleInfoDto) {
+    public ResultVO<Object> addRole(@RequestBody RoleInfoDto roleInfoDto) {
         roleInfoService.addRole(roleInfoDto);
         return ResultVOUtils.success(null);
     }
