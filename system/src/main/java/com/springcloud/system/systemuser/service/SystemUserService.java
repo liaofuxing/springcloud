@@ -46,8 +46,8 @@ public interface SystemUserService {
 
     /**
      * 修改运营平台用户信息
-     * @param systemUser
+     * @param systemUserDto
      * @return
      */
-    void editSystemUser(SystemUser systemUser);
+    void editSystemUser(SystemUserDto systemUserDto);
 }

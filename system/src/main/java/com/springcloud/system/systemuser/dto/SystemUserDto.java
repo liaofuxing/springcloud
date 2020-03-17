@@ -75,4 +75,14 @@ public class SystemUserDto extends PageInfo {
      */
     private String updateTime;
 
+    /**
+     * 角色
+     */
+    private Integer roleId;
+
+    /**
+     *  部门
+     */
+    //private Integer departmentId;
+
 }

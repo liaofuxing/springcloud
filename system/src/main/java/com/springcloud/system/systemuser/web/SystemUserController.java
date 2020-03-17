@@ -65,8 +65,8 @@ public class SystemUserController {
 
     @PostMapping("/editSystemUser")
     @ResponseBody
-    public ResultVO<SystemUser> editSystemUser(SystemUser systemUser) {
-        systemUserService.editSystemUser(systemUser);
+    public ResultVO<SystemUser> editSystemUser(SystemUserDto systemUserDto) {
+        systemUserService.editSystemUser(systemUserDto);
         return ResultVOUtils.success(null);
     }
 

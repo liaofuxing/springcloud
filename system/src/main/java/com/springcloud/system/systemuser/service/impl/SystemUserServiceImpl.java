@@ -1,6 +1,14 @@
 package com.springcloud.system.systemuser.service.impl;
 
 import com.springcloud.common.entity.DatePageVO;
+import com.springcloud.system.department.dao.SystemUserDepartmentRepository;
+import com.springcloud.system.department.entity.Department;
+import com.springcloud.system.department.entity.SystemUserDepartment;
+import com.springcloud.system.department.service.DepartmentService;
+import com.springcloud.system.role.dao.SystemUserRoleRepository;
+import com.springcloud.system.role.etity.RoleInfo;
+import com.springcloud.system.role.etity.SystemUserRole;
+import com.springcloud.system.role.service.RoleInfoService;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.repository.SystemUserRepository;
@@ -14,13 +22,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,10 +40,20 @@ import java.util.Optional;
 @Service
 public class SystemUserServiceImpl implements SystemUserService {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     @Autowired
     private SystemUserRepository systemUserRepository;
+
+    @Autowired
+    private RoleInfoService roleInfoService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private SystemUserDepartmentRepository systemUserDepartmentRepository;
+
+    @Autowired
+    private SystemUserRoleRepository systemUserRoleRepository;
 
     /**
      * 根据id查询SystemUser
@@ -95,6 +111,13 @@ public class SystemUserServiceImpl implements SystemUserService {
             }else{
                 systemUserVO.setGenderLabel("女");
             }
+            // 查询用户角色
+            RoleInfo roleInfoByUserId = roleInfoService.findRoleInfoByUserId(systemUserVO.getId());
+            systemUserVO.setRoleId(roleInfoByUserId.getId());
+
+            // 查询用户部门
+            Department departmentByUserId = departmentService.findDepartmentByUserId(systemUserVO.getId());
+            systemUserVO.setDepartmentId(departmentByUserId.getId());
             systemUserVOList.add(systemUserVO);
         }
         DatePageVO<SystemUserVO> datePageVO = new DatePageVO(systemUserPage.getTotalElements(), systemUserVOList);
@@ -117,13 +140,24 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     /**
      * 编辑SystemUser
-     * @param systemUser
+     * @param systemUserDto
      */
+    @Transactional
     @Override
-    public void editSystemUser(SystemUser systemUser) {
-        Optional<SystemUser> byId = systemUserRepository.findById(systemUser.getId());
+    public void editSystemUser(SystemUserDto systemUserDto) {
+        Optional<SystemUser> byId = systemUserRepository.findById(systemUserDto.getId());
         SystemUser systemUserDB = byId.get();
-        BeanUtils.copyProperties(systemUser, systemUserDB);
+        BeanUtils.copyProperties(systemUserDto, systemUserDB);
         systemUserRepository.save(systemUserDB);
+
+        // 保存角色
+        SystemUserRole systemUserRole = systemUserRoleRepository.findBySystemUserId(systemUserDto.getId());
+        systemUserRole.setRoleId(systemUserDto.getRoleId());
+        systemUserRoleRepository.save(systemUserRole);
+
+        // 保存部门
+        SystemUserDepartment systemUserDepartment = systemUserDepartmentRepository.findBySystemUserId(systemUserDto.getId());
+        systemUserDepartment.setDepartmentId(systemUserDto.getDepartmentId());
+        systemUserDepartmentRepository.save(systemUserDepartment);
     }
 }

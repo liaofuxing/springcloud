@@ -74,9 +74,22 @@ public class SystemUserVO extends PageInfo {
      */
     private String updateTime;
 
+
+    /**
+     * 页面显示值
+     */
     /**
      * 性别 对应值
      */
     private String genderLabel;
 
+    /**
+     * 角色
+     */
+    private Integer roleId;
+
+    /**
+     *  部门
+     */
+    //private Integer departmentId;
 }
