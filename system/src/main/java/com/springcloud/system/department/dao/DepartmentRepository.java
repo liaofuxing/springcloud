@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 /**
  * @author liaofuxing
  * @E-mail liaofuxing@outlook.com
- * @date 2020/03/16 20:20
+ * @date 2020/03/17 15:41
  **/
 @Resource
 public interface DepartmentRepository  extends JpaRepository<Department, Integer> {
