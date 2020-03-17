@@ -12,6 +12,6 @@ import javax.annotation.Resource;
  * @date 2020/03/17 15:41
  **/
 @Resource
-public interface DepartmentRepository  extends JpaRepository<Department, Integer> {
+public interface DepartmentRepository extends JpaRepository<Department, Integer> {
 
 }

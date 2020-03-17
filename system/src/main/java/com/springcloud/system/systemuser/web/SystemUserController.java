@@ -23,6 +23,7 @@ import java.util.List;
 
 /**
  * 系统用户控制器
+ *
  * @author liaofuxing
  * @date 2019/03/10 4:39
  * @E-mail liaofuxing@outlook.com
@@ -46,6 +47,7 @@ public class SystemUserController {
 
     /**
      * 运营平台用户分页查询
+     *
      * @param systemUserDto
      * @return
      */
@@ -72,6 +74,7 @@ public class SystemUserController {
 
     /**
      * 测试传一个对象,给API调用
+     *
      * @param systemUserInfo
      * @return
      */
@@ -91,6 +94,7 @@ public class SystemUserController {
 
     /**
      * 给API调用
+     *
      * @param id
      * @return
      */
@@ -99,7 +103,7 @@ public class SystemUserController {
     public ResultVO<SystemUser> findSystemUserByIdApi(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         SystemUser systemUserInfo = new SystemUser();
-        BeanUtils.copyProperties(systemUserById,systemUserInfo);
+        BeanUtils.copyProperties(systemUserById, systemUserInfo);
         return ResultVOUtils.success(systemUserInfo);
     }
 

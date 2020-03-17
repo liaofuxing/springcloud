@@ -36,7 +36,7 @@ public class RouterVo {
 
     private List<RouterVo> children;
 
-    public RouterVo (){
+    public RouterVo() {
 
     }
 

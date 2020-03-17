@@ -24,13 +24,13 @@ public class RouterController {
 
     @GetMapping("/getRouters")
     @ResponseBody
-    public ResultVO<Router> getRouters( HttpServletRequest request) {
+    public ResultVO<Router> getRouters(HttpServletRequest request) {
         LOGGER.info("收到请求...");
         String token = request.getHeader("token");
         //先获取所有一级路由
         List<RouterVo> routerByParent = routerService.getRouterByParent(0);
         List<RouterVo> routerEntityVos = routerService.formatRouter(routerByParent);
-        if (! routerEntityVos.isEmpty()) {
+        if (!routerEntityVos.isEmpty()) {
             return ResultVOUtils.success(routerEntityVos);
         } else {
             return ResultVOUtils.error(routerEntityVos);

@@ -10,6 +10,7 @@ public interface CommodityCategoryService {
 
     /**
      * 根据 CategoryId 查询商品类别
+     *
      * @param CategoryId
      * @return
      */
@@ -17,6 +18,7 @@ public interface CommodityCategoryService {
 
     /**
      * 新增商品类别
+     *
      * @param commodityCategoryDto
      * @return
      */

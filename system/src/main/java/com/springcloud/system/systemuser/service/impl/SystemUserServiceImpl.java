@@ -76,6 +76,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     /**
      * 运营平台用户分页查询
+     *
      * @param systemUserDto
      * @return
      */
@@ -103,7 +104,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         List<SystemUser> systemUserList = systemUserPage.getContent();
         List<SystemUserVO> systemUserVOList = new ArrayList();
         BeanUtils.copyProperties(systemUserList, systemUserVOList);
-        for (SystemUser systemUser: systemUserList) {
+        for (SystemUser systemUser : systemUserList) {
             SystemUserVO systemUserVO = new SystemUserVO();
             BeanUtils.copyProperties(systemUser, systemUserVO);
 
@@ -136,6 +137,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     /**
      * 编辑SystemUser
+     *
      * @param systemUserDto
      */
     @Transactional

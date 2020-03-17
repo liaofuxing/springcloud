@@ -12,6 +12,6 @@ import javax.annotation.Resource;
  * @date 2020/03/16 20:20
  **/
 @Resource
-public interface RoleInfoRepository  extends JpaRepository<RoleInfo, Integer>, JpaSpecificationExecutor {
+public interface RoleInfoRepository extends JpaRepository<RoleInfo, Integer>, JpaSpecificationExecutor {
 
 }

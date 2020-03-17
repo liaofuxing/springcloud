@@ -1,7 +1,6 @@
 package com.springcloud.system.department.service.impl;
 
 
-
 import com.springcloud.system.department.dao.DepartmentRepository;
 import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.department.entity.SystemUserDepartment;
@@ -17,10 +16,10 @@ import java.util.Optional;
 
 /**
  * 部门 Service
+ *
  * @author liaofuxing
  * @E-mail liaofuxing@outlook.com
  * @date 2020/03/17 16:00
- *
  **/
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -33,13 +32,14 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     /**
      * 查询所有角色
+     *
      * @return
      */
     @Override
     public List<SelectFormatVO> findDepartmentAll() {
         List<SelectFormatVO> selectFormatVOList = new ArrayList();
         List<Department> departmentList = departmentRepository.findAll();
-        for (Department department: departmentList) {
+        for (Department department : departmentList) {
             SelectFormatVO selectFormatVO = new SelectFormatVO(department.getId(), department.getDepartmentName());
             selectFormatVOList.add(selectFormatVO);
         }
@@ -48,6 +48,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     /**
      * 根据userId 查询角色
+     *
      * @param userId
      * @return
      */

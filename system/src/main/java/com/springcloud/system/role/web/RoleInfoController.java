@@ -32,44 +32,48 @@ public class RoleInfoController {
 
     /**
      * 查询角色列表
+     *
      * @return
      */
     @GetMapping("/getRoleSelect")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> getRoleSelect(){
+    public ResultVO<List<SelectFormatVO>> getRoleSelect() {
         List<SelectFormatVO> roleInfoVO = roleInfoService.findRoleAll();
         return ResultVOUtils.success(roleInfoVO);
     }
 
     /**
      * 查询角色列表
+     *
      * @return
      */
     @GetMapping("/getRoleList")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> getRoleList(RoleInfoDto roleInfoDto){
+    public ResultVO<List<SelectFormatVO>> getRoleList(RoleInfoDto roleInfoDto) {
         DatePageVO<RoleInfoVO> roleInfoPage = roleInfoService.findRoleInfoPage(roleInfoDto);
         return ResultVOUtils.success(roleInfoPage);
     }
 
     /**
      * 编辑角色
+     *
      * @return
      */
     @PostMapping("/editRole")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> editRole(RoleInfoDto roleInfoDto){
+    public ResultVO<List<SelectFormatVO>> editRole(RoleInfoDto roleInfoDto) {
         roleInfoService.editRole(roleInfoDto);
         return ResultVOUtils.success(null);
     }
 
     /**
      * 编辑角色
+     *
      * @return
      */
     @PostMapping("/addRole")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> addRole(RoleInfoDto roleInfoDto){
+    public ResultVO<List<SelectFormatVO>> addRole(RoleInfoDto roleInfoDto) {
         roleInfoService.addRole(roleInfoDto);
         return ResultVOUtils.success(null);
     }

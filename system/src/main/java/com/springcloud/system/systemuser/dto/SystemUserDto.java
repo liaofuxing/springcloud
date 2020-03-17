@@ -4,9 +4,9 @@ import com.springcloud.common.entity.PageInfo;
 import lombok.Data;
 
 
-
 /**
  * 系统用户(运营平台用户)Dto
+ *
  * @author liaofuxing
  * @date 2020/03/13 22:01
  */

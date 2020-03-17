@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * 系统用户（运营平台）Service 接口
+ *
  * @author liaofuxing
  * @date 2020/03/13 20:01
  */
@@ -17,6 +18,7 @@ public interface SystemUserService {
 
     /**
      * 根据 ShopUserId 查询用户
+     *
      * @param systemUserId
      * @return
      */
@@ -24,6 +26,7 @@ public interface SystemUserService {
 
     /**
      * 查询用户列表
+     *
      * @param systemUser
      * @return
      */
@@ -31,6 +34,7 @@ public interface SystemUserService {
 
     /**
      * 分页查询
+     *
      * @param systemUserDto
      * @return
      */
@@ -38,6 +42,7 @@ public interface SystemUserService {
 
     /**
      * 新增运营平台用户
+     *
      * @param systemUserDto
      * @return
      */
@@ -46,6 +51,7 @@ public interface SystemUserService {
 
     /**
      * 修改运营平台用户信息
+     *
      * @param systemUserDto
      * @return
      */

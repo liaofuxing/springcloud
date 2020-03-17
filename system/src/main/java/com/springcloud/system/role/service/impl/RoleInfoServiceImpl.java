@@ -1,7 +1,6 @@
 package com.springcloud.system.role.service.impl;
 
 
-
 import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.role.dao.RoleInfoRepository;
@@ -34,10 +33,10 @@ import java.util.Optional;
 
 /**
  * 角色 Service
+ *
  * @author liaofuxing
  * @E-mail liaofuxing@outlook.com
  * @date 2020/03/16 20:25
- *
  **/
 @Service
 public class RoleInfoServiceImpl implements RoleInfoService {
@@ -50,13 +49,14 @@ public class RoleInfoServiceImpl implements RoleInfoService {
 
     /**
      * 查询所有角色
+     *
      * @return
      */
     @Override
     public List<SelectFormatVO> findRoleAll() {
         List<SelectFormatVO> roleInfoVOList = new ArrayList();
         List<RoleInfo> roleInfoList = roleInfoRepository.findAll();
-        for (RoleInfo roleInfo: roleInfoList) {
+        for (RoleInfo roleInfo : roleInfoList) {
             SelectFormatVO roleInfoVO = new SelectFormatVO(roleInfo.getId(), roleInfo.getRoleName());
             roleInfoVOList.add(roleInfoVO);
         }
@@ -65,6 +65,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
 
     /**
      * 根据userId 查询角色
+     *
      * @param userId
      * @return
      */
@@ -77,6 +78,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
 
     /**
      * 编辑角色
+     *
      * @param roleInfoDto
      */
     @Transient
@@ -90,6 +92,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
 
     /**
      * 新增角色
+     *
      * @param roleInfoDto
      */
     @Override
@@ -101,6 +104,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
 
     /**
      * 运营平台用户分页查询
+     *
      * @param roleInfoDto
      * @return
      */

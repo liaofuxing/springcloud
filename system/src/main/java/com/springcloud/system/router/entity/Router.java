@@ -41,7 +41,8 @@ public class Router {
     private String description;
 
 
-    public Router() {}
+    public Router() {
+    }
 
     public Router(Integer id, String name, String path) {
         this.id = id;

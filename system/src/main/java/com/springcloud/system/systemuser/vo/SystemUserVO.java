@@ -6,6 +6,7 @@ import lombok.Data;
 
 /**
  * 系统用户(运营平台用户)VO
+ *
  * @author liaofuxing
  * @date 2020/03/13 22:01
  */

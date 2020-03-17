@@ -27,22 +27,24 @@ public class DepartmentController {
 
     /**
      * 查询部门下拉框列表
+     *
      * @return
      */
     @GetMapping("/getDepartmentSelect")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> getDepartmentSelect(){
+    public ResultVO<List<SelectFormatVO>> getDepartmentSelect() {
         List<SelectFormatVO> selectFormatVO = departmentService.findDepartmentAll();
         return ResultVOUtils.success(selectFormatVO);
     }
 
     /**
      * 查询部门列表
+     *
      * @return
      */
     @GetMapping("/getDepartmentList")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> getDepartmentList(){
+    public ResultVO<List<SelectFormatVO>> getDepartmentList() {
         List<SelectFormatVO> selectFormatVO = departmentService.findDepartmentAll();
         return ResultVOUtils.success(selectFormatVO);
     }
