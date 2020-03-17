@@ -106,11 +106,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         for (SystemUser systemUser: systemUserList) {
             SystemUserVO systemUserVO = new SystemUserVO();
             BeanUtils.copyProperties(systemUser, systemUserVO);
-            if(systemUserVO.getGender().intValue() == 1){
-                systemUserVO.setGenderLabel("男");
-            }else{
-                systemUserVO.setGenderLabel("女");
-            }
+
             // 查询用户角色
             RoleInfo roleInfoByUserId = roleInfoService.findRoleInfoByUserId(systemUserVO.getId());
             systemUserVO.setRoleId(roleInfoByUserId.getId());
