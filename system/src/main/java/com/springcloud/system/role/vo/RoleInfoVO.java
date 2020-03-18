@@ -1,6 +1,7 @@
 package com.springcloud.system.role.vo;
 
 import com.springcloud.common.entity.PageInfo;
+import com.springcloud.system.router.entity.MenuRole;
 import lombok.Data;
 
 /**
@@ -18,4 +19,7 @@ public class RoleInfoVO extends PageInfo {
     private String roleName;
 
     private String description;
+
+    private String menu;
+
 }

@@ -154,8 +154,6 @@ public class SystemUserServiceImpl implements SystemUserService {
         systemUserDepartment.setSystemUserId(systemUser.getId());
         systemUserDepartmentService.addSystemUserDepartment(systemUserDepartment);
 
-        SystemUserRole s = new SystemUserRole();
-        System.out.println(s.getId() / 2);
     }
 
     /**

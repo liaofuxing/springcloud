@@ -22,4 +22,10 @@ public class RoleInfoDto extends PageInfo {
     private String roleName;
 
     private String description;
+
+    // 以下不是数据库字段
+    /**
+     * 角色选中菜单id
+     */
+    private String treeChecked;
 }

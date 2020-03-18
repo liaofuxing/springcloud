@@ -10,6 +10,8 @@ import com.springcloud.system.role.service.RoleInfoService;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import com.springcloud.system.role.vo.RoleInfoVO;
 import com.springcloud.system.role.vo.SelectFormatVO;
+import com.springcloud.system.router.entity.MenuRole;
+import com.springcloud.system.router.service.MenuRoleService;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,33 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     @Autowired
     private RoleInfoRepository roleInfoRepository;
 
+    @Autowired
+    private MenuRoleService menuRoleService;
+
+    /**
+     * 角色分页查询
+     *
+     * @param roleInfoDto
+     * @return
+     */
+    @Override
+    public DatePageVO<RoleInfoVO> findRoleInfoPage(RoleInfoDto roleInfoDto) {
+        Pageable pageable = PageRequest.of(roleInfoDto.getPage() - 1, roleInfoDto.getPageSize(), Sort.Direction.ASC, "id");
+
+        Specification<SystemUser> specification = (Specification<SystemUser>) (root, criteriaQuery, criteriaBuilder) -> {
+            //分页条件组装
+            List<Predicate> list = new ArrayList();
+            if (!StringUtils.isEmpty(roleInfoDto.getRoleName())) {
+                list.add(criteriaBuilder.like(root.get("roleName").as(String.class), "%" + roleInfoDto.getRoleName() + "%"));
+            }
+
+            return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+        };
+        Page<RoleInfo> roleInfoPage = roleInfoRepository.findAll(specification, pageable);
+        DatePageVO<RoleInfoVO> datePageVO = new DatePageVO(roleInfoPage.getTotalElements(), roleInfoPage.getContent());
+        return datePageVO;
+    }
+
     /**
      * 查询所有角色
      *
@@ -73,6 +102,23 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     }
 
     /**
+     * 新增角色
+     *
+     * @param roleInfoDto
+     */
+    @Transactional
+    @Override
+    public void addRole(RoleInfoDto roleInfoDto) {
+        RoleInfo roleInfo = new RoleInfo();
+        BeanUtils.copyProperties(roleInfoDto, roleInfo);
+        roleInfoRepository.save(roleInfo);
+
+        // 保存角色和菜单的关系
+        MenuRole menuRole = new MenuRole(roleInfoDto.getId(), roleInfoDto.getTreeChecked());
+        menuRoleService.addMenuRole(menuRole);
+    }
+
+    /**
      * 编辑角色
      *
      * @param roleInfoDto
@@ -84,42 +130,18 @@ public class RoleInfoServiceImpl implements RoleInfoService {
         RoleInfo roleInfoDB = byId.get();
         BeanUtils.copyProperties(roleInfoDto, roleInfoDB);
         roleInfoRepository.save(roleInfoDB);
+
+        // 保存角色和菜单的关系
+        MenuRole menuRole = menuRoleService.findMenuRole(roleInfoDto.getId());
+        if(menuRole == null) {
+            menuRole = new MenuRole();
+            menuRole.setRoleId(roleInfoDto.getId());
+        }
+        menuRole.setMenu(roleInfoDto.getTreeChecked());
+        menuRoleService.addMenuRole(menuRole);
     }
 
-    /**
-     * 新增角色
-     *
-     * @param roleInfoDto
-     */
-    @Transactional
-    @Override
-    public void addRole(RoleInfoDto roleInfoDto) {
-        RoleInfo roleInfo = new RoleInfo();
-        BeanUtils.copyProperties(roleInfoDto, roleInfo);
-        roleInfoRepository.save(roleInfo);
-    }
 
-    /**
-     * 运营平台用户分页查询
-     *
-     * @param roleInfoDto
-     * @return
-     */
-    @Override
-    public DatePageVO<RoleInfoVO> findRoleInfoPage(RoleInfoDto roleInfoDto) {
-        Pageable pageable = PageRequest.of(roleInfoDto.getPage() - 1, roleInfoDto.getPageSize(), Sort.Direction.ASC, "id");
 
-        Specification<SystemUser> specification = (Specification<SystemUser>) (root, criteriaQuery, criteriaBuilder) -> {
-            //分页条件组装
-            List<Predicate> list = new ArrayList();
-            if (!StringUtils.isEmpty(roleInfoDto.getRoleName())) {
-                list.add(criteriaBuilder.like(root.get("roleName").as(String.class), "%" + roleInfoDto.getRoleName() + "%"));
-            }
 
-            return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
-        };
-        Page<SystemUser> roleInfoPage = roleInfoRepository.findAll(specification, pageable);
-        DatePageVO<RoleInfoVO> datePageVO = new DatePageVO(roleInfoPage.getTotalElements(), roleInfoPage.getContent());
-        return datePageVO;
-    }
 }
