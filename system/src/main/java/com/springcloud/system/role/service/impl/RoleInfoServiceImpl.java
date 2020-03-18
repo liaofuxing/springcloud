@@ -114,7 +114,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
         roleInfoRepository.save(roleInfo);
 
         // 保存角色和菜单的关系
-        MenuRole menuRole = new MenuRole(roleInfoDto.getId(), roleInfoDto.getTreeChecked());
+        MenuRole menuRole = new MenuRole(roleInfo.getId(), roleInfoDto.getTreeChecked());
         menuRoleService.addMenuRole(menuRole);
     }
 
