@@ -2,7 +2,6 @@ package com.springcloud.system.router.web;
 
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
-import com.springcloud.system.router.entity.Router;
 import com.springcloud.system.router.entity.Router2TreeVO;
 import com.springcloud.system.router.entity.RouterVo;
 import com.springcloud.system.router.service.RouterService;
@@ -15,20 +14,30 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ *
+ * @author liaofuxing
+ * @E-mail liaofuxing@outlook.com
+ * @date 2020/03/19 02:40
+ *
+ **/
 @Controller
 @RequestMapping("/router")
 public class RouterController {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RouterController.class);
+
 
     @Autowired
     private RouterService routerService;
+
 
     @GetMapping("/getRouters")
     @ResponseBody
     public ResultVO getRouters(HttpServletRequest request) {
         LOGGER.info("收到请求...");
-
-        List<RouterVo> routerVos= routerService.getRouters();
+        String token = request.getHeader("token");
+        List<RouterVo> routerVos = routerService.getRouters(token);
         if (!routerVos.isEmpty()) {
             return ResultVOUtils.success(routerVos);
         } else {

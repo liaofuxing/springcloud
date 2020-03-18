@@ -34,6 +34,8 @@ public class RouterVo {
 
     private String description;
 
+    private Integer hidden = 1;
+
     private List<RouterVo> children;
 
     public RouterVo() {
