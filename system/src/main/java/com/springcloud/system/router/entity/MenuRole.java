@@ -19,4 +19,13 @@ public class MenuRole {
      * 菜单json串
      */
     private String menu;
+
+    public MenuRole() {
+
+    }
+
+    public MenuRole(Integer roleId, String menu) {
+        this.roleId = roleId;
+        this.menu = menu;
+    }
 }

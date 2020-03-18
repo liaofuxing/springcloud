@@ -11,6 +11,8 @@ public class Router2TreeVO {
 
     private String label;
 
+    private String treeChecked;
+
     private List<Router2TreeVO> children;
 
     public Router2TreeVO() {
