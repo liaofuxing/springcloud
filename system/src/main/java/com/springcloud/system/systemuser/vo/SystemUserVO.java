@@ -55,15 +55,6 @@ public class SystemUserVO extends PageInfo {
      */
     private Integer gender;
 
-    /**
-     * 所属部门id
-     */
-    private Integer departmentId;
-
-    /**
-     * 部门名称
-     */
-    private String departmentName;
 
     /**
      * 创建时间
@@ -77,13 +68,8 @@ public class SystemUserVO extends PageInfo {
 
 
     /**
-     * 页面显示值
+     * 以下不是数据库字段
      */
-    /**
-     * 性别 对应值
-     */
-    private String genderLabel;
-
     /**
      * 角色
      */
@@ -92,5 +78,5 @@ public class SystemUserVO extends PageInfo {
     /**
      *  部门
      */
-    //private Integer departmentId;
+    private Integer departmentId;
 }

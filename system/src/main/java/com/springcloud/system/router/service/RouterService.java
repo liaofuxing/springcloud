@@ -2,6 +2,7 @@ package com.springcloud.system.router.service;
 
 import com.springcloud.system.router.dao.RouterDao;
 import com.springcloud.system.router.entity.Router;
+import com.springcloud.system.router.entity.Router2TreeVO;
 import com.springcloud.system.router.entity.RouterVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,54 @@ public class RouterService {
             }
         }
         return routerList;
+    }
+
+    /**
+     * 根据Parent获取路由
+     *
+     * @return
+     */
+    public List<Router2TreeVO> getRouter2TreeByParent(Integer parent) {
+        List<Router> byParent = routerDao.findByParent(parent);
+        List<Router2TreeVO> router2TreeVOList = new ArrayList<>();
+        for (Router router : byParent) {
+            Router2TreeVO router2TreeVO = new Router2TreeVO(router.getId(), router.getTitle());
+            router2TreeVOList.add(router2TreeVO);
+        }
+        return router2TreeVOList;
+    }
+
+    /**
+     * 递归组装router,目前可以无限递归,但前端最多能渲染2级目录（vue前端有bug）
+     *
+     * @param router2TreeVOList
+     * @return
+     */
+    public List<Router2TreeVO> formatRouter2Tree(List<Router2TreeVO> router2TreeVOList) {
+        for (Router2TreeVO router2TreeVO : router2TreeVOList) {
+            List<Router2TreeVO> router2TreeByParent = getRouter2TreeByParent(router2TreeVO.getId());
+            if (router2TreeByParent != null && router2TreeByParent.size() > 0) {
+                router2TreeVO.setChildren(router2TreeByParent);
+                formatRouter2Tree(router2TreeByParent);
+            }
+        }
+        return router2TreeVOList;
+    }
+
+    public List<RouterVo> getRouters() {
+        // 先获取一级路由
+        Integer parent = 0;
+        List<RouterVo> routerByParent = getRouterByParent(parent);
+        List<RouterVo> routerList = formatRouter(routerByParent);
+        return routerList;
+    }
+
+    public List<Router2TreeVO> getRouters2Tree() {
+        // 先获取一级路由
+        Integer parent = 0;
+        List<Router2TreeVO> routerByParent = getRouter2TreeByParent(parent);
+        List<Router2TreeVO> router2TreeVOList = formatRouter2Tree(routerByParent);
+        return router2TreeVOList;
     }
 
 }

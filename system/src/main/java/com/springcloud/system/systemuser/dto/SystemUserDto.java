@@ -2,6 +2,7 @@ package com.springcloud.system.systemuser.dto;
 
 import com.springcloud.common.entity.PageInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -11,6 +12,7 @@ import lombok.Data;
  * @date 2020/03/13 22:01
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SystemUserDto extends PageInfo {
 
@@ -56,16 +58,6 @@ public class SystemUserDto extends PageInfo {
     private Integer gender;
 
     /**
-     * 所属部门id
-     */
-    private Integer departmentId;
-
-    /**
-     * 部门名称
-     */
-    private String departmentName;
-
-    /**
      * 创建时间
      */
     private String creationTime;
@@ -75,6 +67,8 @@ public class SystemUserDto extends PageInfo {
      */
     private String updateTime;
 
+
+    // 以下不是数据库里的字段
     /**
      * 角色
      */
@@ -83,6 +77,6 @@ public class SystemUserDto extends PageInfo {
     /**
      *  部门
      */
-    //private Integer departmentId;
+    private Integer departmentId;
 
 }

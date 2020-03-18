@@ -48,39 +48,46 @@ public class SystemUserController {
     /**
      * 运营平台用户分页查询
      *
-     * @param systemUserDto
-     * @return
+     * @param systemUserDto dto
+     * @return ResultVO
      */
     @PostMapping("/findSystemUserPage")
     @ResponseBody
-    public ResultVO<SystemUserVO> findSystemUserPage(@RequestBody SystemUserDto systemUserDto) {
+    public ResultVO findSystemUserPage(@RequestBody SystemUserDto systemUserDto) {
         DatePageVO<SystemUserVO> systemUserPage = systemUserService.findSystemUserPage(systemUserDto);
         return ResultVOUtils.success(systemUserPage);
     }
 
     @GetMapping("/findSystemUserById")
     @ResponseBody
-    public ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id) {
+    public ResultVO findSystemUserById(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         return ResultVOUtils.success(systemUserById);
     }
 
     @PostMapping("/editSystemUser")
     @ResponseBody
-    public ResultVO<SystemUser> editSystemUser(@RequestBody SystemUserDto systemUserDto) {
+    public ResultVO editSystemUser(@RequestBody SystemUserDto systemUserDto) {
         systemUserService.editSystemUser(systemUserDto);
+        return ResultVOUtils.success(null);
+    }
+
+    @PostMapping("/addSystemUser")
+    @ResponseBody
+    public ResultVO addSystemUser(@RequestBody SystemUserDto systemUserDto) {
+        systemUserService.addSystemUser(systemUserDto);
         return ResultVOUtils.success(null);
     }
 
     /**
      * 测试传一个对象,给API调用
      *
-     * @param systemUserInfo
-     * @return
+     * @param systemUserInfo dto
+     * @return ResultVO
      */
     @PostMapping("/api/findSystemUser")
     @ResponseBody
-    public ResultVO<SystemUser> findSystemUserById(@RequestBody @Valid SystemUser systemUserInfo, BindingResult result) {
+    public ResultVO findSystemUserById(@RequestBody @Valid SystemUser systemUserInfo, BindingResult result) {
         if (result.hasErrors()) {
             for (ObjectError error : result.getAllErrors()) {
                 System.out.println(error.getDefaultMessage());
@@ -99,7 +106,7 @@ public class SystemUserController {
      */
     @GetMapping("/api/findSystemUserById")
     @ResponseBody
-    public ResultVO<SystemUser> findSystemUserByIdApi(@RequestParam Integer id) {
+    public ResultVO findSystemUserByIdApi(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         SystemUser systemUserInfo = new SystemUser();
         BeanUtils.copyProperties(systemUserById, systemUserInfo);

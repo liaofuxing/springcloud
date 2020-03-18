@@ -44,9 +44,9 @@ public interface SystemUserService {
      * 新增运营平台用户
      *
      * @param systemUserDto
-     * @return
+     *
      */
-    SystemUser addSystemUser(SystemUserDto systemUserDto);
+    void addSystemUser(SystemUserDto systemUserDto);
 
 
     /**

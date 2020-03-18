@@ -3,6 +3,7 @@ package com.springcloud.system.router.web;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
 import com.springcloud.system.router.entity.Router;
+import com.springcloud.system.router.entity.Router2TreeVO;
 import com.springcloud.system.router.entity.RouterVo;
 import com.springcloud.system.router.service.RouterService;
 import org.slf4j.Logger;
@@ -24,16 +25,27 @@ public class RouterController {
 
     @GetMapping("/getRouters")
     @ResponseBody
-    public ResultVO<Router> getRouters(HttpServletRequest request) {
+    public ResultVO getRouters(HttpServletRequest request) {
         LOGGER.info("收到请求...");
-        String token = request.getHeader("token");
-        //先获取所有一级路由
-        List<RouterVo> routerByParent = routerService.getRouterByParent(0);
-        List<RouterVo> routerEntityVos = routerService.formatRouter(routerByParent);
-        if (!routerEntityVos.isEmpty()) {
-            return ResultVOUtils.success(routerEntityVos);
+
+        List<RouterVo> routerVos= routerService.getRouters();
+        if (!routerVos.isEmpty()) {
+            return ResultVOUtils.success(routerVos);
         } else {
-            return ResultVOUtils.error(routerEntityVos);
+            return ResultVOUtils.error(routerVos);
+        }
+    }
+
+    @GetMapping("/getMenuTree")
+    @ResponseBody
+    public ResultVO getRouterTree() {
+        LOGGER.info("收到请求...");
+
+        List<Router2TreeVO> routers2TreeVOs = routerService.getRouters2Tree();
+        if (!routers2TreeVOs.isEmpty()) {
+            return ResultVOUtils.success(routers2TreeVOs);
+        } else {
+            return ResultVOUtils.error(routers2TreeVOs);
         }
     }
 }

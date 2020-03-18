@@ -2,9 +2,7 @@ package com.springcloud.system.department.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 部门表
@@ -19,6 +17,7 @@ import javax.persistence.Table;
 public class Department {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String departmentName;

@@ -5,10 +5,12 @@ import com.springcloud.system.department.dao.SystemUserDepartmentRepository;
 import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.department.entity.SystemUserDepartment;
 import com.springcloud.system.department.service.DepartmentService;
+import com.springcloud.system.department.service.SystemUserDepartmentService;
 import com.springcloud.system.role.dao.SystemUserRoleRepository;
 import com.springcloud.system.role.etity.RoleInfo;
 import com.springcloud.system.role.etity.SystemUserRole;
 import com.springcloud.system.role.service.RoleInfoService;
+import com.springcloud.system.role.service.SystemUserRoleService;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.repository.SystemUserRepository;
@@ -21,7 +23,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -50,10 +54,10 @@ public class SystemUserServiceImpl implements SystemUserService {
     private DepartmentService departmentService;
 
     @Autowired
-    private SystemUserDepartmentRepository systemUserDepartmentRepository;
+    private SystemUserDepartmentService systemUserDepartmentService;
 
     @Autowired
-    private SystemUserRoleRepository systemUserRoleRepository;
+    private SystemUserRoleService systemUserRoleService;
 
     /**
      * 根据id查询SystemUser
@@ -128,19 +132,40 @@ public class SystemUserServiceImpl implements SystemUserService {
      * @param systemUserDto
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public SystemUser addSystemUser(SystemUserDto systemUserDto) {
+    public void addSystemUser(SystemUserDto systemUserDto) {
         SystemUser systemUser = new SystemUser();
         BeanUtils.copyProperties(systemUserDto, systemUser);
-        return systemUserRepository.save(systemUser);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        systemUser.setPassword(bCryptPasswordEncoder.encode("123456"));
+        systemUserRepository.save(systemUser);
+
+
+        // 保存角色关系
+        SystemUserRole systemUserRole = new SystemUserRole();
+        systemUserRole.setRoleId(systemUserDto.getRoleId());
+        systemUserRole.setSystemUserId(systemUser.getId());
+        systemUserRoleService.addSystemUserRole(systemUserRole);
+
+        // 保存部门关系
+        SystemUserDepartment systemUserDepartment = new SystemUserDepartment();
+        systemUserDepartment.setDepartmentId(systemUserDto.getDepartmentId());
+        systemUserDepartment.setSystemUserId(systemUser.getId());
+        systemUserDepartmentService.addSystemUserDepartment(systemUserDepartment);
+
+        SystemUserRole s = new SystemUserRole();
+        System.out.println(s.getId() / 2);
     }
 
     /**
      * 编辑SystemUser
      *
+     * this @Transactional is Propagation.REQUIRED, 这是一个整体事务，出现异常会一起回滚
+     *
      * @param systemUserDto
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void editSystemUser(SystemUserDto systemUserDto) {
         Optional<SystemUser> byId = systemUserRepository.findById(systemUserDto.getId());
@@ -148,14 +173,14 @@ public class SystemUserServiceImpl implements SystemUserService {
         BeanUtils.copyProperties(systemUserDto, systemUserDB);
         systemUserRepository.save(systemUserDB);
 
-        // 保存角色
-        SystemUserRole systemUserRole = systemUserRoleRepository.findBySystemUserId(systemUserDto.getId());
+        // 保存用户和角色关系
+        SystemUserRole systemUserRole = systemUserRoleService.findSystemUserRoleBySystemUserId(systemUserDto.getId());
         systemUserRole.setRoleId(systemUserDto.getRoleId());
-        systemUserRoleRepository.save(systemUserRole);
+        systemUserRoleService.addSystemUserRole(systemUserRole);
 
-        // 保存部门
-        SystemUserDepartment systemUserDepartment = systemUserDepartmentRepository.findBySystemUserId(systemUserDto.getId());
+        // 保存用户和部门角色关系
+        SystemUserDepartment systemUserDepartment = systemUserDepartmentService.findSystemUserDepartmentBySystemUserId(systemUserDto.getId());
         systemUserDepartment.setDepartmentId(systemUserDto.getDepartmentId());
-        systemUserDepartmentRepository.save(systemUserDepartment);
+        systemUserDepartmentService.addSystemUserDepartment(systemUserDepartment);
     }
 }

@@ -2,7 +2,6 @@ package com.springcloud.system.role.service.impl;
 
 
 import com.springcloud.common.entity.DatePageVO;
-import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.role.dao.RoleInfoRepository;
 import com.springcloud.system.role.dto.RoleInfoDto;
 import com.springcloud.system.role.etity.RoleInfo;
@@ -11,21 +10,18 @@ import com.springcloud.system.role.service.RoleInfoService;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import com.springcloud.system.role.vo.RoleInfoVO;
 import com.springcloud.system.role.vo.SelectFormatVO;
-import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
-import com.springcloud.system.systemuser.vo.SystemUserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.management.relation.Role;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +77,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
      *
      * @param roleInfoDto
      */
-    @Transient
+    @Transactional
     @Override
     public void editRole(RoleInfoDto roleInfoDto) {
         Optional<RoleInfo> byId = roleInfoRepository.findById(roleInfoDto.getId());
@@ -95,6 +91,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
      *
      * @param roleInfoDto
      */
+    @Transactional
     @Override
     public void addRole(RoleInfoDto roleInfoDto) {
         RoleInfo roleInfo = new RoleInfo();

@@ -11,4 +11,6 @@ public interface SystemUserDepartmentService {
 
     SystemUserDepartment findSystemUserDepartmentBySystemUserId(Integer systemUserId);
 
+    void addSystemUserDepartment(SystemUserDepartment systemUserDepartment);
+
 }

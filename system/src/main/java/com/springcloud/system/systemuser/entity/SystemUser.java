@@ -61,16 +61,6 @@ public class SystemUser {
     private Integer gender;
 
     /**
-     * 所属部门id
-     */
-    private Integer departmentId;
-
-    /**
-     * 部门名称
-     */
-    private String departmentName;
-
-    /**
      * 创建时间
      */
     private String creationTime;
