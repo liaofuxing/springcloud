@@ -20,6 +20,8 @@ public class SecurityUser implements UserDetails {
 
     private String password;
 
+    private Integer enabledFlag;
+
     private Collection<? extends  GrantedAuthority> authorities;
 
     public SecurityUser() {
@@ -29,19 +31,22 @@ public class SecurityUser implements UserDetails {
     public SecurityUser(MallUser mallUser) {
         this.username = mallUser.getUsername();
         this.password = mallUser.getPassword();
-        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));;
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));
+
+
     }
 
     public SecurityUser(SystemUser systemUser) {
         this.username = systemUser.getUsername();
         this.password = systemUser.getPassword();
-        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));;
+        this.enabledFlag = systemUser.getEnabledFlag();
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));
     }
 
     public SecurityUser(String username, String password) {
         this.username = username;
         this.password = password;
-        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));;
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));
     }
 
     private static final long serialVersionUID = 1L;
@@ -78,6 +83,6 @@ public class SecurityUser implements UserDetails {
     //是否可用 ,禁用的用户不能身份验证
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabledFlag != 1;
     }
 }

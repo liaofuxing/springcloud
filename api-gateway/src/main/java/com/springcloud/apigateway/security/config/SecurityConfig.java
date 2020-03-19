@@ -141,8 +141,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         auth
                 .authenticationProvider(systemUserAuthenticationProvider)
-                .authenticationProvider(daoAuthenticationProvider)
                 .authenticationProvider(userSmsAuthenticationProvider);
+                //.authenticationProvider(daoAuthenticationProvider)
+
 
     }
 

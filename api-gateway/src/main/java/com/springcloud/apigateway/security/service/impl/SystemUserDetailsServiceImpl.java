@@ -16,16 +16,12 @@ public class SystemUserDetailsServiceImpl implements SystemUserDetailsService {
 
     @Override
     public SecurityUser loadUserBySystemUsername(String username) throws UsernameNotFoundException {
-        SystemUser systemUser = new SystemUser();
-        if(username.contains("!")) {
-            String[] splitUsername = username.split("!");
-            systemUser = systemUserDao.findSystemUserByUsername(splitUsername[0]);
+        SystemUser  systemUser = systemUserDao.findSystemUserByUsername(username);
             if (systemUser == null){
                 UsernameNotFoundException usernameNotFoundException = new UsernameNotFoundException("用户名不存在");
                 usernameNotFoundException.printStackTrace();
                 throw usernameNotFoundException;
             }
-        }
         return new SecurityUser(systemUser);
     }
 }
