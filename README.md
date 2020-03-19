@@ -45,3 +45,7 @@ Spring Security 过滤器链示意图
 0.0.3.1版本 2020-03-13 updates
 1. 【add】新增前端项目vue的动态路由，现在可从数据库取菜单，不用在项目中写死，前端地址[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template)
 2. 【add】配合前端实现列表分页功能，前端基于Element UI 分页插件
+
+0.0.5版本 2020-03-19 updates
+1. 【fix】基于多AuthenticationProvider的验证方式，优化登录流程，修改登录bug
+2. 【fix】规范化类和包命名
