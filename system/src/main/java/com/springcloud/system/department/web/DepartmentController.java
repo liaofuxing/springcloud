@@ -1,14 +1,15 @@
 package com.springcloud.system.department.web;
 
+import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
+import com.springcloud.system.department.dto.DepartmentDto;
 import com.springcloud.system.department.service.DepartmentService;
+import com.springcloud.system.department.vo.DepartmentVO;
 import com.springcloud.system.role.vo.SelectFormatVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class DepartmentController {
     /**
      * 查询部门下拉框列表
      *
-     * @return
+     * @return ResultVO<List<SelectFormatVO>>
      */
     @GetMapping("/getDepartmentSelect")
     @ResponseBody
@@ -38,14 +39,45 @@ public class DepartmentController {
     }
 
     /**
-     * 查询部门列表
+     * 查询部门列表 分页
      *
-     * @return
+     * @return ResultVO
      */
     @GetMapping("/getDepartmentList")
     @ResponseBody
-    public ResultVO<List<SelectFormatVO>> getDepartmentList() {
-        List<SelectFormatVO> selectFormatVO = departmentService.findDepartmentAll();
-        return ResultVOUtils.success(selectFormatVO);
+    public ResultVO getDepartmentList(DepartmentDto departmentDto) {
+        DatePageVO<DepartmentVO> departmentVOPage = departmentService.findDepartmentPage(departmentDto);
+        return ResultVOUtils.success(departmentVOPage);
     }
+
+    /**
+     * 新增
+     *
+     * @param departmentDto dto
+     *
+     * @return ResultVO
+     */
+    @PostMapping("/addDepartment")
+    @ResponseBody
+    public ResultVO addDepartment(@RequestBody DepartmentDto departmentDto) {
+        departmentService.addDepartment(departmentDto);
+        return ResultVOUtils.success(null);
+    }
+
+    /**
+     *
+     * 查询部门列表 分页
+     *
+     * @param departmentDto dto
+     *
+     * @return ResultVO
+     */
+    @PostMapping("/editDepartment")
+    @ResponseBody
+    public ResultVO editDepartment(@RequestBody DepartmentDto departmentDto) {
+        departmentService.editDepartment(departmentDto);
+        return ResultVOUtils.success(null);
+    }
+
+
 }
