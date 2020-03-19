@@ -78,7 +78,7 @@ public class ResultVOUtils {
      * @return
      */
     public static ResultVO not_login(Object object) {
-        ResultVO resultVO = new ResultVO(StatusCodeEnum.NOT_LOGIN.getCode(), StatusCodeEnum.NOT_LOGIN.getName(), object);
+        ResultVO resultVO = new ResultVO(StatusCodeEnum.USER_ENABLED.getCode(), StatusCodeEnum.USER_ENABLED.getName(), object);
         return resultVO;
     }
 

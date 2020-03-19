@@ -10,6 +10,7 @@ import com.springcloud.system.router.entity.Router;
 import com.springcloud.system.router.entity.Router2TreeVO;
 import com.springcloud.system.router.entity.RouterVo;
 import com.springcloud.system.systemuser.entity.SystemUser;
+import com.springcloud.system.systemuser.service.SystemUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -39,6 +40,9 @@ public class RouterService {
 
     @Autowired
     private MenuRoleService menuRoleService;
+
+    @Autowired
+    private SystemUserService systemUserService;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -187,9 +191,10 @@ public class RouterService {
         String userInfoStr = stringRedisTemplate.opsForValue().get("USER_INFO:"+ token);
         JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
         SystemUser systemUser = JSON.toJavaObject(jsonObject, SystemUser.class);
-        systemUser.setId(1);
 
-        SystemUserRole systemUserRole = systemUserRoleService.findSystemUserRoleBySystemUserId(systemUser.getId());
+        SystemUser systemUserByUsername = systemUserService.findSystemUserByUsername(systemUser.getUsername());
+
+        SystemUserRole systemUserRole = systemUserRoleService.findSystemUserRoleBySystemUserId(systemUserByUsername.getId());
         MenuRole menuRole = menuRoleService.findMenuRole(systemUserRole.getRoleId());
         String[] menuSplit = menuRole.getMenu().split(",");
         List<String> menuSplitList = Arrays.asList(menuSplit);

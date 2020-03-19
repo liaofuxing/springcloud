@@ -17,17 +17,28 @@ import java.util.List;
 public interface SystemUserService {
 
     /**
-     * 根据 ShopUserId 查询用户
+     * 根据 id 查询用户
      *
-     * @param systemUserId
-     * @return
+     * @param id id
+     *
+     * @return SystemUser
      */
-    SystemUser findSystemUserById(Integer systemUserId);
+    SystemUser findSystemUserById(Integer id);
+
+    /**
+     * 根据 username 查询用户
+     *
+     * @param username username
+     *
+     * @return SystemUser
+     */
+    SystemUser findSystemUserByUsername(String username);
 
     /**
      * 查询用户列表
      *
      * @param systemUser
+     *
      * @return
      */
     List<SystemUser> findSystemUserList(SystemUser systemUser);

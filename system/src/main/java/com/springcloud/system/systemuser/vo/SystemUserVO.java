@@ -66,6 +66,11 @@ public class SystemUserVO extends PageInfo {
      */
     private String updateTime;
 
+    /**
+     * 账户是否被禁用 0.否 1.是
+     */
+    private Integer enabledFlag;
+
 
     /**
      * 以下不是数据库字段

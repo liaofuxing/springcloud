@@ -66,6 +66,14 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     /**
+     * 根据name查询SystemUser
+     */
+    @Override
+    public SystemUser findSystemUserByUsername(String username) {
+        return systemUserDao.findByUsername(username);
+    }
+
+    /**
      * 查询用户列表
      *
      * @param systemUser
