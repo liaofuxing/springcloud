@@ -1,8 +1,8 @@
-package com.springcloud.apigateway.securityuser.web;
+package com.springcloud.apigateway.securityuser.systemuser.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.springcloud.apigateway.securityuser.entity.MallUser;
+import com.springcloud.apigateway.securityuser.systemuser.entity.SystemUser;
 import com.springcloud.common.enums.ResultStatusCodeEnums;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
@@ -37,12 +37,12 @@ public class SystemUserController {
     public String getUserInfoByToken(HttpServletRequest request, HttpServletResponse response){
         String token = request.getHeader("token");
         String userInfoStr = stringRedisTemplate.opsForValue().get("USER_INFO:"+ token);
-        ResultVO<MallUser> resultVO;
+        ResultVO<SystemUser> resultVO;
         if(!StringUtils.isEmpty(userInfoStr)){
             JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
-            MallUser mallUser = JSON.toJavaObject(jsonObject, MallUser.class);
+            SystemUser systemUser = JSON.toJavaObject(jsonObject, SystemUser.class);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            resultVO = ResultVOUtils.success(mallUser);
+            resultVO = ResultVOUtils.success(systemUser);
         }else {
             //redis中没有用户信息
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

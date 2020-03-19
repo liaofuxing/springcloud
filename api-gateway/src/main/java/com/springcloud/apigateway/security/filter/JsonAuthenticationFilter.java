@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
  * @date 2020/02/18 11:50
  */
 public class JsonAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-	private boolean postOnly = true;
 
 	public JsonAuthenticationFilter() {
 		super(new AntPathRequestMatcher("/user/login", "POST"));
@@ -33,7 +32,7 @@ public class JsonAuthenticationFilter extends AbstractAuthenticationProcessingFi
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 
-			if (postOnly && !request.getMethod().equals("POST")) {
+		if (!request.getMethod().equals("POST")) {
 				throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
 			}
 

@@ -3,12 +3,17 @@ package com.springcloud.apigateway.security.config;
 
 import com.springcloud.apigateway.security.filter.TokenAuthenticationEntryPoint;
 import com.springcloud.apigateway.security.filter.TokenAuthorizationFilter;
+import com.springcloud.apigateway.security.provider.SystemUserAuthenticationProvider;
+import com.springcloud.apigateway.security.provider.UserSmsAuthenticationProvider;
 import com.springcloud.apigateway.security.securityhandle.TokenAccessDeniedHandler;
 import com.springcloud.apigateway.security.securityhandle.TokenLogoutSuccessHandler;
-import com.springcloud.apigateway.security.service.UserDetailServiceImpl;
+import com.springcloud.apigateway.security.service.SystemUserDetailsService;
+import com.springcloud.apigateway.security.service.impl.UserDetailServiceImpl;
+import com.springcloud.apigateway.security.service.UserSmsDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,7 +33,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    private UserDetailServiceImpl userDetailsService;
+    private UserDetailServiceImpl userDetailsServiceImpl;
+
+    @Autowired
+    private UserSmsDetailsService userSmsDetailsServiceImpl;
+
+    @Autowired
+    private SystemUserDetailsService systemUserDetailsServiceImpl;
+
+    @Autowired
+    private SystemUserAuthenticationProvider systemUserAuthenticationProvider;
+
+    @Autowired
+    private DaoAuthenticationProvider daoAuthenticationProvider;
+
+    @Autowired
+    private UserSmsAuthenticationProvider userSmsAuthenticationProvider;
 
     /**
      * 权限鉴定过滤器
@@ -120,9 +140,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth
-                //设置使用自己实现的userDetailsService（loadUserByUsername）
-                .userDetailsService(userDetailsService)
-                //设置密码加密方式
-                .passwordEncoder(bCryptPasswordEncoder());
+                .authenticationProvider(systemUserAuthenticationProvider)
+                .authenticationProvider(daoAuthenticationProvider)
+                .authenticationProvider(userSmsAuthenticationProvider);
+
     }
+
+
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(){
+
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(userDetailsServiceImpl);
+        return daoAuthenticationProvider;
+    }
+
+    @Bean
+    public UserSmsAuthenticationProvider UserSmsAuthenticationProvider(){
+
+        UserSmsAuthenticationProvider userSmsAuthenticationProvider = new UserSmsAuthenticationProvider();
+        userSmsAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        userSmsAuthenticationProvider.setUserDetailsService(userSmsDetailsServiceImpl);
+        return userSmsAuthenticationProvider;
+    }
+
+    @Bean
+    public SystemUserAuthenticationProvider systemUserAuthenticationProvider(){
+
+        SystemUserAuthenticationProvider systemUserAuthenticationProvider = new SystemUserAuthenticationProvider();
+        systemUserAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        systemUserAuthenticationProvider.setUserDetailsService(systemUserDetailsServiceImpl);
+        return systemUserAuthenticationProvider;
+    }
+
+
+
 }

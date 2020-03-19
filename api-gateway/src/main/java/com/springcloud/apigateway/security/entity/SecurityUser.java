@@ -1,6 +1,7 @@
 package com.springcloud.apigateway.security.entity;
 
-import com.springcloud.apigateway.securityuser.entity.MallUser;
+import com.springcloud.apigateway.securityuser.malluser.entity.MallUser;
+import com.springcloud.apigateway.securityuser.systemuser.entity.SystemUser;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +29,12 @@ public class SecurityUser implements UserDetails {
     public SecurityUser(MallUser mallUser) {
         this.username = mallUser.getUsername();
         this.password = mallUser.getPassword();
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));;
+    }
+
+    public SecurityUser(SystemUser systemUser) {
+        this.username = systemUser.getUsername();
+        this.password = systemUser.getPassword();
         this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));;
     }
 

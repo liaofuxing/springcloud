@@ -1,7 +1,7 @@
 package com.springcloud.apigateway.security.web;
 
 import com.alibaba.fastjson.JSON;
-import com.springcloud.apigateway.securityuser.entity.MallUser;
+import com.springcloud.apigateway.securityuser.malluser.entity.MallUser;
 import com.springcloud.common.spi.sms.SmsManager;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;

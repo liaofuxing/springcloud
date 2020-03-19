@@ -1,6 +1,6 @@
-package com.springcloud.apigateway.securityuser.dao;
+package com.springcloud.apigateway.securityuser.malluser.dao;
 
-import com.springcloud.apigateway.securityuser.entity.MallUser;
+import com.springcloud.apigateway.securityuser.malluser.entity.MallUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

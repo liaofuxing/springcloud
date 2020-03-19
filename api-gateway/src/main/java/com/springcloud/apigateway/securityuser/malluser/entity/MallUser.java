@@ -1,4 +1,4 @@
-package com.springcloud.apigateway.securityuser.entity;
+package com.springcloud.apigateway.securityuser.malluser.entity;
 
 import lombok.Data;
 
