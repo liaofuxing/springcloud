@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  * @date 2020/03/16 20:25
  **/
 @Resource
-public interface SystemUserRoleRepository extends JpaRepository<SystemUserRole, Integer> {
+public interface SystemUserRoleDao extends JpaRepository<SystemUserRole, Integer> {
 
     SystemUserRole findBySystemUserId(Integer systemUserId);
 }

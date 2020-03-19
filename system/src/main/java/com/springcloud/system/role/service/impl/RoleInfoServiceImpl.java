@@ -2,7 +2,7 @@ package com.springcloud.system.role.service.impl;
 
 
 import com.springcloud.common.entity.DatePageVO;
-import com.springcloud.system.role.dao.RoleInfoRepository;
+import com.springcloud.system.role.dao.RoleInfoDao;
 import com.springcloud.system.role.dto.RoleInfoDto;
 import com.springcloud.system.role.etity.RoleInfo;
 import com.springcloud.system.role.etity.SystemUserRole;
@@ -12,7 +12,6 @@ import com.springcloud.system.role.vo.RoleInfoVO;
 import com.springcloud.system.role.vo.SelectFormatVO;
 import com.springcloud.system.router.entity.MenuRole;
 import com.springcloud.system.router.service.MenuRoleService;
-import com.springcloud.system.systemuser.entity.SystemUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,7 +42,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     private SystemUserRoleService systemUserRoleService;
 
     @Autowired
-    private RoleInfoRepository roleInfoRepository;
+    private RoleInfoDao roleInfoRepository;
 
     @Autowired
     private MenuRoleService menuRoleService;
@@ -58,9 +57,9 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     public DatePageVO<RoleInfoVO> findRoleInfoPage(RoleInfoDto roleInfoDto) {
         Pageable pageable = PageRequest.of(roleInfoDto.getPage() - 1, roleInfoDto.getPageSize(), Sort.Direction.ASC, "id");
 
-        Specification<SystemUser> specification = (Specification<SystemUser>) (root, criteriaQuery, criteriaBuilder) -> {
+        Specification<RoleInfo> specification = (Specification<RoleInfo>) (root, criteriaQuery, criteriaBuilder) -> {
             //分页条件组装
-            List<Predicate> list = new ArrayList();
+            List<Predicate> list = new ArrayList<>();
             if (!StringUtils.isEmpty(roleInfoDto.getRoleName())) {
                 list.add(criteriaBuilder.like(root.get("roleName").as(String.class), "%" + roleInfoDto.getRoleName() + "%"));
             }

@@ -1,17 +1,15 @@
 package com.springcloud.system.role.service.impl;
 
 
-import com.springcloud.system.role.dao.SystemUserRoleRepository;
+import com.springcloud.system.role.dao.SystemUserRoleDao;
 import com.springcloud.system.role.etity.SystemUserRole;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Transient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author liaofuxing
@@ -22,7 +20,7 @@ import java.util.Optional;
 public class SystemUserRoleServiceImpl implements SystemUserRoleService {
 
     @Autowired
-    private SystemUserRoleRepository systemUserRoleRepository;
+    private SystemUserRoleDao systemUserRoleRepository;
 
     /**
      * 查询列表

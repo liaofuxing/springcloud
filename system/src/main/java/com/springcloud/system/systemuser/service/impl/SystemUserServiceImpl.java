@@ -1,19 +1,17 @@
 package com.springcloud.system.systemuser.service.impl;
 
 import com.springcloud.common.entity.DatePageVO;
-import com.springcloud.system.department.dao.SystemUserDepartmentRepository;
 import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.department.entity.SystemUserDepartment;
 import com.springcloud.system.department.service.DepartmentService;
 import com.springcloud.system.department.service.SystemUserDepartmentService;
-import com.springcloud.system.role.dao.SystemUserRoleRepository;
 import com.springcloud.system.role.etity.RoleInfo;
 import com.springcloud.system.role.etity.SystemUserRole;
 import com.springcloud.system.role.service.RoleInfoService;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
-import com.springcloud.system.systemuser.repository.SystemUserRepository;
+import com.springcloud.system.systemuser.dao.SystemUserDao;
 import com.springcloud.system.systemuser.service.SystemUserService;
 import com.springcloud.system.systemuser.vo.SystemUserVO;
 import org.springframework.beans.BeanUtils;
@@ -45,7 +43,7 @@ import java.util.Optional;
 public class SystemUserServiceImpl implements SystemUserService {
 
     @Autowired
-    private SystemUserRepository systemUserRepository;
+    private SystemUserDao systemUserDao;
 
     @Autowired
     private RoleInfoService roleInfoService;
@@ -64,7 +62,7 @@ public class SystemUserServiceImpl implements SystemUserService {
      */
     @Override
     public SystemUser findSystemUserById(Integer systemUserId) {
-        return systemUserRepository.findById(systemUserId).get();
+        return systemUserDao.findById(systemUserId).get();
     }
 
     /**
@@ -75,7 +73,7 @@ public class SystemUserServiceImpl implements SystemUserService {
      */
     @Override
     public List<SystemUser> findSystemUserList(SystemUser systemUser) {
-        return systemUserRepository.findSystemUserList(systemUser);
+        return systemUserDao.findSystemUserList(systemUser);
     }
 
     /**
@@ -104,7 +102,7 @@ public class SystemUserServiceImpl implements SystemUserService {
             return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
         };
 
-        Page<SystemUser> systemUserPage = systemUserRepository.findAll(specification, pageable);
+        Page<SystemUser> systemUserPage = systemUserDao.findAll(specification, pageable);
         List<SystemUser> systemUserList = systemUserPage.getContent();
         List<SystemUserVO> systemUserVOList = new ArrayList();
         BeanUtils.copyProperties(systemUserList, systemUserVOList);
@@ -139,7 +137,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         BeanUtils.copyProperties(systemUserDto, systemUser);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         systemUser.setPassword(bCryptPasswordEncoder.encode("123456"));
-        systemUserRepository.save(systemUser);
+        systemUserDao.save(systemUser);
 
 
         // 保存角色关系
@@ -166,10 +164,10 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void editSystemUser(SystemUserDto systemUserDto) {
-        Optional<SystemUser> byId = systemUserRepository.findById(systemUserDto.getId());
+        Optional<SystemUser> byId = systemUserDao.findById(systemUserDto.getId());
         SystemUser systemUserDB = byId.get();
         BeanUtils.copyProperties(systemUserDto, systemUserDB);
-        systemUserRepository.save(systemUserDB);
+        systemUserDao.save(systemUserDB);
 
         // 保存用户和角色关系
         SystemUserRole systemUserRole = systemUserRoleService.findSystemUserRoleBySystemUserId(systemUserDto.getId());
