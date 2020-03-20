@@ -8,7 +8,7 @@ import java.util.ServiceLoader;
 
 public class SmsManager {
 
-    private final static List<Sms> smsImplList = new ArrayList();
+    private final static List<Sms> smsImplList = new ArrayList<>();
 
     static {
         loadInitialSmsImpl();

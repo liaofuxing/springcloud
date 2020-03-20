@@ -53,7 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public List<SelectFormatVO> findDepartmentAll() {
-        List<SelectFormatVO> selectFormatVOList = new ArrayList();
+        List<SelectFormatVO> selectFormatVOList = new ArrayList<>();
         List<Department> departmentList = departmentRepository.findAll();
         for (Department department : departmentList) {
             SelectFormatVO selectFormatVO = new SelectFormatVO(department.getId(), department.getDepartmentName());

@@ -1,9 +1,10 @@
 package com.springcloud.apigateway.security.securityhandle;
 
 import com.alibaba.fastjson.JSON;
-import com.springcloud.apigateway.common.entity.LoginResponseData;
 import com.springcloud.apigateway.security.entity.SecurityUser;
+import com.springcloud.common.entity.LoginResponseData;
 import com.springcloud.common.utils.ResultVOUtils;
+import com.springcluod.rediscore.utils.RedisUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -26,15 +28,17 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
+        RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
         SecurityUser user = (SecurityUser) authentication.getPrincipal();
         String token = UUID.randomUUID().toString();
         String userInfoJsonStr = JSON.toJSONString(user);
+
         //将用户信息存入存入redis
-        stringRedisTemplate.opsForValue().set("USER_INFO:" + token, userInfoJsonStr);
-        stringRedisTemplate.opsForValue().set("SECURITY_TOKEN:" + token, user.getUsername());
+        redisUtils.setEx("USER_INFO:" + token, userInfoJsonStr,30, TimeUnit.MINUTES);
+        redisUtils.setEx("SECURITY_TOKEN:" + token, userInfoJsonStr,30, TimeUnit.MINUTES);
         response.setStatus(200);
         response.setContentType("application/json;charset=UTF-8");
         LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);

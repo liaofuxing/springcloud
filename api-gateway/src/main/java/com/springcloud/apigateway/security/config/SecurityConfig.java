@@ -31,6 +31,7 @@ import org.springframework.social.security.SpringSocialConfigurer;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] excludedAuthPages = {"/sms/*", "/user/register"};
 
     @Autowired
     private UserDetailServiceImpl userDetailsServiceImpl;
@@ -88,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JsonAuthenticationConfigurer jsonAuthenticationConfigurer;
 
     /**
-     * json {"username":"","password":""}登录配置器
+     * 短信验证码登录配置器
      */
     @Autowired
     private SmsCodeAuthenticationConfigurer smsCodeAuthenticationConfigurer;
@@ -112,9 +113,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //设置登出成功处理器（下面介绍）
                 .logoutSuccessHandler(logoutSuccessHandler).and()
                 .authorizeRequests()
-                .antMatchers("/authentication/require",
-                        "/sms/*",
-                        "/user/regist").permitAll()
+                .antMatchers(excludedAuthPages).permitAll()
                 .antMatchers("/user/lala/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated();

@@ -4,6 +4,7 @@ package com.springcloud.system.systemuser.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 /**
@@ -14,7 +15,9 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-public class SystemUser {
+public class SystemUser implements Serializable {
+
+    private static final long serialVersionUI = 2656653232L;
 
     /**
      * 系统用户id

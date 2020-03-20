@@ -8,7 +8,7 @@ public enum StatusCodeEnum {
     SUCCESS("请求成功", 20001),
     LOGIN_FAILURE("用户名或密码错误", 50001),
     LOGOUT_SUCCESS("注销成功",50002),
-    USER_ENABLED("账户被禁用",50003),
+    CREDENTIALS_EXPIRED("凭证过期",50003),
     ERROR("系统出错", 50000),
     UNAUTHORIZED("未授权", 50004);
     // 成员变量

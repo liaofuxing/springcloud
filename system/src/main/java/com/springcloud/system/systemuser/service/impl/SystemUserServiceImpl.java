@@ -16,6 +16,7 @@ import com.springcloud.system.systemuser.service.SystemUserService;
 import com.springcloud.system.systemuser.vo.SystemUserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,8 +61,10 @@ public class SystemUserServiceImpl implements SystemUserService {
     /**
      * 根据id查询SystemUser
      */
+    //@Cacheable(value = "spring-cloud-system", key = "'user_'+#systemUserId")
     @Override
     public SystemUser findSystemUserById(Integer systemUserId) {
+        System.out.println("测试缓存");
         return systemUserDao.findById(systemUserId).get();
     }
 

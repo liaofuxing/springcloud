@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import com.springcluod.rediscore.utils.RedisUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +47,7 @@ public class RouterService {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
 
     /**
      * 获取所有路由,不按菜单结构排序
@@ -188,7 +190,9 @@ public class RouterService {
      * @return showMenu
      */
     public List<Integer> getMenuRoleByLoginUser(String token) {
-        String userInfoStr = stringRedisTemplate.opsForValue().get("USER_INFO:"+ token);
+        RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
+        String userInfoStr = redisUtils.get("USER_INFO:" + token);
+        // String userInfoStr = stringRedisTemplate.opsForValue().get();
         JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
         SystemUser systemUser = JSON.toJavaObject(jsonObject, SystemUser.class);
 

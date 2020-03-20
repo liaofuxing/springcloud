@@ -20,10 +20,10 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        int status = StatusCodeEnum.USER_ENABLED.getCode();
+        int status = StatusCodeEnum.CREDENTIALS_EXPIRED.getCode();
         response.setStatus(200);
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().print(JSON.toJSONString(ResultVOUtils.not_login(null)));
+        response.getWriter().print(JSON.toJSONString(ResultVOUtils.credentials_expired(null)));
         response.flushBuffer();
         throw new AuthenticationServiceException(StatusCodeEnum.getName(status));
 

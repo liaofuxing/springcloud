@@ -16,7 +16,7 @@ import java.util.List;
 public interface SystemUserDao extends JpaRepository<SystemUser, Integer>, JpaSpecificationExecutor {
 
     @Query(value = "select user from SystemUser user")
-    List findSystemUserList(SystemUser systemUser);
+    List<SystemUser> findSystemUserList(SystemUser systemUser);
 
     SystemUser findByUsername(String username);
 }

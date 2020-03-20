@@ -2,6 +2,7 @@ package com.springcloud.system.systemuser.vo;
 
 import com.springcloud.common.entity.PageInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -11,6 +12,7 @@ import lombok.Data;
  * @date 2020/03/13 22:01
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SystemUserVO extends PageInfo {
 

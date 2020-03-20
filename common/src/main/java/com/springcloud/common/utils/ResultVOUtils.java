@@ -12,12 +12,8 @@ import com.springcloud.common.vo.ResultVO;
  * @date 2019/03/10 4:10
  */
 public class ResultVOUtils {
-    /**
-     * 普通请求
-     *
-     * @param object
-     * @return
-     */
+
+    // 普通请求
     /**
      * 请求成功 20001
      * @param object
@@ -38,10 +34,8 @@ public class ResultVOUtils {
         return resultVO;
     }
 
-    /**
-     * 登录请求
-     *
-     */
+
+    // 登录请求
     /**
      * 登录成功 20000
      * @param object
@@ -77,8 +71,8 @@ public class ResultVOUtils {
      * @param object
      * @return
      */
-    public static ResultVO not_login(Object object) {
-        ResultVO resultVO = new ResultVO(StatusCodeEnum.USER_ENABLED.getCode(), StatusCodeEnum.USER_ENABLED.getName(), object);
+    public static ResultVO credentials_expired(Object object) {
+        ResultVO resultVO = new ResultVO(StatusCodeEnum.CREDENTIALS_EXPIRED.getCode(), StatusCodeEnum.CREDENTIALS_EXPIRED.getName(), object);
         return resultVO;
     }
 
