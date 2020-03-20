@@ -38,11 +38,10 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
             RedisUtils redisUtils = new RedisUtils(redisTemplate);
             String userInfoStr = redisUtils.get("USER_INFO:" + token);
             if (userInfoStr != null) {
-                // redis 中存在用户信息将， 凭证有效时间延长
+                // redis 中存在用户信息,将凭证有效时间延长
                 redisUtils.expire("USER_INFO:" + token, 30, TimeUnit.MINUTES);
                 Map<String, String> userMap = (Map<String, String>) JSONObject.parse(userInfoStr);
                 SecurityUser securityUser = new SecurityUser(userMap.get("username"), userMap.get("password"));
-                //解析并设置认证信息（具体实现不清楚）
                 authentication = new UsernamePasswordAuthenticationToken(securityUser,
                         null, securityUser.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

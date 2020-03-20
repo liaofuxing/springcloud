@@ -1,8 +1,10 @@
 package com.springcloud.apigateway.security.securityhandle;
 
 import com.alibaba.fastjson.JSON;
-import com.springcloud.apigateway.security.entity.SecurityUser;
+import com.alibaba.fastjson.JSONObject;
+import com.springcloud.apigateway.securityuser.systemuser.entity.SystemUser;
 import com.springcloud.common.utils.ResultVOUtils;
+import com.springcluod.rediscore.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -20,16 +22,20 @@ import java.util.concurrent.TimeUnit;
 public class TokenLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException , ServletException {
+        RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
+        String requestToken = request.getHeader("token");
+        String userInfoStr = redisUtils.get("USER_INFO:" + requestToken);
 
-        SecurityUser user = (SecurityUser) authentication.getPrincipal();
-        String token = redisTemplate.opsForValue().get("SECURITY_USERNAME : " + user.getUsername());
-        redisTemplate.expire("SECURITY_USERNAME : " + user.getUsername(), 0, TimeUnit.MICROSECONDS);
-        redisTemplate.expire("SECURITY_TOKEN : " + token, 0, TimeUnit.MICROSECONDS);
+        SystemUser user = JSON.toJavaObject( JSONObject.parseObject(userInfoStr), SystemUser.class);
 
+        String token = redisUtils.get("SECURITY_TOKEN:" + user.getUsername());
+        // 将redis 上的缓存信息设置为即将过期
+        redisUtils.expire("USER_INFO:" + token, 0 , TimeUnit.MICROSECONDS);
+        redisUtils.expire("SECURITY_TOKEN:" + token, 0 , TimeUnit.MICROSECONDS);
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.logout_success(null)));
         response.flushBuffer();

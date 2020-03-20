@@ -38,7 +38,7 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
 
         //将用户信息存入存入redis
         redisUtils.setEx("USER_INFO:" + token, userInfoJsonStr,30, TimeUnit.MINUTES);
-        redisUtils.setEx("SECURITY_TOKEN:" + token, userInfoJsonStr,30, TimeUnit.MINUTES);
+        redisUtils.setEx("SECURITY_TOKEN:" + user.getUsername(), token,30, TimeUnit.MINUTES);
         response.setStatus(200);
         response.setContentType("application/json;charset=UTF-8");
         LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);
