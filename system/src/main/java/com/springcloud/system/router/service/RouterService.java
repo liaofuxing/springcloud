@@ -5,17 +5,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.springcloud.system.role.etity.SystemUserRole;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import com.springcloud.system.router.dao.RouterDao;
+import com.springcloud.system.router.dto.Menu2RouterDto;
 import com.springcloud.system.router.entity.MenuRole;
 import com.springcloud.system.router.entity.Router;
 import com.springcloud.system.router.entity.Router2TreeVO;
 import com.springcloud.system.router.entity.RouterVo;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.service.SystemUserService;
+import com.springcluod.rediscore.utils.RedisUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import com.springcluod.rediscore.utils.RedisUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +58,17 @@ public class RouterService {
      */
     public List<Router> getRouterAll() {
         return routerDao.findAll();
+    }
+
+    /**
+     * 新增路由
+     */
+    @Transactional
+    public Integer addRouter(Menu2RouterDto menu2RouterDto) {
+        Router router = new Router();
+        BeanUtils.copyProperties(menu2RouterDto, router);
+        routerDao.save(router);
+        return router.getId();
     }
 
 
@@ -156,7 +169,7 @@ public class RouterService {
         List<Router> byParent = routerDao.findByParent(parent);
         List<Router2TreeVO> router2TreeVOList = new ArrayList<>();
         for (Router router : byParent) {
-            Router2TreeVO router2TreeVO = new Router2TreeVO(router.getId(), router.getTitle());
+            Router2TreeVO router2TreeVO = new Router2TreeVO(router.getId(), router.getTitle(), router.getParent());
             router2TreeVOList.add(router2TreeVO);
         }
         return router2TreeVOList;

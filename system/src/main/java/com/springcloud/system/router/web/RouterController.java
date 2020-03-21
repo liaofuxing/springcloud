@@ -2,6 +2,7 @@ package com.springcloud.system.router.web;
 
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
+import com.springcloud.system.router.dto.Menu2RouterDto;
 import com.springcloud.system.router.entity.Router2TreeVO;
 import com.springcloud.system.router.entity.RouterVo;
 import com.springcloud.system.router.service.RouterService;
@@ -56,5 +57,13 @@ public class RouterController {
         } else {
             return ResultVOUtils.error(routers2TreeVOs);
         }
+    }
+
+    @PostMapping("/addMenuTree2Router")
+    @ResponseBody
+    public ResultVO addMenuTree2Router(@RequestBody Menu2RouterDto menu2RouterDto) {
+        LOGGER.info("收到请求...");
+        Integer id = routerService.addRouter(menu2RouterDto);
+        return ResultVOUtils.success(id);
     }
 }

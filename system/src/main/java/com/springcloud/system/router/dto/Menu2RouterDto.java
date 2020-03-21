@@ -1,8 +1,8 @@
-package com.springcloud.system.router.entity;
+package com.springcloud.system.router.dto;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 
 /**
  * 前端路由实体类
@@ -12,12 +12,9 @@ import javax.persistence.*;
  * @date: 2019/08/07 11:45
  **/
 @Data
-@Entity
-@Table(name = "router")
-public class Router {
+public class Menu2RouterDto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -39,12 +36,7 @@ public class Router {
     private String description;
 
 
-    public Router() {
+    public Menu2RouterDto() {
     }
 
-    public Router(Integer id, String name, String path) {
-        this.id = id;
-        this.name = name;
-        this.path = path;
-    }
 }

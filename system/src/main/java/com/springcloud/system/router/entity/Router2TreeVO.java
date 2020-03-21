@@ -11,7 +11,7 @@ public class Router2TreeVO {
 
     private String label;
 
-    private String treeChecked;
+    private Integer parent;
 
     private List<Router2TreeVO> children;
 
@@ -19,8 +19,9 @@ public class Router2TreeVO {
 
     }
 
-    public Router2TreeVO(Integer id, String label) {
+    public Router2TreeVO(Integer id, String label, Integer parent) {
         this.id = id;
         this.label = label;
+        this.parent = parent;
     }
 }
