@@ -209,13 +209,12 @@ public class RouterServiceImpl implements RouterService {
     public List<Integer> getMenuRoleByLoginUser(String token) {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
         String userInfoStr = redisUtils.get("USER_INFO:" + token);
-        // String userInfoStr = stringRedisTemplate.opsForValue().get();
         JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
         SystemUser systemUser = JSON.toJavaObject(jsonObject, SystemUser.class);
 
-        SystemUser systemUserByUsername = systemUserService.findSystemUserByUsername(systemUser.getUsername());
+        SystemUser systemUserById = systemUserService.findSystemUserById(systemUser.getId());
 
-        SystemUserRole systemUserRole = systemUserRoleService.findSystemUserRoleBySystemUserId(systemUserByUsername.getId());
+        SystemUserRole systemUserRole = systemUserRoleService.findSystemUserRoleBySystemUserId(systemUserById.getId());
         MenuRole menuRole = menuRoleService.findMenuRole(systemUserRole.getRoleId());
         String[] menuSplit = menuRole.getMenu().split(",");
         List<String> menuSplitList = Arrays.asList(menuSplit);
