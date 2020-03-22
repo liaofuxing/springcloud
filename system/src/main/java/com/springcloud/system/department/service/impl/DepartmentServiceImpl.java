@@ -9,11 +9,7 @@ import com.springcloud.system.department.entity.SystemUserDepartment;
 import com.springcloud.system.department.service.DepartmentService;
 import com.springcloud.system.department.service.SystemUserDepartmentService;
 import com.springcloud.system.department.vo.DepartmentVO;
-import com.springcloud.system.role.dto.RoleInfoDto;
-import com.springcloud.system.role.etity.RoleInfo;
-import com.springcloud.system.role.vo.RoleInfoVO;
 import com.springcloud.system.role.vo.SelectFormatVO;
-import com.springcloud.system.systemuser.entity.SystemUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -116,5 +112,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department departmentDB = byId.get();
         BeanUtils.copyProperties(departmentDto, departmentDB);
         departmentRepository.save(departmentDB);
+    }
+
+    @Override
+    public Boolean validateDepartmentNameRepeat(String DepartmentName) {
+        Department byDepartmentName = departmentRepository.findByDepartmentName(DepartmentName);
+        return byDepartmentName != null;
     }
 }

@@ -79,6 +79,14 @@ public class SystemUserController {
         return ResultVOUtils.success(null);
     }
 
+    // 校验用户名重复
+    @GetMapping("/validateUsernameRepeat")
+    @ResponseBody
+    public ResultVO validateUsernameRepeat(String username) {
+        Boolean validate = systemUserService.validateUsernameRepeat(username);
+        return ResultVOUtils.success(validate);
+    }
+
     /**
      * 测试传一个对象,给API调用
      *

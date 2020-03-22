@@ -87,6 +87,11 @@ public class RoleInfoServiceImpl implements RoleInfoService {
         return roleInfoVOList;
     }
 
+    @Override
+    public RoleInfo findByRoleName(String roleName) {
+        return roleInfoRepository.findByRoleName(roleName);
+    }
+
     /**
      * 根据userId 查询角色
      *
@@ -140,7 +145,10 @@ public class RoleInfoServiceImpl implements RoleInfoService {
         menuRoleService.addMenuRole(menuRole);
     }
 
-
-
+    @Override
+    public Boolean validateRoleNameRepeat(String roleName) {
+        RoleInfo byRoleName = roleInfoRepository.findByRoleName(roleName);
+        return byRoleName != null;
+    }
 
 }

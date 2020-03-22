@@ -42,6 +42,8 @@ public interface RouterService {
      */
     List<RouterVo> getRouters(String token);
 
+    Boolean validateRouterTitleRepeat(String routerName);
+
 
 
 

@@ -66,4 +66,12 @@ public class RouterController {
         Integer id = routerService.addRouter(menu2RouterDto);
         return ResultVOUtils.success(id);
     }
+
+    // 校验路由名重复
+    @GetMapping("/validateRouterTitleRepeat")
+    @ResponseBody
+    public ResultVO validateRouterTitleRepeat(String routerTitle) {
+        Boolean validate = routerService.validateRouterTitleRepeat(routerTitle);
+        return ResultVOUtils.success(validate);
+    }
 }

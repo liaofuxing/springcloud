@@ -98,4 +98,12 @@ public class RoleInfoController {
         }
         return ResultVOUtils.success(menu);
     }
+
+    // 校验角色名重复
+    @GetMapping("/validateRoleNameRepeat")
+    @ResponseBody
+    public ResultVO validateRoleNameRepeat(String roleName) {
+        Boolean validate = roleInfoService.validateRoleNameRepeat(roleName);
+        return ResultVOUtils.success(validate);
+    }
 }

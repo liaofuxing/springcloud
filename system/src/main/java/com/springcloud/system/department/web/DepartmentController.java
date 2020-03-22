@@ -79,5 +79,11 @@ public class DepartmentController {
         return ResultVOUtils.success(null);
     }
 
-
+    // 校验角色名重复
+    @GetMapping("/validateDepartmentNameRepeat")
+    @ResponseBody
+    public ResultVO validateDepartmentNameRepeat(String roleName) {
+        Boolean validate = departmentService.validateDepartmentNameRepeat(roleName);
+        return ResultVOUtils.success(validate);
+    }
 }

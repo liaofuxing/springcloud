@@ -67,4 +67,6 @@ public interface SystemUserService {
      * @return
      */
     void editSystemUser(SystemUserDto systemUserDto);
+
+    Boolean validateUsernameRepeat(String username);
 }

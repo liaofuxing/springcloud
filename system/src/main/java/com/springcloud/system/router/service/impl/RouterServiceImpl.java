@@ -93,6 +93,8 @@ public class RouterServiceImpl implements RouterService {
         return formatRouter(routerByParent, showMenu);
     }
 
+
+
     /**
      *
      * 根据Parent获取路由
@@ -219,5 +221,11 @@ public class RouterServiceImpl implements RouterService {
         List<String> menuSplitList = Arrays.asList(menuSplit);
 
         return menuSplitList.stream().map(Integer::parseInt).distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean validateRouterTitleRepeat(String routerTitle) {
+        Router byTitle = routerDao.findByTitle(routerTitle);
+        return byTitle != null;
     }
 }

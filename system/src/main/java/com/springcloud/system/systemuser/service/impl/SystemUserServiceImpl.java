@@ -9,14 +9,13 @@ import com.springcloud.system.role.etity.RoleInfo;
 import com.springcloud.system.role.etity.SystemUserRole;
 import com.springcloud.system.role.service.RoleInfoService;
 import com.springcloud.system.role.service.SystemUserRoleService;
+import com.springcloud.system.systemuser.dao.SystemUserDao;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
-import com.springcloud.system.systemuser.dao.SystemUserDao;
 import com.springcloud.system.systemuser.service.SystemUserService;
 import com.springcloud.system.systemuser.vo.SystemUserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -190,4 +189,16 @@ public class SystemUserServiceImpl implements SystemUserService {
         systemUserDepartment.setDepartmentId(systemUserDto.getDepartmentId());
         systemUserDepartmentService.addSystemUserDepartment(systemUserDepartment);
     }
+
+
+    /**
+     * 校验用户名不重复
+     *
+     * @param username username
+     */
+    public  Boolean validateUsernameRepeat(String username){
+        SystemUser byUsername = systemUserDao.findByUsername(username);
+        return byUsername != null;
+    }
+
 }

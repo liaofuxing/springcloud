@@ -6,13 +6,14 @@ import com.springcloud.system.role.dto.RoleInfoDto;
 import com.springcloud.system.role.etity.RoleInfo;
 import com.springcloud.system.role.vo.RoleInfoVO;
 import com.springcloud.system.role.vo.SelectFormatVO;
-import com.springcloud.system.role.web.RoleInfoController;
 
 import java.util.List;
 
 public interface RoleInfoService {
 
     List<SelectFormatVO> findRoleAll();
+
+    RoleInfo findByRoleName(String roleName);
 
     RoleInfo findRoleInfoByUserId(Integer userId);
 
@@ -22,5 +23,5 @@ public interface RoleInfoService {
 
     DatePageVO<RoleInfoVO> findRoleInfoPage(RoleInfoDto roleInfoDto);
 
-
+    Boolean validateRoleNameRepeat(String roleName);
 }

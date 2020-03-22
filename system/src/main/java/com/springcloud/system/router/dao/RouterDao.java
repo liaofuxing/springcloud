@@ -17,4 +17,8 @@ import java.util.List;
 public interface RouterDao extends JpaRepository<Router, Integer> {
 
     List<Router> findByParent(Integer parent);
+
+    Router findByName(String routerName);
+
+    Router findByTitle(String routerTitle);
 }

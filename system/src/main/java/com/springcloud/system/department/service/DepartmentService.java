@@ -53,4 +53,6 @@ public interface DepartmentService {
      */
     void editDepartment(DepartmentDto departmentDto);
 
+    Boolean validateDepartmentNameRepeat(String departmentName);
+
 }
