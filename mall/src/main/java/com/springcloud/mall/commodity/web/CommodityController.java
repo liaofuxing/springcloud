@@ -41,8 +41,7 @@ public class CommodityController {
     @ResponseBody
     public ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id){
 
-        ResultVO<SystemUser> resultVO = systemClient.findSystemUserById(id);
-        return resultVO;
+        return systemClient.findSystemUserById(id);
     }
 
     /**
@@ -57,8 +56,7 @@ public class CommodityController {
     @ResponseBody
     public ResultVO<SystemUser> findSystemUser(@RequestBody SystemUser systemUserInfo) {
         try {
-            ResultVO<SystemUser> resultVO = systemClient.findSystemUser(systemUserInfo);
-            return resultVO;
+            return systemClient.findSystemUser(systemUserInfo);
         } catch (Exception e) {
             throw new ExceptionUtils(ExceptionEnums.SYSTEM_EXCEPTION);
         }
