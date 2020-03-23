@@ -45,7 +45,7 @@ public class DepartmentController {
      */
     @GetMapping("/getDepartmentList")
     @ResponseBody
-    public ResultVO getDepartmentList(DepartmentDto departmentDto) {
+    public ResultVO<DatePageVO<DepartmentVO>> getDepartmentList(DepartmentDto departmentDto) {
         DatePageVO<DepartmentVO> departmentVOPage = departmentService.findDepartmentPage(departmentDto);
         return ResultVOUtils.success(departmentVOPage);
     }
@@ -59,7 +59,7 @@ public class DepartmentController {
      */
     @PostMapping("/addDepartment")
     @ResponseBody
-    public ResultVO addDepartment(@RequestBody DepartmentDto departmentDto) {
+    public ResultVO<Object> addDepartment(@RequestBody DepartmentDto departmentDto) {
         departmentService.addDepartment(departmentDto);
         return ResultVOUtils.success(null);
     }
@@ -74,7 +74,7 @@ public class DepartmentController {
      */
     @PostMapping("/editDepartment")
     @ResponseBody
-    public ResultVO editDepartment(@RequestBody DepartmentDto departmentDto) {
+    public ResultVO<Object> editDepartment(@RequestBody DepartmentDto departmentDto) {
         departmentService.editDepartment(departmentDto);
         return ResultVOUtils.success(null);
     }
@@ -82,8 +82,8 @@ public class DepartmentController {
     // 校验角色名重复
     @GetMapping("/validateDepartmentNameRepeat")
     @ResponseBody
-    public ResultVO validateDepartmentNameRepeat(String roleName) {
-        Boolean validate = departmentService.validateDepartmentNameRepeat(roleName);
+    public ResultVO<Boolean> validateDepartmentNameRepeat(String roleName, Integer id) {
+        Boolean validate = departmentService.validateDepartmentNameRepeat(roleName, id);
         return ResultVOUtils.success(validate);
     }
 }

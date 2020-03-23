@@ -10,6 +10,9 @@ import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.service.SystemUserService;
 import com.springcloud.system.systemuser.vo.SystemUserVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +33,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/systemUser")
+@Api(value = "systemUser")
 public class SystemUserController {
 
     @Autowired
@@ -37,7 +41,9 @@ public class SystemUserController {
 
     @PostMapping("/findSystemUserList")
     @ResponseBody
-    public ResultVO<SystemUser> findSystemUserList(@RequestBody SystemUserDto systemUserDto) {
+    @ApiOperation(value = "/findSystemUserList", notes = "查询用户列表")
+    @ApiImplicitParam(name = "systemUserDto", value = "用户对象Dto", dataType = "String")
+    public ResultVO<List<SystemUser>> findSystemUserList(@RequestBody SystemUserDto systemUserDto) {
         SystemUser systemUser = new SystemUser();
         BeanUtils.copyProperties(systemUserDto, systemUser);
         List<SystemUser> systemUserList = systemUserService.findSystemUserList(systemUser);
@@ -53,28 +59,28 @@ public class SystemUserController {
      */
     @PostMapping("/findSystemUserPage")
     @ResponseBody
-    public ResultVO findSystemUserPage(@RequestBody SystemUserDto systemUserDto) {
+    public ResultVO<DatePageVO<SystemUserVO>> findSystemUserPage(@RequestBody SystemUserDto systemUserDto) {
         DatePageVO<SystemUserVO> systemUserPage = systemUserService.findSystemUserPage(systemUserDto);
         return ResultVOUtils.success(systemUserPage);
     }
 
     @GetMapping("/findSystemUserById")
     @ResponseBody
-    public ResultVO findSystemUserById(@RequestParam Integer id) {
+    public ResultVO<SystemUser> findSystemUserById(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         return ResultVOUtils.success(systemUserById);
     }
 
     @PostMapping("/editSystemUser")
     @ResponseBody
-    public ResultVO editSystemUser(@RequestBody SystemUserDto systemUserDto) {
+    public ResultVO<Object> editSystemUser(@RequestBody SystemUserDto systemUserDto) {
         systemUserService.editSystemUser(systemUserDto);
         return ResultVOUtils.success(null);
     }
 
     @PostMapping("/addSystemUser")
     @ResponseBody
-    public ResultVO addSystemUser(@RequestBody SystemUserDto systemUserDto) {
+    public ResultVO<Object> addSystemUser(@RequestBody SystemUserDto systemUserDto) {
         systemUserService.addSystemUser(systemUserDto);
         return ResultVOUtils.success(null);
     }
@@ -82,8 +88,8 @@ public class SystemUserController {
     // 校验用户名重复
     @GetMapping("/validateUsernameRepeat")
     @ResponseBody
-    public ResultVO validateUsernameRepeat(String username) {
-        Boolean validate = systemUserService.validateUsernameRepeat(username);
+    public ResultVO<Boolean> validateUsernameRepeat(String username, Integer id) {
+        Boolean validate = systemUserService.validateUsernameRepeat(username, id);
         return ResultVOUtils.success(validate);
     }
 
@@ -95,7 +101,7 @@ public class SystemUserController {
      */
     @PostMapping("/api/findSystemUser")
     @ResponseBody
-    public ResultVO findSystemUserById(@RequestBody @Valid SystemUser systemUserInfo, BindingResult result) {
+    public ResultVO<SystemUser> findSystemUserById(@RequestBody @Valid SystemUser systemUserInfo, BindingResult result) {
         if (result.hasErrors()) {
             for (ObjectError error : result.getAllErrors()) {
                 System.out.println(error.getDefaultMessage());
@@ -114,7 +120,7 @@ public class SystemUserController {
      */
     @GetMapping("/api/findSystemUserById")
     @ResponseBody
-    public ResultVO findSystemUserByIdApi(@RequestParam Integer id) {
+    public ResultVO<SystemUser> findSystemUserByIdApi(@RequestParam Integer id) {
         SystemUser systemUserById = systemUserService.findSystemUserById(id);
         SystemUser systemUserInfo = new SystemUser();
         BeanUtils.copyProperties(systemUserById, systemUserInfo);

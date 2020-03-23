@@ -35,7 +35,7 @@ public class RouterController {
 
     @GetMapping("/getRouters")
     @ResponseBody
-    public ResultVO getRouters(HttpServletRequest request) {
+    public ResultVO<List<RouterVo>> getRouters(HttpServletRequest request) {
         LOGGER.info("收到请求...");
         String token = request.getHeader("token");
         List<RouterVo> routerVos = routerService.getRouters(token);
@@ -48,7 +48,7 @@ public class RouterController {
 
     @GetMapping("/getMenuTree")
     @ResponseBody
-    public ResultVO getRouterTree() {
+    public ResultVO<List<Router2TreeVO>> getRouterTree() {
         LOGGER.info("收到请求...");
 
         List<Router2TreeVO> routers2TreeVOs = routerService.getRouters2Tree();
@@ -61,7 +61,7 @@ public class RouterController {
 
     @PostMapping("/addMenuTree2Router")
     @ResponseBody
-    public ResultVO addMenuTree2Router(@RequestBody Menu2RouterDto menu2RouterDto) {
+    public ResultVO<Integer> addMenuTree2Router(@RequestBody Menu2RouterDto menu2RouterDto) {
         LOGGER.info("收到请求...");
         Integer id = routerService.addRouter(menu2RouterDto);
         return ResultVOUtils.success(id);
@@ -70,8 +70,8 @@ public class RouterController {
     // 校验路由名重复
     @GetMapping("/validateRouterTitleRepeat")
     @ResponseBody
-    public ResultVO validateRouterTitleRepeat(String routerTitle) {
-        Boolean validate = routerService.validateRouterTitleRepeat(routerTitle);
+    public ResultVO<Boolean> validateRouterTitleRepeat(String routerTitle, Integer id) {
+        Boolean validate = routerService.validateRouterTitleRepeat(routerTitle, id);
         return ResultVOUtils.success(validate);
     }
 }

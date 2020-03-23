@@ -42,13 +42,6 @@ public interface RouterService {
      */
     List<RouterVo> getRouters(String token);
 
-    Boolean validateRouterTitleRepeat(String routerName);
-
-
-
-
-
-
 
     /**
      * 获取菜单Tree
@@ -69,4 +62,7 @@ public interface RouterService {
      * @return showMenu
      */
     List<Integer> getMenuRoleByLoginUser(String token);
+
+
+    Boolean validateRouterTitleRepeat(String routerTitle, Integer id);
 }

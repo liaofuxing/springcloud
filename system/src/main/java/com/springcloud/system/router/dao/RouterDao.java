@@ -20,5 +20,9 @@ public interface RouterDao extends JpaRepository<Router, Integer> {
 
     Router findByName(String routerName);
 
+    Router findByNameAndIdNot(String routerName, Integer id);
+
     Router findByTitle(String routerTitle);
+
+    Router findByTitleAndIdNot(String routerTitle, Integer id);
 }

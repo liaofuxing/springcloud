@@ -115,8 +115,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Boolean validateDepartmentNameRepeat(String DepartmentName) {
-        Department byDepartmentName = departmentRepository.findByDepartmentName(DepartmentName);
+    public Boolean validateDepartmentNameRepeat(String DepartmentName, Integer id) {
+        Department byDepartmentName = departmentRepository.findByDepartmentNameAndIdNot(DepartmentName, id);
         return byDepartmentName != null;
     }
 }

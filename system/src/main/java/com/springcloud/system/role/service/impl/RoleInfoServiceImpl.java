@@ -146,8 +146,8 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     }
 
     @Override
-    public Boolean validateRoleNameRepeat(String roleName) {
-        RoleInfo byRoleName = roleInfoRepository.findByRoleName(roleName);
+    public Boolean validateRoleNameRepeat(String roleName, Integer id) {
+        RoleInfo byRoleName = roleInfoRepository.findByRoleNameAndIdNot(roleName, id);
         return byRoleName != null;
     }
 

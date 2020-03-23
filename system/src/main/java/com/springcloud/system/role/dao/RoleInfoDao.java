@@ -15,4 +15,6 @@ import javax.annotation.Resource;
 public interface RoleInfoDao extends JpaRepository<RoleInfo, Integer>, JpaSpecificationExecutor<RoleInfo> {
 
     RoleInfo findByRoleName(String roleName);
+
+    RoleInfo findByRoleNameAndIdNot(String roleName,Integer id);
 }

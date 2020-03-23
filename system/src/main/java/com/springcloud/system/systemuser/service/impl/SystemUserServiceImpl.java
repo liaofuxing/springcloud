@@ -196,8 +196,8 @@ public class SystemUserServiceImpl implements SystemUserService {
      *
      * @param username username
      */
-    public  Boolean validateUsernameRepeat(String username){
-        SystemUser byUsername = systemUserDao.findByUsername(username);
+    public  Boolean validateUsernameRepeat(String username, Integer id){
+        SystemUser byUsername = systemUserDao.findByUsernameAndIdNot(username, id);
         return byUsername != null;
     }
 

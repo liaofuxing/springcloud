@@ -47,11 +47,11 @@ public class RoleInfoController {
     /**
      * 查询角色列表
      *
-     * @return
+     * @return ResultVO<DatePageVO<RoleInfoVO>>
      */
     @GetMapping("/getRoleList")
     @ResponseBody
-    public ResultVO<RoleInfoVO> getRoleList(RoleInfoDto roleInfoDto) {
+    public ResultVO<DatePageVO<RoleInfoVO>> getRoleList(RoleInfoDto roleInfoDto) {
         DatePageVO<RoleInfoVO> roleInfoPage = roleInfoService.findRoleInfoPage(roleInfoDto);
         return ResultVOUtils.success(roleInfoPage);
     }
@@ -59,11 +59,11 @@ public class RoleInfoController {
     /**
      * 编辑角色
      *
-     * @return
+     * @return ResultVO<Object>
      */
     @PostMapping("/editRole")
     @ResponseBody
-    public ResultVO editRole(@RequestBody RoleInfoDto roleInfoDto) {
+    public ResultVO<Object> editRole(@RequestBody RoleInfoDto roleInfoDto) {
         roleInfoService.editRole(roleInfoDto);
         return ResultVOUtils.success(null);
     }
@@ -71,11 +71,11 @@ public class RoleInfoController {
     /**
      * 新增角色
      *
-     * @return
+     * @return ResultVO<Object>
      */
     @PostMapping("/addRole")
     @ResponseBody
-    public ResultVO addRole(@RequestBody RoleInfoDto roleInfoDto) {
+    public ResultVO<Object> addRole(@RequestBody RoleInfoDto roleInfoDto) {
         roleInfoService.addRole(roleInfoDto);
         return ResultVOUtils.success(null);
     }
@@ -83,7 +83,7 @@ public class RoleInfoController {
     /**
      * 获取角色对应菜单
      *
-     * @return
+     * @return ResultVO<List<Integer>>
      */
     @GetMapping("/getRoleMenu")
     @ResponseBody
@@ -102,8 +102,8 @@ public class RoleInfoController {
     // 校验角色名重复
     @GetMapping("/validateRoleNameRepeat")
     @ResponseBody
-    public ResultVO validateRoleNameRepeat(String roleName) {
-        Boolean validate = roleInfoService.validateRoleNameRepeat(roleName);
+    public ResultVO<Boolean> validateRoleNameRepeat(String roleName, Integer id) {
+        Boolean validate = roleInfoService.validateRoleNameRepeat(roleName, id);
         return ResultVOUtils.success(validate);
     }
 }

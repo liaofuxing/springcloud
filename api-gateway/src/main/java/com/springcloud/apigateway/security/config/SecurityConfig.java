@@ -8,14 +8,15 @@ import com.springcloud.apigateway.security.provider.UserSmsAuthenticationProvide
 import com.springcloud.apigateway.security.securityhandle.TokenAccessDeniedHandler;
 import com.springcloud.apigateway.security.securityhandle.TokenLogoutSuccessHandler;
 import com.springcloud.apigateway.security.service.SystemUserDetailsService;
-import com.springcloud.apigateway.security.service.impl.UserDetailServiceImpl;
 import com.springcloud.apigateway.security.service.UserSmsDetailsService;
+import com.springcloud.apigateway.security.service.impl.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -31,7 +32,12 @@ import org.springframework.social.security.SpringSocialConfigurer;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String[] excludedAuthPages = {"/sms/*", "/user/register"};
+    private static final String[] excludedAuthPages = {"/sms/*",
+            "/user/register","/css/**",
+            "/js/**",
+            "/images/**",
+            "/webjars/springfox-swagger-ui/**"
+    };
 
     @Autowired
     private UserDetailServiceImpl userDetailsServiceImpl;
@@ -94,6 +100,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SmsCodeAuthenticationConfigurer smsCodeAuthenticationConfigurer;
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring(). antMatchers("/swagger-ui.html")
+                .antMatchers("/webjars/**")
+                .antMatchers("/v2/**")
+                .antMatchers("/swagger-resources/**");
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -122,8 +136,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          *  所以这个过滤器应该在UsernamePasswordAuthenticationFilter过滤器之前执行,所以放在LogoutFilter之后
          */
         http.addFilterAfter(authorizationFilter, LogoutFilter.class);
-
-
     }
 
 

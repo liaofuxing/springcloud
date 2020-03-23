@@ -23,5 +23,5 @@ public interface RoleInfoService {
 
     DatePageVO<RoleInfoVO> findRoleInfoPage(RoleInfoDto roleInfoDto);
 
-    Boolean validateRoleNameRepeat(String roleName);
+    Boolean validateRoleNameRepeat(String roleName, Integer id);
 }

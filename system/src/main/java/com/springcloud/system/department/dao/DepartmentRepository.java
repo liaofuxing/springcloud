@@ -15,4 +15,6 @@ import javax.annotation.Resource;
 public interface DepartmentRepository extends JpaRepository<Department, Integer>, JpaSpecificationExecutor<Department> {
 
     Department findByDepartmentName(String departmentName);
+
+    Department findByDepartmentNameAndIdNot(String departmentName, Integer id);
 }

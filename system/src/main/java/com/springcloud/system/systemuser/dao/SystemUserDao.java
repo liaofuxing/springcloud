@@ -19,4 +19,6 @@ public interface SystemUserDao extends JpaRepository<SystemUser, Integer>, JpaSp
     List<SystemUser> findSystemUserList(SystemUser systemUser);
 
     SystemUser findByUsername(String username);
+
+    SystemUser findByUsernameAndIdNot(String username, Integer id);
 }

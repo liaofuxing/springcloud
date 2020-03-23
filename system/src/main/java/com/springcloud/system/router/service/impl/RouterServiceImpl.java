@@ -223,8 +223,8 @@ public class RouterServiceImpl implements RouterService {
     }
 
     @Override
-    public Boolean validateRouterTitleRepeat(String routerTitle) {
-        Router byTitle = routerDao.findByTitle(routerTitle);
+    public Boolean validateRouterTitleRepeat(String routerTitle, Integer id) {
+        Router byTitle = routerDao.findByTitleAndIdNot(routerTitle, id);
         return byTitle != null;
     }
 }

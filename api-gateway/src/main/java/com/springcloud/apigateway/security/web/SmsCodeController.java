@@ -34,14 +34,13 @@ public class SmsCodeController {
 
     @GetMapping("/sendSmsCode")
     @ResponseBody
-    public String sendSmsCode(@RequestParam String phone, HttpServletResponse response){
+    public ResultVO<String> sendSmsCode(@RequestParam String phone, HttpServletResponse response){
         logger.info("进入sendSmsCode,phone:{}",phone);
         SmsManager smsManager = new SmsManager();
         String smsCode = smsManager.sendSms(phone);
         redisTemplate.opsForValue().set("SMS_CODE:" + phone, smsCode);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        ResultVO<MallUser> resultVO = ResultVOUtils.success(smsCode);
-        return JSON.toJSONString(resultVO);
+        return ResultVOUtils.success(smsCode);
     }
 
 }
