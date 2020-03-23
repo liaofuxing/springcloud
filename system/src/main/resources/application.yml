@@ -1,3 +1,5 @@
+server:
+  port: 8091
 
 eureka:
   client:
@@ -51,3 +53,4 @@ spring:
         max-wait: -1
         min-idle: 0
     timeout: 1000
+

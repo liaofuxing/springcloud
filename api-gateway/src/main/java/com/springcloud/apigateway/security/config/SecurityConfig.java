@@ -112,7 +112,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //处理跨域请求
-        http.cors().and().csrf().disable()
+            http
+                .cors().and().csrf().disable()
                 .apply(jsonAuthenticationConfigurer)
                 .and()
                 .apply(springSocialConfigurer)
