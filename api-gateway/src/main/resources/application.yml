@@ -44,6 +44,7 @@ spring:
     host: 192.168.31.207
     port: 6379
     password:
+    timeout: 5000
 
 eureka:
   client:

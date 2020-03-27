@@ -2,13 +2,13 @@ package com.springcloud.apigateway.security.entity;
 
 import com.springcloud.apigateway.securityuser.malluser.entity.MallUser;
 import com.springcloud.apigateway.securityuser.systemuser.entity.SystemUser;
+import com.springcloud.apigateway.securityuser.systemuser.entity.SystemUserRole;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -24,9 +24,7 @@ public class SecurityUser implements UserDetails {
 
     private Collection<? extends  GrantedAuthority> authorities;
 
-    public SecurityUser() {
 
-    }
 
     public SecurityUser(MallUser mallUser) {
         this.username = mallUser.getUsername();
@@ -36,11 +34,11 @@ public class SecurityUser implements UserDetails {
 
     }
 
-    public SecurityUser(SystemUser systemUser) {
+    public SecurityUser(SystemUser systemUser, SystemUserRole systemUserRole) {
         this.username = systemUser.getUsername();
         this.password = systemUser.getPassword();
         this.enabledFlag = systemUser.getEnabledFlag();
-        this.authorities = Collections.singleton(new SimpleGrantedAuthority("role"));
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority(systemUserRole.getRoleId().toString()));
     }
 
     public SecurityUser(String username, String password) {
@@ -53,12 +51,12 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        String username = this.getUsername();
-        if (username != null) {
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(username);
-            authorities.add(authority);
-        }
+//        Collection<GrantedAuthority> authorities = new ArrayList<>();
+//        String username = this.getUsername();
+//        if (username != null) {
+//            //SimpleGrantedAuthority authority = new SimpleGrantedAuthority(username);
+//            authorities.add(this.authorities);
+//        }
         return authorities;
     }
 
