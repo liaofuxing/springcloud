@@ -93,6 +93,24 @@ public class SystemUserController {
         return ResultVOUtils.success(validate);
     }
 
+    // 在线用户查询
+    @GetMapping("/getUserOnline")
+    @ResponseBody
+    public ResultVO<List<SystemUserVO>> getUserOnline () {
+        List<SystemUserVO> SystemUserVOs = systemUserService.userOnline();
+        return ResultVOUtils.success(SystemUserVOs);
+    }
+
+    // 强制离线
+    @GetMapping("/userForceOffline")
+    @ResponseBody
+    public ResultVO<List<SystemUserVO>> userForceOffline (Integer userId) {
+        List<SystemUserVO> SystemUserVOs = systemUserService.forceOffline(userId);
+        return ResultVOUtils.success(SystemUserVOs);
+    }
+
+
+
     /**
      * 测试传一个对象,给API调用
      *

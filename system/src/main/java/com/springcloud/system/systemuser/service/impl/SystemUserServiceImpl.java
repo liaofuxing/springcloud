@@ -1,5 +1,7 @@
 package com.springcloud.system.systemuser.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.department.entity.SystemUserDepartment;
@@ -14,6 +16,7 @@ import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.service.SystemUserService;
 import com.springcloud.system.systemuser.vo.SystemUserVO;
+import com.springcluod.rediscore.utils.RedisUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,16 +24,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 /**
@@ -56,6 +62,9 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     @Autowired
     private SystemUserRoleService systemUserRoleService;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 根据id查询SystemUser
@@ -97,7 +106,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
         Specification<SystemUser> specification = (Specification<SystemUser>) (root, criteriaQuery, criteriaBuilder) -> {
             //分页条件组装
-            List<Predicate> list = new ArrayList();
+            List<Predicate> list = new ArrayList<>();
             if (!StringUtils.isEmpty(systemUserDto.getAccount())) {
                 list.add(criteriaBuilder.like(root.get("account").as(String.class), "%" + systemUserDto.getAccount() + "%"));
             }
@@ -109,28 +118,13 @@ public class SystemUserServiceImpl implements SystemUserService {
             if (!StringUtils.isEmpty(systemUserDto.getPhone())) {
                 list.add(criteriaBuilder.equal(root.get("phone").as(String.class), systemUserDto.getPhone()));
             }
-            return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+            return criteriaBuilder.and(list.toArray(new Predicate[0]));
         };
 
         Page<SystemUser> systemUserPage = systemUserDao.findAll(specification, pageable);
         List<SystemUser> systemUserList = systemUserPage.getContent();
-        List<SystemUserVO> systemUserVOList = new ArrayList();
-        BeanUtils.copyProperties(systemUserList, systemUserVOList);
-        for (SystemUser systemUser : systemUserList) {
-            SystemUserVO systemUserVO = new SystemUserVO();
-            BeanUtils.copyProperties(systemUser, systemUserVO);
-
-            // 查询用户角色
-            RoleInfo roleInfoByUserId = roleInfoService.findRoleInfoByUserId(systemUserVO.getId());
-            systemUserVO.setRoleId(roleInfoByUserId.getId());
-
-            // 查询用户部门
-            Department departmentByUserId = departmentService.findDepartmentByUserId(systemUserVO.getId());
-            systemUserVO.setDepartmentId(departmentByUserId.getId());
-            systemUserVOList.add(systemUserVO);
-        }
-        DatePageVO<SystemUserVO> datePageVO = new DatePageVO(systemUserPage.getTotalElements(), systemUserVOList);
-        return datePageVO;
+        List<SystemUserVO> systemUserRoleDepartment = getSystemUserRoleDepartment(systemUserList);
+        return new DatePageVO<>(systemUserPage.getTotalElements(), systemUserRoleDepartment);
     }
 
 
@@ -138,6 +132,7 @@ public class SystemUserServiceImpl implements SystemUserService {
      * 新增用户
      *
      * @param systemUserDto
+     *
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
@@ -199,6 +194,58 @@ public class SystemUserServiceImpl implements SystemUserService {
     public  Boolean validateUsernameRepeat(String username, Integer id){
         SystemUser byUsername = systemUserDao.findByUsernameAndIdNot(username, id);
         return byUsername != null;
+    }
+
+    /**
+     * 查询在线用户
+     *
+     * @return
+     */
+    @Override
+    public List<SystemUserVO> userOnline() {
+        RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
+        Set<String> keys = redisUtils.keys("USER_INFO:"+"*");
+        List<Integer> idList = new ArrayList<>();
+        for (String key: keys) {
+            String userInfoStr = redisUtils.get(key);
+            JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
+            SystemUser systemUser = JSON.toJavaObject(jsonObject, SystemUser.class);
+            idList.add(systemUser.getId());
+        }
+        List<SystemUser> systemUserList = systemUserDao.findByIdIn(idList);
+        return getSystemUserRoleDepartment(systemUserList);
+    }
+
+    /**
+     * 在线用户强制下线
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SystemUserVO> forceOffline(Integer userId) {
+        RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
+        Optional<SystemUser> byId = systemUserDao.findById(userId);
+        SystemUser systemUser = byId.get();
+        String token = redisUtils.get("SECURITY_TOKEN:" + systemUser.getUsername());
+        redisUtils.delete("USER_INFO:" + token);
+        return this.userOnline();
+    }
+
+    private List<SystemUserVO> getSystemUserRoleDepartment(List<SystemUser> systemUserList) {
+        List<SystemUserVO> systemUserVOList = new ArrayList<>();
+        for (SystemUser systemUser : systemUserList) {
+            SystemUserVO systemUserVO = new SystemUserVO();
+            BeanUtils.copyProperties(systemUser, systemUserVO);
+            // 查询用户角色
+            RoleInfo roleInfoByUserId = roleInfoService.findRoleInfoByUserId(systemUser.getId());
+            systemUserVO.setRoleId(roleInfoByUserId.getId());
+
+            // 查询用户部门
+            Department departmentByUserId = departmentService.findDepartmentByUserId(systemUser.getId());
+            systemUserVO.setDepartmentId(departmentByUserId.getId());
+            systemUserVOList.add(systemUserVO);
+        }
+        return systemUserVOList;
     }
 
 }

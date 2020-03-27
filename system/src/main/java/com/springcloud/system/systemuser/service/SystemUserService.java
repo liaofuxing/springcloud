@@ -69,4 +69,8 @@ public interface SystemUserService {
     void editSystemUser(SystemUserDto systemUserDto);
 
     Boolean validateUsernameRepeat(String username,Integer id);
+
+    List<SystemUserVO>  userOnline();
+
+    List<SystemUserVO> forceOffline(Integer userId);
 }

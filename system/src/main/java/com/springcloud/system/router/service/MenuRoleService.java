@@ -2,6 +2,8 @@ package com.springcloud.system.router.service;
 
 import com.springcloud.system.router.entity.MenuRole;
 
+import java.util.List;
+
 /**
  * @author liaofuxing
  * @E-mail liaofuxing@outlook.com
@@ -16,6 +18,13 @@ public interface MenuRoleService {
      * @return
      */
     MenuRole findMenuRole(Integer roleId);
+
+    /**
+     *
+     *
+     * @return
+     */
+    List<Integer> findMenuRoleList(Integer roleId);
 
     /**
      *

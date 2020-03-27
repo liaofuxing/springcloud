@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2020/03/13 22:01
  */
 @Repository
-public interface SystemUserDao extends JpaRepository<SystemUser, Integer>, JpaSpecificationExecutor {
+public interface SystemUserDao extends JpaRepository<SystemUser, Integer>, JpaSpecificationExecutor<SystemUser> {
 
     @Query(value = "select user from SystemUser user")
     List<SystemUser> findSystemUserList(SystemUser systemUser);
@@ -21,4 +21,6 @@ public interface SystemUserDao extends JpaRepository<SystemUser, Integer>, JpaSp
     SystemUser findByUsername(String username);
 
     SystemUser findByUsernameAndIdNot(String username, Integer id);
+
+    List<SystemUser> findByIdIn(List<Integer> id);
 }

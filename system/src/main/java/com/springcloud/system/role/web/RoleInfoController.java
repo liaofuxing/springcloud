@@ -7,13 +7,11 @@ import com.springcloud.system.role.dto.RoleInfoDto;
 import com.springcloud.system.role.service.RoleInfoService;
 import com.springcloud.system.role.vo.RoleInfoVO;
 import com.springcloud.system.role.vo.SelectFormatVO;
-import com.springcloud.system.router.entity.MenuRole;
 import com.springcloud.system.router.service.MenuRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,6 +29,8 @@ public class RoleInfoController {
 
     @Autowired
     private MenuRoleService menuRoleService;
+
+
 
     /**
      * 查询角色列表
@@ -81,22 +81,15 @@ public class RoleInfoController {
     }
 
     /**
-     * 获取角色对应菜单
+     * 获取角色对应菜单(页面菜单tree的默认选中状态)
      *
      * @return ResultVO<List<Integer>>
      */
     @GetMapping("/getRoleMenu")
     @ResponseBody
     public ResultVO<List<Integer>> getRoleMenu(RoleInfoDto roleInfoDto) {
-        MenuRole menuRole = menuRoleService.findMenuRole(roleInfoDto.getId());
-        List<Integer> menu = new ArrayList<>();
-        if (menuRole != null){
-            String[] menuArr = menuRole.getMenu().split(",");
-            for (String s: menuArr) {
-                menu.add(Integer.parseInt(s));
-            }
-        }
-        return ResultVOUtils.success(menu);
+        List<Integer> menuRoleList = menuRoleService.findMenuRoleList(roleInfoDto.getId());
+        return ResultVOUtils.success(menuRoleList);
     }
 
     // 校验角色名重复
