@@ -35,7 +35,7 @@ public class TokenLogoutSuccessHandler implements LogoutSuccessHandler {
         String token = redisUtils.get("SECURITY_TOKEN:" + user.getUsername());
         // 将redis 上的缓存信息设置为即将过期
         redisUtils.expire("USER_INFO:" + token, 0 , TimeUnit.MICROSECONDS);
-        redisUtils.expire("SECURITY_TOKEN:" + token, 0 , TimeUnit.MICROSECONDS);
+        redisUtils.expire("SECURITY_TOKEN:" + user.getUsername(), 0 , TimeUnit.MICROSECONDS);
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.logout_success(null)));
         response.flushBuffer();
