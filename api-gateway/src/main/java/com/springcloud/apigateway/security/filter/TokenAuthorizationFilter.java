@@ -2,6 +2,7 @@ package com.springcloud.apigateway.security.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.springcloud.apigateway.security.entity.SecurityUser;
+import com.springcloud.common.enums.UserTokenEnums;
 import com.springcluod.rediscore.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -36,13 +37,13 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
         if (!StringUtils.isEmpty(token)) {
             //用token从redis中获取用户信息，构造一个SecurityUser
             RedisUtils redisUtils = new RedisUtils(redisTemplate);
-            String userInfoStr = redisUtils.get("USER_INFO:" + token);
+            String userInfoStr = redisUtils.get(UserTokenEnums.USER_INFO.getCode() + token);
             if (userInfoStr != null) {
                 Map<String, String> userMap = (Map<String, String>) JSONObject.parse(userInfoStr);
                 SecurityUser securityUser = new SecurityUser(userMap.get("username"), userMap.get("password"));
                 // redis 中存在用户信息,将凭证有效时间延长
-                redisUtils.expire("USER_INFO:" + token, 30, TimeUnit.MINUTES);
-                redisUtils.expire("SECURITY_TOKEN:" + userMap.get("username"), 30, TimeUnit.MINUTES);
+                redisUtils.expire(UserTokenEnums.USER_INFO.getCode() + token, 30, TimeUnit.MINUTES);
+                redisUtils.expire(UserTokenEnums.SECURITY_TOKEN.getCode() + userMap.get("username"), 30, TimeUnit.MINUTES);
                 authentication = new UsernamePasswordAuthenticationToken(securityUser,
                         null, securityUser.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -2,6 +2,7 @@ package com.springcloud.system.router.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.springcloud.common.enums.UserTokenEnums;
 import com.springcloud.system.role.etity.SystemUserRole;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import com.springcloud.system.router.dao.RouterDao;
@@ -208,7 +209,7 @@ public class RouterServiceImpl implements RouterService {
      */
     public List<Integer> getMenuRoleByLoginUser(String token) {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
-        String userInfoStr = redisUtils.get("USER_INFO:" + token);
+        String userInfoStr = redisUtils.get(UserTokenEnums.USER_INFO.getCode() + token);
         JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
         SystemUser systemUser = JSON.toJavaObject(jsonObject, SystemUser.class);
 

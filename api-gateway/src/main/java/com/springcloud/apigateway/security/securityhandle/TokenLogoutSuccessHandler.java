@@ -3,6 +3,7 @@ package com.springcloud.apigateway.security.securityhandle;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.springcloud.apigateway.securityuser.systemuser.entity.SystemUser;
+import com.springcloud.common.enums.UserTokenEnums;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcluod.rediscore.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,14 @@ public class TokenLogoutSuccessHandler implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException , ServletException {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
         String requestToken = request.getHeader("token");
-        String userInfoStr = redisUtils.get("USER_INFO:" + requestToken);
+        String userInfoStr = redisUtils.get(UserTokenEnums.USER_INFO.getCode() + requestToken);
 
         SystemUser user = JSON.toJavaObject( JSONObject.parseObject(userInfoStr), SystemUser.class);
 
-        String token = redisUtils.get("SECURITY_TOKEN:" + user.getUsername());
+        String token = redisUtils.get(UserTokenEnums.SECURITY_TOKEN.getCode() + user.getUsername());
         // 将redis 上的缓存信息设置为即将过期
-        redisUtils.expire("USER_INFO:" + token, 0 , TimeUnit.MICROSECONDS);
-        redisUtils.expire("SECURITY_TOKEN:" + user.getUsername(), 0 , TimeUnit.MICROSECONDS);
+        redisUtils.expire(UserTokenEnums.USER_INFO.getCode() + token, 0 , TimeUnit.MICROSECONDS);
+        redisUtils.expire(UserTokenEnums.SECURITY_TOKEN.getCode() + user.getUsername(), 0 , TimeUnit.MICROSECONDS);
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.logout_success(null)));
         response.flushBuffer();

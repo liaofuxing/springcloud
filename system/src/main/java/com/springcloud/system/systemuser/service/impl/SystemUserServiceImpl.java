@@ -3,6 +3,7 @@ package com.springcloud.system.systemuser.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.springcloud.common.entity.DatePageVO;
+import com.springcloud.common.enums.UserTokenEnums;
 import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.department.entity.SystemUserDepartment;
 import com.springcloud.system.department.service.DepartmentService;
@@ -204,7 +205,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Override
     public List<SystemUserVO> userOnline() {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
-        Set<String> keys = redisUtils.keys("USER_INFO:"+"*");
+        Set<String> keys = redisUtils.keys(UserTokenEnums.USER_INFO.getCode()+"*");
         List<Integer> idList = new ArrayList<>();
         for (String key: keys) {
             String userInfoStr = redisUtils.get(key);
@@ -226,8 +227,9 @@ public class SystemUserServiceImpl implements SystemUserService {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
         Optional<SystemUser> byId = systemUserDao.findById(userId);
         SystemUser systemUser = byId.get();
-        String token = redisUtils.get("SECURITY_TOKEN:" + systemUser.getUsername());
-        redisUtils.delete("USER_INFO:" + token);
+        String token = redisUtils.get(UserTokenEnums.SECURITY_TOKEN.getCode() + systemUser.getUsername());
+        redisUtils.delete(UserTokenEnums.USER_INFO.getCode() + token);
+        redisUtils.delete(UserTokenEnums.SECURITY_TOKEN.getCode() + systemUser.getUsername());
         return this.userOnline();
     }
 
