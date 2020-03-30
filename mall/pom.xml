@@ -6,19 +6,19 @@
     <parent>
         <groupId>com.springcloud</groupId>
         <artifactId>spring-cloud</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.5-beta</version>
     </parent>
 
 
     <groupId>com.springcloud.mall</groupId>
     <artifactId>mall</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.5-beta</version>
     <name>mall</name>
     <packaging>jar</packaging>
     <description>mall</description>
 
     <properties>
-        <common.version>0.0.1-SNAPSHOT</common.version>
+        <common.version>0.5-beta</common.version>
     </properties>
 
     <dependencies>

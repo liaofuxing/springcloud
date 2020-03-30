@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.springcloud</groupId>
     <artifactId>spring-cloud</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.5-beta</version>
     <name>spring-cloud</name>
     <packaging>pom</packaging>
     <description>spring-cloud project</description>
@@ -18,8 +18,9 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
-        <common.version>0.0.1-SNAPSHOT</common.version>
+        <common.version>0.5-beta</common.version>
         <social.version>1.1.6.RELEASE</social.version>
+        <fastjson.version>1.2.67</fastjson.version>
     </properties>
 
     <dependencies>
@@ -40,7 +41,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.67</version>
+            <version>${fastjson.version}</version>
         </dependency>
 
 

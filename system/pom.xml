@@ -6,18 +6,18 @@
 	<parent>
 		<groupId>com.springcloud</groupId>
 		<artifactId>spring-cloud</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.5-beta</version>
 	</parent>
 
 	<groupId>com.springcloud.system</groupId>
 	<artifactId>system</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.5-beta</version>
 	<name>system</name>
 	<packaging>jar</packaging>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
-		<common.version>0.0.1-SNAPSHOT</common.version>
+		<common.version>0.5-beta</common.version>
 	</properties>
 
 	<dependencies>

@@ -5,13 +5,13 @@
     <parent>
         <groupId>com.springcloud</groupId>
         <artifactId>spring-cloud</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.5-beta</version>
     </parent>
 
 
     <groupId>com.springcloud.common</groupId>
     <artifactId>common</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.5-beta</version>
     <name>common</name>
     <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>

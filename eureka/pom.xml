@@ -5,13 +5,13 @@
     <parent>
         <groupId>com.springcloud</groupId>
         <artifactId>spring-cloud</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.5-beta</version>
     </parent>
 
 
     <groupId>com.springcloud.eureka</groupId>
     <artifactId>eureka</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.5-beta</version>
     <name>eureka</name>
     <packaging>jar</packaging>
     <description>eureka</description>
