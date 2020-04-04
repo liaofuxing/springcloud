@@ -139,15 +139,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterAfter(authorizationFilter, LogoutFilter.class);
     }
 
-
-    //密码加密器，在授权时，框架为我们解析用户名密码时，密码会通过加密器加密在进行比较
-    //将密码加密器交给spring管理，在注册时，密码也是需要加密的，再存入数据库中
-    //用户输入登录的密码用加密器加密，再与数据库中查询到的用户密码比较
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
+    //配置多个authenticationProvider
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -157,6 +149,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.authenticationProvider(daoAuthenticationProvider)
 
 
+    }
+
+
+    //密码加密器，在授权时，框架为我们解析用户名密码时，密码会通过加密器加密在进行比较
+    //将密码加密器交给spring管理，在注册时，密码也是需要加密的，再存入数据库中
+    //用户输入登录的密码用加密器加密，再与数据库中查询到的用户密码比较
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 
