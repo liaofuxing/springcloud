@@ -2,8 +2,8 @@ package com.springcloud.system.router.service;
 
 import com.springcloud.system.router.dto.Menu2RouterDto;
 import com.springcloud.system.router.entity.Router;
-import com.springcloud.system.router.entity.Router2TreeVO;
-import com.springcloud.system.router.entity.RouterVo;
+import com.springcloud.system.router.vo.Router2TreeVO;
+import com.springcloud.system.router.vo.RouterVO;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public interface RouterService {
      * @return List<RouterVo> 所有的一级路由
      *
      */
-    List<RouterVo> getRouters(String token);
+    List<RouterVO> getRouters(String token);
 
 
     /**

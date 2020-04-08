@@ -1,4 +1,4 @@
-package com.springcloud.system.router.entity;
+package com.springcloud.system.router.vo;
 
 import lombok.Data;
 

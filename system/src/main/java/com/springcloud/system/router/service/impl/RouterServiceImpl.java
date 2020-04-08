@@ -9,8 +9,8 @@ import com.springcloud.system.router.dao.RouterDao;
 import com.springcloud.system.router.dto.Menu2RouterDto;
 import com.springcloud.system.router.entity.MenuRole;
 import com.springcloud.system.router.entity.Router;
-import com.springcloud.system.router.entity.Router2TreeVO;
-import com.springcloud.system.router.entity.RouterVo;
+import com.springcloud.system.router.vo.Router2TreeVO;
+import com.springcloud.system.router.vo.RouterVO;
 import com.springcloud.system.router.service.MenuRoleService;
 import com.springcloud.system.router.service.RouterService;
 import com.springcloud.system.systemuser.entity.SystemUser;
@@ -83,10 +83,10 @@ public class RouterServiceImpl implements RouterService {
      * @return List<RouterVo> 所有的一级路由
      *
      */
-    public List<RouterVo> getRouters(String token) {
+    public List<RouterVO> getRouters(String token) {
         // 先获取一级路由
         Integer parent = 0;
-        List<RouterVo> routerByParent = getRouterByParent(parent);
+        List<RouterVO> routerByParent = getRouterByParent(parent);
 
         //获取登录用户的菜单权限
         List<Integer> showMenu = getMenuRoleByLoginUser(token);
@@ -103,11 +103,11 @@ public class RouterServiceImpl implements RouterService {
      *
      * @return List<RouterVo>
      */
-    public List<RouterVo> getRouterByParent(Integer parent) {
+    public List<RouterVO> getRouterByParent(Integer parent) {
         List<Router> byParent = routerDao.findByParent(parent);
-        List<RouterVo> RouterEntityVoList = new ArrayList<>();
+        List<RouterVO> RouterEntityVoList = new ArrayList<>();
         for (Router router : byParent) {
-            RouterVo routerVo = new RouterVo();
+            RouterVO routerVo = new RouterVO();
             BeanUtils.copyProperties(router, routerVo);
             RouterEntityVoList.add(routerVo);
         }
@@ -127,11 +127,11 @@ public class RouterServiceImpl implements RouterService {
      *
      * @return List<RouterVo> 递归
      */
-    public List<RouterVo> formatRouter(List<RouterVo> routerList, List<Integer> showMenu) {
-        for (RouterVo routerEntityVo : routerList) {
-            List<RouterVo> routerByParent = getRouterByParent(routerEntityVo.getId());
+    public List<RouterVO> formatRouter(List<RouterVO> routerList, List<Integer> showMenu) {
+        for (RouterVO routerEntityVo : routerList) {
+            List<RouterVO> routerByParent = getRouterByParent(routerEntityVo.getId());
             if (routerByParent != null && routerByParent.size() > 0) {
-                for (RouterVo byParent: routerByParent) {
+                for (RouterVO byParent: routerByParent) {
                     if (showMenu.contains(byParent.getId())) {
                         routerEntityVo.setHidden(0);
                     }

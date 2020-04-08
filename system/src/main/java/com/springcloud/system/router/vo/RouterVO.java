@@ -1,4 +1,4 @@
-package com.springcloud.system.router.entity;
+package com.springcloud.system.router.vo;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2019/08/09 15:26
  **/
 @Data
-public class RouterVo {
+public class RouterVO {
 
     private Integer id;
 
@@ -36,13 +36,13 @@ public class RouterVo {
 
     private Integer hidden = 1;
 
-    private List<RouterVo> children;
+    private List<RouterVO> children;
 
-    public RouterVo() {
+    public RouterVO() {
 
     }
 
-    public RouterVo(Integer id, String name, String path) {
+    public RouterVO(Integer id, String name, String path) {
         this.id = id;
         this.name = name;
         this.path = path;

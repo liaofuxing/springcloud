@@ -3,8 +3,8 @@ package com.springcloud.system.router.web;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
 import com.springcloud.system.router.dto.Menu2RouterDto;
-import com.springcloud.system.router.entity.Router2TreeVO;
-import com.springcloud.system.router.entity.RouterVo;
+import com.springcloud.system.router.vo.Router2TreeVO;
+import com.springcloud.system.router.vo.RouterVO;
 import com.springcloud.system.router.service.RouterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +35,10 @@ public class RouterController {
 
     @GetMapping("/getRouters")
     @ResponseBody
-    public ResultVO<List<RouterVo>> getRouters(HttpServletRequest request) {
+    public ResultVO<List<RouterVO>> getRouters(HttpServletRequest request) {
         LOGGER.info("收到请求...");
         String token = request.getHeader("token");
-        List<RouterVo> routerVos = routerService.getRouters(token);
+        List<RouterVO> routerVos = routerService.getRouters(token);
         if (!routerVos.isEmpty()) {
             return ResultVOUtils.success(routerVos);
         } else {
