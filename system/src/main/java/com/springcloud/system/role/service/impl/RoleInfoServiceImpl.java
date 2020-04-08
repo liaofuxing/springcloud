@@ -51,8 +51,9 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     /**
      * 角色分页查询
      *
-     * @param roleInfoDto
-     * @return
+     * @param roleInfoDto roleInfoDto
+     * @return DatePageVO<RoleInfoVO>
+     *
      */
     @Override
     public DatePageVO<RoleInfoVO> findRoleInfoPage(RoleInfoDto roleInfoDto) {
@@ -76,7 +77,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     /**
      * 查询所有角色
      *
-     * @return
+     * @return List<SelectFormatVO>
      */
     @Override
     public List<SelectFormatVO> findRoleAll() {
@@ -95,10 +96,11 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     }
 
     /**
+     *
      * 根据userId 查询角色
      *
-     * @param userId
-     * @return
+     * @param userId userId
+     * @return RoleInfo
      */
     @Override
     public RoleInfo findRoleInfoByUserId(Integer userId) {
