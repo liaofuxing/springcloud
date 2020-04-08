@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 数据库工具
  */
 public class DBUtils {
 
