@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.common.enums.UserTokenEnums;
+import com.springcloud.common.utils.BeanCopyUtil;
 import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.department.entity.SystemUserDepartment;
 import com.springcloud.system.department.service.DepartmentService;
@@ -237,7 +238,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         List<SystemUserVO> systemUserVOList = new ArrayList<>();
         for (SystemUser systemUser : systemUserList) {
             SystemUserVO systemUserVO = new SystemUserVO();
-            BeanUtils.copyProperties(systemUser, systemUserVO);
+            BeanCopyUtil.copyProperties(systemUser, systemUserVO);
             // 查询用户角色
             RoleInfo roleInfoByUserId = roleInfoService.findRoleInfoByUserId(systemUser.getId());
             systemUserVO.setRoleId(roleInfoByUserId.getId());

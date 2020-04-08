@@ -2,6 +2,7 @@ package com.springcloud.system.department.service.impl;
 
 
 import com.springcloud.common.entity.DatePageVO;
+import com.springcloud.common.utils.BeanCopyUtil;
 import com.springcloud.system.department.dao.DepartmentRepository;
 import com.springcloud.system.department.dto.DepartmentDto;
 import com.springcloud.system.department.entity.Department;
@@ -95,7 +96,9 @@ public class DepartmentServiceImpl implements DepartmentService {
             return criteriaBuilder.and(list.toArray(new Predicate[0]));
         };
         Page<Department> departmentPage = departmentRepository.findAll(specification, pageable);
-        return new DatePageVO(departmentPage.getTotalElements(), departmentPage.getContent());
+        List<DepartmentVO> departmentVOList = BeanCopyUtil.copyListProperties(departmentPage.getContent(), DepartmentVO::new);
+
+        return new DatePageVO<>(departmentPage.getTotalElements(), departmentVOList);
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.springcloud.system.role.service.impl;
 
 
 import com.springcloud.common.entity.DatePageVO;
+import com.springcloud.common.utils.BeanCopyUtil;
 import com.springcloud.system.role.dao.RoleInfoDao;
 import com.springcloud.system.role.dto.RoleInfoDto;
 import com.springcloud.system.role.etity.RoleInfo;
@@ -64,11 +65,12 @@ public class RoleInfoServiceImpl implements RoleInfoService {
                 list.add(criteriaBuilder.like(root.get("roleName").as(String.class), "%" + roleInfoDto.getRoleName() + "%"));
             }
 
-            return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+            return criteriaBuilder.and(list.toArray(new Predicate[0]));
         };
         Page<RoleInfo> roleInfoPage = roleInfoRepository.findAll(specification, pageable);
-        DatePageVO<RoleInfoVO> datePageVO = new DatePageVO(roleInfoPage.getTotalElements(), roleInfoPage.getContent());
-        return datePageVO;
+        List<RoleInfoVO> roleInfoVOList = BeanCopyUtil.copyListProperties(roleInfoPage.getContent(), RoleInfoVO::new);
+
+        return new DatePageVO<>(roleInfoPage.getTotalElements(), roleInfoVOList);
     }
 
     /**
@@ -78,7 +80,7 @@ public class RoleInfoServiceImpl implements RoleInfoService {
      */
     @Override
     public List<SelectFormatVO> findRoleAll() {
-        List<SelectFormatVO> roleInfoVOList = new ArrayList();
+        List<SelectFormatVO> roleInfoVOList = new ArrayList<>();
         List<RoleInfo> roleInfoList = roleInfoRepository.findAll();
         for (RoleInfo roleInfo : roleInfoList) {
             SelectFormatVO roleInfoVO = new SelectFormatVO(roleInfo.getId(), roleInfo.getRoleName());
