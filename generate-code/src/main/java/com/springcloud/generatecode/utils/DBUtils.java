@@ -48,14 +48,12 @@ public class DBUtils {
         ResultSet rs = cs.executeQuery(SQL + tableName);
         ResultSetMetaData data = rs.getMetaData();
         List<FieldInfo> fields = new ArrayList<>();
-        while (rs.next()) {
-            for (int i = 1; i <= data.getColumnCount(); i++) {
-                String columnName = data.getColumnName(i);
-                //获得指定列的数据类型名
-                String columnTypeName = data.getColumnTypeName(i);
-                FieldInfo fieldInfo = new FieldInfo(columnName, columnTypeName);
-                fields.add(fieldInfo);
-            }
+        for (int i = 1; i <= data.getColumnCount(); i++) {
+            String columnName = data.getColumnName(i);
+            //获得指定列的数据类型名
+            String columnTypeName = data.getColumnTypeName(i);
+            FieldInfo fieldInfo = new FieldInfo(columnName, columnTypeName);
+            fields.add(fieldInfo);
         }
         return fields;
     }
