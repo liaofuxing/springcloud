@@ -8,7 +8,7 @@ import javax.persistence.*;
  *
  * @author generate-code create by generate-code
  * @E-mail liaofuxing@outlook.com
- * @date 2020/03/17 16:00
+ * @date ${generateDate}
  *
  **/
 @Data
