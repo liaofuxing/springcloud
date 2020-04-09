@@ -16,6 +16,11 @@ public class GenerateConstants {
     public static final String ENTITY_TEMPLATE_PATH = "classpath:templates/entity/entityTemplate.tmp";
 
     /**
+     * 生成时间
+     */
+    public static final String GENERATE_DATE = "${generateDate}";
+
+    /**
      * 表名
      */
     public static final String TABLE_NAME = "${tableName}";

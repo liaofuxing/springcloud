@@ -20,9 +20,9 @@ public class MysqlFieldConvertJavaHumpUtils {
      */
     public static String mysqlFieldConvertJavaHump(String mysqlField) {
         // 替换数据库中的"_" 用java驼峰命名
-        String javaHump = "";
+        String javaHump;
         if (mysqlField.contains(GenerateConstants.DB_LINK_TAG)) {
-            //*第一个出现的索引位置
+            // 第一个出现的索引位置
             StringBuilder mysqlFieldBuilder = new StringBuilder(mysqlField);
             int indexOf = mysqlField.indexOf(GenerateConstants.DB_LINK_TAG);
             char c = mysqlField.charAt(indexOf + 1);

@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +66,11 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 //                if (str.contains(GenerateConstants.PACKAGE_PATH)) {
 //                    str = str.replace(GenerateConstants.PACKAGE_PATH, packagePath);
 //                }
+                if (str.contains(GenerateConstants.GENERATE_DATE)) {
+                    ZonedDateTime now = ZonedDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    str = str.replace(GenerateConstants.GENERATE_DATE, now.format(formatter));
+                }
                 if (str.contains(GenerateConstants.TABLE_NAME)) {
                     str = str.replace(GenerateConstants.TABLE_NAME, tableName);
                 }
