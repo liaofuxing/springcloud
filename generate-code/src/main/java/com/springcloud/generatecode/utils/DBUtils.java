@@ -21,7 +21,7 @@ public class DBUtils {
     /**
      * 获取数据库中所有的表名称
      *
-     * @return 该数据库中所有的表名称
+     * @return tables 该数据库中所有的表名称
      *
      */
     public List<String> getTables() throws SQLException {

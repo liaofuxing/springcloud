@@ -1,7 +1,15 @@
-package com.springcloud.generatecode.commcon;
+package com.springcloud.generatecode.common;
 
 import lombok.Getter;
 
+/**
+ *
+ * 代码生成器mysqlType和javaType对照枚举
+ *
+ * @author liaofuxing
+ * @E-mail liaofuxing@outlook.com
+ * @date 2020/04/09 15:24
+ */
 @Getter
 public enum  GenerateMysqlType2JavaTypeEnum {
 
@@ -20,7 +28,13 @@ public enum  GenerateMysqlType2JavaTypeEnum {
         this.javaType = javaType;
     }
 
-    // 普通方法
+    /**
+     *
+     * 通过 mysqlType获取javaType
+     *
+     * @param mysqlType mysql类型
+     * @return javaType
+     */
     public static String getJavaType(String mysqlType) {
         for (GenerateMysqlType2JavaTypeEnum g : GenerateMysqlType2JavaTypeEnum.values()) {
             if (g.getMysqlType().equals(mysqlType)) {

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface GenerateCodeService {
 
-    List<String> generateEntityCode(String tableName) throws SQLException, IOException;
+    List<String> generateEntityCode(String tableName, String packagePath) throws SQLException, IOException;
 }

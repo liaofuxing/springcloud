@@ -24,7 +24,7 @@ public class GenerateCodeController {
     @GetMapping("/test")
     @ResponseBody
     public void getRouters(HttpServletResponse response) throws SQLException, IOException {
-        List<String> systemUser = generateCodeService.generateEntityCode("system_user");
+        List<String> systemUser = generateCodeService.generateEntityCode("system_user",null);
         String javaHumpClassName = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump("system_user");
         StringBuilder outputBuilder = new StringBuilder();
         for (String s: systemUser) {
