@@ -2,7 +2,7 @@ package com.springcloud.system.systemuser.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.springcloud.common.entity.DatePageVO;
+import com.springcloud.common.vo.DatePageVO;
 import com.springcloud.common.enums.UserTokenEnums;
 import com.springcloud.common.utils.BeanCopyUtil;
 import com.springcloud.system.department.entity.Department;

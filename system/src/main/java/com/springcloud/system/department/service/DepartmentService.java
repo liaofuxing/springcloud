@@ -1,11 +1,11 @@
 package com.springcloud.system.department.service;
 
 
-import com.springcloud.common.entity.DatePageVO;
+import com.springcloud.common.vo.DatePageVO;
+import com.springcloud.common.vo.SelectFormatVO;
 import com.springcloud.system.department.dto.DepartmentDto;
 import com.springcloud.system.department.entity.Department;
 import com.springcloud.system.department.vo.DepartmentVO;
-import com.springcloud.system.role.vo.SelectFormatVO;
 
 import java.util.List;
 

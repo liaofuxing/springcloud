@@ -1,8 +1,9 @@
 package com.springcloud.system.role.service.impl;
 
 
-import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.common.utils.BeanCopyUtil;
+import com.springcloud.common.vo.DatePageVO;
+import com.springcloud.common.vo.SelectFormatVO;
 import com.springcloud.system.role.dao.RoleInfoDao;
 import com.springcloud.system.role.dto.RoleInfoDto;
 import com.springcloud.system.role.etity.RoleInfo;
@@ -10,7 +11,6 @@ import com.springcloud.system.role.etity.SystemUserRole;
 import com.springcloud.system.role.service.RoleInfoService;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import com.springcloud.system.role.vo.RoleInfoVO;
-import com.springcloud.system.role.vo.SelectFormatVO;
 import com.springcloud.system.router.entity.MenuRole;
 import com.springcloud.system.router.service.MenuRoleService;
 import org.springframework.beans.BeanUtils;

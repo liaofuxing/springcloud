@@ -2,7 +2,9 @@ package com.springcloud.generatecode.generate.service.impl;
 
 import com.springcloud.generatecode.common.GenerateConstants;
 import com.springcloud.generatecode.common.GenerateMysqlType2JavaTypeEnum;
+import com.springcloud.generatecode.generate.dto.GenerateCodeDto;
 import com.springcloud.generatecode.generate.entity.FieldInfo;
+import com.springcloud.common.vo.SelectFormatVO;
 import com.springcloud.generatecode.generate.service.GenerateCodeService;
 import com.springcloud.generatecode.utils.DBUtils;
 import com.springcloud.generatecode.utils.MysqlFieldConvertJavaHumpUtils;
@@ -39,22 +41,50 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     @Autowired
     private ResourceLoader resourceLoader;
 
+
+    @Override
+    public List<FieldInfo> getTableField(String tableName) throws SQLException {
+        List<FieldInfo> tableFields = null;
+        try {
+            DBUtils dbUtils = new DBUtils(dataSource);
+            tableFields = dbUtils.getDBFields(tableName);
+            for (FieldInfo fieldInfo: tableFields) {
+                // mysql列风格转换java驼峰风格
+                String javaHumpField = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(fieldInfo.getDbColumnName());
+                // mysql类型转java类型
+                String javaType = GenerateMysqlType2JavaTypeEnum.getJavaType(fieldInfo.getDbColumnType());
+                fieldInfo.setJavaJavaHumpColumnName(javaHumpField);
+                fieldInfo.setJavaColumnType(javaType);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return tableFields;
+    }
+
+    @Override
+    public List<String> generateCode(GenerateCodeDto generateCodeDto) throws IOException {
+        if(generateCodeDto.getOnlyGenerateJavaBean()) {
+            return generateEntityCode(generateCodeDto);
+        }else {
+            return null;
+        }
+    }
+
     /**
      * 生成entity
      *
-     * @param tableName 目标数据库表名
-     * @param packagePath 生成java类的包路径
+     * @param generateCodeDto 生成器Dto
      * @return templateInner 实际生成java文件的字符流
      * @throws IOException 异常
      */
     @Override
-    public List<String> generateEntityCode(String tableName, String packagePath) throws IOException {
+    public List<String> generateEntityCode(GenerateCodeDto generateCodeDto) throws IOException {
         FileReader fr = null;
         BufferedReader bf = null;
         List<String> templateInner = new ArrayList<>();
+        String tableName = generateCodeDto.getTableName();
         try {
-            DBUtils dbUtils = new DBUtils(dataSource);
-            List<FieldInfo> systemUserFields = dbUtils.getDBFields(tableName);
             Resource resource = resourceLoader.getResource(GenerateConstants.ENTITY_TEMPLATE_PATH);
             File file = resource.getFile();
             fr = new FileReader(file);
@@ -63,9 +93,10 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
             // 按行读取字符串
             while ((str = bf.readLine()) != null) {
-//                if (str.contains(GenerateConstants.PACKAGE_PATH)) {
-//                    str = str.replace(GenerateConstants.PACKAGE_PATH, packagePath);
-//                }
+                if (str.contains(GenerateConstants.PACKAGE_PATH)) {
+                    str = str.replace(GenerateConstants.PACKAGE_PATH, generateCodeDto.getPackagePath())
+                            + GenerateConstants.JAVA_GRAMMAR_END_TAG;
+                }
                 if (str.contains(GenerateConstants.GENERATE_DATE)) {
                     ZonedDateTime now = ZonedDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -82,29 +113,22 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
             }
 
             // mysql 列转化为java bean
-            for (FieldInfo fieldInfo : systemUserFields) {
+            for (FieldInfo fieldInfo : generateCodeDto.getTableFieldList()) {
 
-                String dbColumnName = fieldInfo.getDbColumnName();
-                if (!"id".equals(dbColumnName)){
-                    String dbColumnTypeName = fieldInfo.getDbColumnTypeName();
-                    // mysql类型转java类型
-                    String javaType = GenerateMysqlType2JavaTypeEnum.getJavaType(dbColumnTypeName);
-                    // mysql列风格转换java驼峰风格
-                    String javaHumpField = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(dbColumnName);
-
+                if (!"id".equals(fieldInfo.getJavaJavaHumpColumnName())){
                     String javaLineTxt = GenerateConstants.TAB_STRING
-                                            + GenerateConstants.JAVA_SCOPE_PRIVATE
-                                            + GenerateConstants.SPACE_STRING
-                                            + javaType
-                                            + GenerateConstants.SPACE_STRING
-                                            + javaHumpField
-                                            + GenerateConstants.JAVA_GRAMMAR_END_TAG;
+                            + GenerateConstants.JAVA_SCOPE_PRIVATE
+                            + GenerateConstants.SPACE_STRING
+                            + fieldInfo.getJavaColumnType()
+                            + GenerateConstants.SPACE_STRING
+                            + fieldInfo.getJavaJavaHumpColumnName()
+                            + GenerateConstants.JAVA_GRAMMAR_END_TAG;
                     templateInner.add(javaLineTxt);
                 }
             }
             templateInner.add(GenerateConstants.JAVA_TXT_END_TAG);
 
-        } catch (SQLException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             assert bf != null;
@@ -112,5 +136,18 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
             fr.close();
         }
         return templateInner;
+    }
+
+
+    @Override
+    public List<SelectFormatVO> getMysqlTableSelect() throws SQLException {
+        DBUtils dbUtils = new DBUtils(dataSource);
+        List<String> tables = dbUtils.getTables();
+        List<SelectFormatVO> selectFormatVOList = new ArrayList<>();
+        for (String tableName: tables ) {
+            SelectFormatVO selectFormatVO = new SelectFormatVO(tableName,tableName );
+            selectFormatVOList.add(selectFormatVO);
+        }
+        return selectFormatVOList;
     }
 }

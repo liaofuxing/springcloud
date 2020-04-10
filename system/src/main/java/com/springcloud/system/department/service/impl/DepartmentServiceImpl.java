@@ -1,8 +1,9 @@
 package com.springcloud.system.department.service.impl;
 
 
-import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.common.utils.BeanCopyUtil;
+import com.springcloud.common.vo.DatePageVO;
+import com.springcloud.common.vo.SelectFormatVO;
 import com.springcloud.system.department.dao.DepartmentRepository;
 import com.springcloud.system.department.dto.DepartmentDto;
 import com.springcloud.system.department.entity.Department;
@@ -10,7 +11,6 @@ import com.springcloud.system.department.entity.SystemUserDepartment;
 import com.springcloud.system.department.service.DepartmentService;
 import com.springcloud.system.department.service.SystemUserDepartmentService;
 import com.springcloud.system.department.vo.DepartmentVO;
-import com.springcloud.system.role.vo.SelectFormatVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

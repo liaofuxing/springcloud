@@ -1,12 +1,15 @@
 package com.springcloud.generatecode.generate.web;
 
+import com.springcloud.common.utils.ResultVOUtils;
+import com.springcloud.common.vo.ResultVO;
+import com.springcloud.generatecode.generate.dto.GenerateCodeDto;
+import com.springcloud.generatecode.generate.entity.FieldInfo;
+import com.springcloud.common.vo.SelectFormatVO;
 import com.springcloud.generatecode.generate.service.GenerateCodeService;
 import com.springcloud.generatecode.utils.MysqlFieldConvertJavaHumpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,14 +24,29 @@ public class GenerateCodeController {
     private GenerateCodeService generateCodeService;
 
 
-    @GetMapping("/test")
+    @GetMapping("/getMysqlTableSelect")
     @ResponseBody
-    public void getRouters(HttpServletResponse response) throws SQLException, IOException {
-        List<String> systemUser = generateCodeService.generateEntityCode("system_user",null);
-        String javaHumpClassName = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump("system_user");
+    public ResultVO<List<SelectFormatVO>> getMysqlTableSelect() throws SQLException {
+        List<SelectFormatVO> mysqlTableSelect = generateCodeService.getMysqlTableSelect();
+        return ResultVOUtils.success(mysqlTableSelect);
+    }
+
+    @GetMapping("/getTableField")
+    @ResponseBody
+    public ResultVO<List<FieldInfo>> getTableField(String tableName) throws SQLException {
+        List<FieldInfo> tableField = generateCodeService.getTableField(tableName);
+        return ResultVOUtils.success(tableField);
+    }
+
+    @PostMapping("/generateCode")
+    @ResponseBody
+    public void generateCode(@RequestBody GenerateCodeDto generateCodeDto, HttpServletResponse response) throws SQLException, IOException {
+
+        List<String> codeList = generateCodeService.generateCode(generateCodeDto);
+        String javaHumpClassName = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(generateCodeDto.getTableName());
         StringBuilder outputBuilder = new StringBuilder();
-        for (String s: systemUser) {
-            outputBuilder.append(s);
+        for (String code: codeList) {
+            outputBuilder.append(code);
             outputBuilder.append("\n");
         }
         try {

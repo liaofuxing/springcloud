@@ -1,9 +1,9 @@
-package com.springcloud.system.role.vo;
+package com.springcloud.common.vo;
 
 import lombok.Data;
 
 /**
- * 角色前端下拉框实体
+ * 下拉框实体VO
  *
  * @author liaofuxing
  * @E-mail liaofuxing@outlook.com
@@ -11,10 +11,10 @@ import lombok.Data;
  **/
 @Data
 public class SelectFormatVO {
-    private Integer value;
+    private Object value;
     private String label;
 
-    public SelectFormatVO(Integer value, String label) {
+    public SelectFormatVO(Object value, String label) {
         this.value = value;
         this.label = label;
     }

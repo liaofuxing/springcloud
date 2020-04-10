@@ -62,6 +62,9 @@ zuul:
       path: /mall/**
       # 路由的目标服务名
       serviceId: mall
+    generate:
+      path: /generate/**
+      serviceId: generate
 
 spring-social:
   security:

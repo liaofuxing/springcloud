@@ -1,12 +1,12 @@
 package com.springcloud.system.role.web;
 
-import com.springcloud.common.entity.DatePageVO;
 import com.springcloud.common.utils.ResultVOUtils;
+import com.springcloud.common.vo.DatePageVO;
 import com.springcloud.common.vo.ResultVO;
+import com.springcloud.common.vo.SelectFormatVO;
 import com.springcloud.system.role.dto.RoleInfoDto;
 import com.springcloud.system.role.service.RoleInfoService;
 import com.springcloud.system.role.vo.RoleInfoVO;
-import com.springcloud.system.role.vo.SelectFormatVO;
 import com.springcloud.system.router.service.MenuRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

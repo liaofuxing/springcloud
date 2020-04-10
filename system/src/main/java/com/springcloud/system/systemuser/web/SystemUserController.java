@@ -1,7 +1,7 @@
 package com.springcloud.system.systemuser.web;
 
 
-import com.springcloud.common.entity.DatePageVO;
+import com.springcloud.common.vo.DatePageVO;
 import com.springcloud.common.enums.ExceptionEnums;
 import com.springcloud.common.exception.ExceptionUtils;
 import com.springcloud.common.utils.ResultVOUtils;

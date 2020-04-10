@@ -1,7 +1,7 @@
 package com.springcloud.system.systemuser.service;
 
 
-import com.springcloud.common.entity.DatePageVO;
+import com.springcloud.common.vo.DatePageVO;
 import com.springcloud.system.systemuser.dto.SystemUserDto;
 import com.springcloud.system.systemuser.entity.SystemUser;
 import com.springcloud.system.systemuser.vo.SystemUserVO;
