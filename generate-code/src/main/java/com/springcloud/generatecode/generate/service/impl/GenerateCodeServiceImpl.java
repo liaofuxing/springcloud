@@ -68,6 +68,18 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     }
 
     @Override
+    public List<SelectFormatVO> getMysqlTableSelect() throws SQLException {
+        DBUtils dbUtils = new DBUtils(dataSource);
+        List<String> tables = dbUtils.getTables();
+        List<SelectFormatVO> selectFormatVOList = new ArrayList<>();
+        for (String tableName: tables ) {
+            SelectFormatVO selectFormatVO = new SelectFormatVO(tableName,tableName );
+            selectFormatVOList.add(selectFormatVO);
+        }
+        return selectFormatVOList;
+    }
+
+    @Override
     public void generateCode(GenerateCodeDto generateCodeDto, String token) throws IOException {
         Map<String, String> pathMap = generateCodeFileDir(generateCodeDto.getPackagePath(), token);
         String sourceDirPath = pathMap.get("sourceDirPath");
@@ -88,7 +100,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
             generateServiceImplCode(generateCodeDto, sourceDirPath);
         }
 
-        // zip OutputStream eg: this zip file  writer path : "F://xxx/xxx.zip
+        // zip OutputStream eg: this zip file  writer path : "F://xxx/xxx.zip"
         FileOutputStream fos1 = new FileOutputStream(new File(  zipDirPath + GenerateSuffixConstants.PATH_SIGN_SUFFIX + generateCodeDto.getTableName() + GenerateSuffixConstants.ZIP_FILE_SUFFIX));
 
         ZipUtils.toZip(generateProperties.getGenerateFileRootPath()
@@ -97,7 +109,6 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                 fos1, true);
     }
 
-    @Override
     public Map<String, String> generateCodeFileDir(String packagePath, String token) {
         String generateFileRootPath = generateProperties.getGenerateFileRootPath() + GenerateSuffixConstants.PATH_SIGN_SUFFIX + token;
         String[] packagePathArr = packagePath.split("\\.");
@@ -301,18 +312,9 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         }
     }
 
-    public void writerFile(String writerFilePath, List<String> sourceCode) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(writerFilePath));
-        for (String line : sourceCode){
-            writer.write(line + "\r\n");
-        }
-        writer.close();
-    }
-
-
 
     /**
-     * 生成ServiceCode
+     * 生成 Service
      *
      * @param generateCodeDto 生成器Dto
      * @throws IOException 异常
@@ -374,7 +376,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
 
     /**
-     * 生成ServiceImplCode
+     * 生成ServiceImpl
      *
      * @param generateCodeDto 生成器Dto
      * @throws IOException 异常
@@ -538,7 +540,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     }
 
     /**
-     * Service 公共 Replace 方法
+     * Service 公共 Replace 模板
      * @param entity entity 类名
      * @param dtoClassName dto类名
      * @param voClassName vo类名
@@ -580,7 +582,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     }
 
     /**
-     * ServiceImpl 公共 Replace 方法
+     * ServiceImpl 公共 Replace 模板
      * @param daoClassName dao类名
      * @param serviceClassName service类名
      * @param daoClassSuffix dao后缀
@@ -615,7 +617,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
     /**
      *
-     * 模板公共区域替换
+     * Basic基础模板替换
      *
      * @param generateCodeDto 代码生成器参数
      * @param str    调用者传入的模板字符流
@@ -640,17 +642,18 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     }
 
 
-    @Override
-    public List<SelectFormatVO> getMysqlTableSelect() throws SQLException {
-        DBUtils dbUtils = new DBUtils(dataSource);
-        List<String> tables = dbUtils.getTables();
-        List<SelectFormatVO> selectFormatVOList = new ArrayList<>();
-        for (String tableName: tables ) {
-            SelectFormatVO selectFormatVO = new SelectFormatVO(tableName,tableName );
-            selectFormatVOList.add(selectFormatVO);
+    /**
+     * 将 List 逐行写入文件
+     * @param writerFilePath 文件路径
+     * @param sourceCode List 源文件
+     * @throws IOException 异常
+     */
+    public void writerFile(String writerFilePath, List<String> sourceCode) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(writerFilePath));
+        for (String line : sourceCode){
+            writer.write(line + "\r\n");
         }
-        return selectFormatVOList;
+        writer.close();
     }
-
 
 }

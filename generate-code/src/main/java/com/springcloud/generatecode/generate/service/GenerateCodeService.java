@@ -1,13 +1,12 @@
 package com.springcloud.generatecode.generate.service;
 
+import com.springcloud.common.vo.SelectFormatVO;
 import com.springcloud.generatecode.generate.dto.GenerateCodeDto;
 import com.springcloud.generatecode.generate.entity.FieldInfo;
-import com.springcloud.common.vo.SelectFormatVO;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public interface GenerateCodeService {
 
@@ -19,5 +18,5 @@ public interface GenerateCodeService {
 
     List<SelectFormatVO> getMysqlTableSelect() throws SQLException;
 
-    Map<String, String> generateCodeFileDir(String packagePath, String filePathRoot);
+//    Map<String, String> generateCodeFileDir(String packagePath, String filePathRoot);
 }
