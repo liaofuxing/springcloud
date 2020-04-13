@@ -105,7 +105,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void addDepartment(DepartmentDto departmentDto) {
         Department department = new Department();
-        BeanUtils.copyProperties(departmentDto, department);
+        BeanCopyUtil.copyProperties(departmentDto, department);
+        //BeanUtils.copyProperties(departmentDto, department);
         departmentRepository.save(department);
     }
 
@@ -113,7 +114,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void editDepartment(DepartmentDto departmentDto) {
         Optional<Department> byId = departmentRepository.findById(departmentDto.getId());
         Department departmentDB = byId.get();
-        BeanUtils.copyProperties(departmentDto, departmentDB);
+        BeanCopyUtil.copyProperties(departmentDto, departmentDB);
+//        BeanUtils.copyProperties(departmentDto, departmentDB);
         departmentRepository.save(departmentDB);
     }
 

@@ -1,0 +1,40 @@
+package ${packagePath}
+
+
+import com.springcloud.common.vo.DatePageVO;
+${importEntity}
+${importDto}
+${importVO}
+
+import java.util.List;
+
+/**
+ *
+ * @author create by generate-code
+ * @E-mail liaofuxing@outlook.com
+ * @date ${generateDate}
+ **/
+public interface ${className} {
+
+   /**
+     *
+     * find by id
+     * @param id this id
+     * @return ${entity} byId
+     */
+    ${entity} find${entity}ById(Integer id);
+
+
+
+   /**
+    * add
+    * @param ${entityDtoParam} Dto
+    */
+    void add${entity}(${entityDto} ${entityDtoParam});
+
+    /**
+     * edit
+     * @param ${entityDtoParam} Dto
+     */
+    void edit${entity}(${entityDto} ${entityDtoParam});
+

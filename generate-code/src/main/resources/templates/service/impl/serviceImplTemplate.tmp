@@ -1,0 +1,69 @@
+package ${packagePath}
+
+
+import com.springcloud.common.utils.BeanCopyUtil;
+${importEntity}
+${importService}
+${importDao}
+${importDto}
+${importVO}
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
+/**
+ *
+ * @author create by generate-code
+ * @E-mail liaofuxing@outlook.com
+ * @date ${generateDate}
+ **/
+@Service
+public class ${className} implements ${entityServiceInterface} {
+
+    @Autowired
+    private ${entityDao} ${entityDaoParam};
+
+
+    /**
+     *
+     * find by id
+     * @param id this id
+     * @return ${entity} byId
+     */
+     public ${entity} find${entity}ById(Integer id){
+        return ${entityDaoParam}.findById(id).get();
+     }
+
+
+    /**
+     *
+     * add
+     * @param ${entityDtoParam} this ${entityDtoParam}
+     *
+     */
+    @Transactional
+    @Override
+    public void add${entity}(${entityDto} ${entityDtoParam}) {
+        ${entity} ${entityParam} = new ${entity}();
+        BeanCopyUtil.copyProperties(${entityDtoParam}, ${entityParam});
+        ${entityDaoParam}.save(${entityParam});
+    }
+
+    /**
+     *
+     * edit
+     * @param ${entityDtoParam} this ${entityDtoParam}
+     *
+     */
+    @Transactional
+    @Override
+    public void edit${entity}(${entityDto} ${entityDtoParam}) {
+        ${entity} ${entityParam}DB = this.find${entity}ById(${entityDtoParam}.getId());
+        BeanCopyUtil.copyProperties(${entityDtoParam}, ${entityParam}DB);
+        ${entityDaoParam}.save(${entityParam}DB);
+    }
+
+

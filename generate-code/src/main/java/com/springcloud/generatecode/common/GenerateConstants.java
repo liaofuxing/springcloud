@@ -11,9 +11,34 @@ package com.springcloud.generatecode.common;
 public class GenerateConstants {
 
     /**
-     * entity Template 类路径(模板路径)
+     * entity Template 实体类模板路径
      */
     public static final String ENTITY_TEMPLATE_PATH = "classpath:templates/entity/entityTemplate.tmp";
+
+    /**
+     * entityDto Template
+     */
+    public static final String ENTITY_DTO_TEMPLATE_PATH = "classpath:templates/dto/entityDtoTemplate.tmp";
+
+    /**
+     * entityVO Template
+     */
+    public static final String ENTITY_VO_TEMPLATE_PATH = "classpath:templates/vo/entityVoTemplate.tmp";
+
+    /**
+     * dao Template dao模板路径(Repository模板路径)
+     */
+    public static final String DAO_TEMPLATE_PATH = "classpath:templates/dao/daoTemplate.tmp";
+
+    /**
+     * service Template service 模板路径
+     */
+    public static final String SERVICE_TEMPLATE_PATH = "classpath:templates/service/serviceTemplate.tmp";
+
+    /**
+     * service Template serviceImpl 模板路径
+     */
+    public static final String SERVICE_IMPL_TEMPLATE_PATH = "classpath:templates/service/impl/serviceImplTemplate.tmp";
 
     /**
      * 生成时间
@@ -34,6 +59,87 @@ public class GenerateConstants {
      * java 包路径
      */
     public static final String PACKAGE_PATH = "${packagePath}";
+
+    /**
+     * jpaRepository
+     */
+    public static final String JPA_REPOSITORY = "${jpaRepository}";
+
+    /**
+     * entity
+     */
+    public static final String ENTITY = "${entity}";
+
+    /**
+     * entityDto
+     */
+    public static final String ENTITY_DTO = "${entityDto}";
+
+    /**
+     * entityVO
+     */
+    public static final String ENTITY_VO = "${entityVO}";
+
+    /**
+     * entityDao
+     */
+    public static final String ENTITY_DAO = "${entityDao}";
+
+    /**
+     * serviceInterface
+     */
+    public static final String ENTITY_SERVICE_INTERFACE = "${entityServiceInterface}";
+
+
+    /**
+     * entityParam
+     */
+    public static final String ENTITY_PARAM = "${entityParam}";
+
+    /**
+     * entityDaoParam
+     */
+    public static final String ENTITY_DAO_PARAM = "${entityDaoParam}";
+
+    /**
+     * entityDtoParam
+     */
+    public static final String ENTITY_DTO_PARAM = "${entityDtoParam}";
+
+    /**
+     * entityVOParam
+     */
+    public static final String ENTITY_VO_PARAM = "${entityVOParam}";
+
+
+
+
+    /**
+     * importEntity
+     */
+    public static final String IMPORT_ENTITY = "${importEntity}";
+
+    /**
+     * importDto
+     */
+    public static final String IMPORT_DTO = "${importDto}";
+
+    /**
+     * importVO
+     */
+    public static final String IMPORT_VO = "${importVO}";
+
+
+    /**
+     * importService
+     */
+    public static final String IMPORT_SERVICE = "${importService}";
+
+    /**
+     * importDao
+     */
+    public static final String IMPORT_DAO = "${importDao}";
+
 
     /**
      * 数据库字段连接符
@@ -59,6 +165,11 @@ public class GenerateConstants {
      * java作用域修饰符 private
      */
     public static final String JAVA_SCOPE_PRIVATE = "private";
+
+    /**
+     * java作用域修饰符 private
+     */
+    public static final String JAVA_SCOPE_IMPORT = "import";
 
     /**
      * 空格

@@ -2,7 +2,6 @@ package ${packagePath}
 
 import lombok.Data;
 
-import javax.persistence.*;
 
 /**
  *
@@ -12,12 +11,8 @@ import javax.persistence.*;
  *
  **/
 @Data
-@Table(name="${tableName}")
-@Entity
 public class ${className} {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
 
