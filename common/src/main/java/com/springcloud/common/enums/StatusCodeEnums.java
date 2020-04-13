@@ -3,7 +3,7 @@ package com.springcloud.common.enums;
 /**
  * 返回状态码
  */
-public enum StatusCodeEnum {
+public enum StatusCodeEnums {
     LOGIN_SUCCESS("登录成功", 20000),
     SUCCESS("请求成功", 20001),
     LOGIN_FAILURE("用户名或密码错误", 50001),
@@ -15,13 +15,13 @@ public enum StatusCodeEnum {
     private String name;
     private int code;
     // 构造方法
-    StatusCodeEnum(String name, int code) {
+    StatusCodeEnums(String name, int code) {
         this.name = name;
         this.code = code;
     }
     // 普通方法
     public static String getName(int code) {
-        for (StatusCodeEnum s : StatusCodeEnum.values()) {
+        for (StatusCodeEnums s : StatusCodeEnums.values()) {
             if (s.getCode() == code) {
                 return s.name;
             }

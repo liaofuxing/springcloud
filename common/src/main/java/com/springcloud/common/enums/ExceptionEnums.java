@@ -1,13 +1,10 @@
 package com.springcloud.common.enums;
 
-import lombok.Getter;
-
 /**
  * 异常类型枚举
  * @author liaofuxing
  * @date 2019/03/10 4:10
  */
-@Getter
 public enum ExceptionEnums {
     SYSTEM_EXCEPTION(1, "系统异常"),
     ;
@@ -18,6 +15,22 @@ public enum ExceptionEnums {
 
     ExceptionEnums(Integer code, String message) {
         this.code = code;
+        this.message = message;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
         this.message = message;
     }
 }

@@ -1,7 +1,5 @@
 package com.springcloud.generatecode.common;
 
-import lombok.Getter;
-
 /**
  *
  * 代码生成器mysqlType和javaType对照枚举
@@ -10,8 +8,7 @@ import lombok.Getter;
  * @E-mail liaofuxing@outlook.com
  * @date 2020/04/09 15:24
  */
-@Getter
-public enum  GenerateMysqlType2JavaTypeEnum {
+public enum GenerateMysqlType2JavaTypeEnums {
 
     MYSQL_TYPE_INT("INT", "Integer"),
     MYSQL_TYPE_CHAR("CHAR", "String"),
@@ -23,7 +20,7 @@ public enum  GenerateMysqlType2JavaTypeEnum {
 
     private String javaType;
 
-    GenerateMysqlType2JavaTypeEnum(String mysqlType, String javaType) {
+    GenerateMysqlType2JavaTypeEnums(String mysqlType, String javaType) {
         this.mysqlType = mysqlType;
         this.javaType = javaType;
     }
@@ -36,11 +33,27 @@ public enum  GenerateMysqlType2JavaTypeEnum {
      * @return javaType
      */
     public static String getJavaType(String mysqlType) {
-        for (GenerateMysqlType2JavaTypeEnum g : GenerateMysqlType2JavaTypeEnum.values()) {
+        for (GenerateMysqlType2JavaTypeEnums g : GenerateMysqlType2JavaTypeEnums.values()) {
             if (g.getMysqlType().equals(mysqlType)) {
                 return g.getJavaType();
             }
         }
         return null;
+    }
+
+    public String getMysqlType() {
+        return mysqlType;
+    }
+
+    public void setMysqlType(String mysqlType) {
+        this.mysqlType = mysqlType;
+    }
+
+    public String getJavaType() {
+        return javaType;
+    }
+
+    public void setJavaType(String javaType) {
+        this.javaType = javaType;
     }
 }

@@ -3,7 +3,7 @@ package com.springcloud.generatecode.generate.service.impl;
 import com.springcloud.common.utils.ZipUtils;
 import com.springcloud.common.vo.SelectFormatVO;
 import com.springcloud.generatecode.common.GenerateConstants;
-import com.springcloud.generatecode.common.GenerateMysqlType2JavaTypeEnum;
+import com.springcloud.generatecode.common.GenerateMysqlType2JavaTypeEnums;
 import com.springcloud.generatecode.common.GenerateSuffixConstants;
 import com.springcloud.generatecode.common.properties.GenerateProperties;
 import com.springcloud.generatecode.generate.dto.GenerateCodeDto;
@@ -57,7 +57,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                 // mysql列风格转换java驼峰风格
                 String javaHumpField = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(fieldInfo.getDbColumnName());
                 // mysql类型转java类型
-                String javaType = GenerateMysqlType2JavaTypeEnum.getJavaType(fieldInfo.getDbColumnType());
+                String javaType = GenerateMysqlType2JavaTypeEnums.getJavaType(fieldInfo.getDbColumnType());
                 fieldInfo.setJavaJavaHumpColumnName(javaHumpField);
                 fieldInfo.setJavaColumnType(javaType);
             }

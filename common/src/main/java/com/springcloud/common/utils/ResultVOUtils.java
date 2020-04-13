@@ -2,7 +2,7 @@ package com.springcloud.common.utils;
 
 
 import com.springcloud.common.enums.ResultStatusCodeEnums;
-import com.springcloud.common.enums.StatusCodeEnum;
+import com.springcloud.common.enums.StatusCodeEnums;
 import com.springcloud.common.vo.ResultVO;
 
 /**
@@ -43,7 +43,7 @@ public class ResultVOUtils {
      * @return <T> ResultVO<T>
      */
     public static <T> ResultVO<T> login_success(T object) {
-        return new ResultVO<>(StatusCodeEnum.LOGIN_SUCCESS.getCode(), StatusCodeEnum.LOGIN_SUCCESS.getName(), object);
+        return new ResultVO<>(StatusCodeEnums.LOGIN_SUCCESS.getCode(), StatusCodeEnums.LOGIN_SUCCESS.getName(), object);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ResultVOUtils {
      * @return <T> ResultVO<T>
      */
     public static <T> ResultVO<T> login_failure(T object) {
-        return new ResultVO<>(StatusCodeEnum.LOGIN_FAILURE.getCode(), StatusCodeEnum.LOGIN_FAILURE.getName(), object);
+        return new ResultVO<>(StatusCodeEnums.LOGIN_FAILURE.getCode(), StatusCodeEnums.LOGIN_FAILURE.getName(), object);
     }
 
     /**
@@ -63,7 +63,7 @@ public class ResultVOUtils {
      * @return <T> ResultVO<T>
      */
     public static <T> ResultVO<T> logout_success(T object) {
-        return new ResultVO<>(StatusCodeEnum.LOGOUT_SUCCESS.getCode(), StatusCodeEnum.LOGOUT_SUCCESS.getName(), object);
+        return new ResultVO<>(StatusCodeEnums.LOGOUT_SUCCESS.getCode(), StatusCodeEnums.LOGOUT_SUCCESS.getName(), object);
     }
 
     /**
@@ -73,7 +73,7 @@ public class ResultVOUtils {
      * @return <T> ResultVO<T>
      */
     public static <T> ResultVO<T> credentials_expired(T object) {
-        return new ResultVO<>(StatusCodeEnum.CREDENTIALS_EXPIRED.getCode(), StatusCodeEnum.CREDENTIALS_EXPIRED.getName(), object);
+        return new ResultVO<>(StatusCodeEnums.CREDENTIALS_EXPIRED.getCode(), StatusCodeEnums.CREDENTIALS_EXPIRED.getName(), object);
     }
 
     /**
@@ -83,7 +83,7 @@ public class ResultVOUtils {
      * @return <T> ResultVO<T>
      */
     public static <T> ResultVO<T> unauthorized(T object) {
-        return  new ResultVO<>(StatusCodeEnum.UNAUTHORIZED.getCode(), StatusCodeEnum.UNAUTHORIZED.getName(), object);
+        return  new ResultVO<>(StatusCodeEnums.UNAUTHORIZED.getCode(), StatusCodeEnums.UNAUTHORIZED.getName(), object);
     }
 
     //接口请求
