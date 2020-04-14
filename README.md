@@ -5,9 +5,17 @@
 
  **架构技术：** 基于 spring boot 2.2.2.RELEASE，spring cloud Hoxton.SR3 构建，使用zuul、eureka、hystrix、feign微服务架构体系，spring security 作为安全模块
 
+#### 项目亮点
+功能完善，已集成用户管理，代码生成器等功能，有配套的前端项目，是不错的spring cloud 项目脚手架，后期将拆分为单独的spring boot项目
+ps：代码生成器与本项目配套，依赖本项目common模块，并且基于spring data jpa，并不能生成 mybatis 类型代码，代码生成器有可视化页面
+
 #### 项目前端
 前端Vue项目地址[vue-admin-template](http://gitee.com/liaofuxing/vue-admin-template) ps：前端项目框架并不是本人自己开发，基于[@花裤衩](http://gitee.com/panjiachen/vue-admin-template.git)开源项目修改而来，本人只是实现前后端登录，以及基于数据库Vue动态路由等功能
 
+#### github地址
+
+[后端项目github跳转地址](https://github.com/liaofuxing/springcloud)
+[前端项目github跳转地址](https://github.com/liaofuxing/vue-admin-template)
 
 #### 软件架构图
 ![项目架构图](https://images.gitee.com/uploads/images/2020/0321/115010_6a559f47_2025409.png "项目架构图.png")
