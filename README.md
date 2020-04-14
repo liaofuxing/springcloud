@@ -48,4 +48,13 @@ ps：代码生成器与本项目配套，依赖本项目common模块，并且基
 | generate-code      | 代码生成器       | 否       | 0        |
 | vue-admin-template | 运营平台前端项目 | 是       | 1        |
 
+#### 项目展示图
 
+1. 主页
+![主页](https://images.gitee.com/uploads/images/2020/0414/172316_c2d06afb_2025409.png "屏幕截图.png")
+
+2.用户管理
+![用户管理](https://images.gitee.com/uploads/images/2020/0414/172407_381c6b99_2025409.png "屏幕截图.png")
+
+3.代码生成器
+![代码生成器](https://images.gitee.com/uploads/images/2020/0414/172514_8836dc9b_2025409.png "屏幕截图.png")
