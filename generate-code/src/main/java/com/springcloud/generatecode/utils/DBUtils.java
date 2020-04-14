@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class DBUtils {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
-    public DBUtils(DataSource dataSource) throws SQLException {
+    public DBUtils(DataSource dataSource){
         this.dataSource = dataSource;
     }
 
