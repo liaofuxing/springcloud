@@ -9,6 +9,7 @@ ${importVO}
 import java.util.List;
 
 /**
+ * Service
  *
  * @author create by generate-code
  * @E-mail liaofuxing@outlook.com
@@ -24,7 +25,12 @@ public interface ${className} {
      */
     ${entity} find${entity}ById(Integer id);
 
-
+    /**
+     *
+     * find ${entity} list
+     * @return List<${entity}> ${entity} list
+     */
+    List<${entity}> find${entity}List();
 
    /**
     * add
@@ -37,4 +43,6 @@ public interface ${className} {
      * @param ${entityDtoParam} Dto
      */
     void edit${entity}(${entityDto} ${entityDtoParam});
+
+
 

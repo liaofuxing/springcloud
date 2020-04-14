@@ -1,0 +1,3 @@
+            if (!StringUtils.isEmpty(${entityDtoParam}.get${getterFieldName}())) {
+                list.add(criteriaBuilder.equal(root.get(${fieldName}).as(String.class), ${entityDtoParam}.get${getterFieldName}()));
+            }

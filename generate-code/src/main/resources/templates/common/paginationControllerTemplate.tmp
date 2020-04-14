@@ -1,0 +1,11 @@
+   /**
+     * ${entity} find page
+     *
+     * @return ResultVO ResultVO<DatePageVO<${entityVO}>>
+     */
+    @GetMapping("/get${entity}List")
+    @ResponseBody
+    public ResultVO<DatePageVO<${entityVO}>> get${entity}List(${entityDto} ${entityDtoParam}) {
+        DatePageVO<${entityVO}> ${entityVO}Page = ${entityServiceParam}.find${entity}Page(${entityDtoParam});
+        return ResultVOUtils.success(${entityVO}Page);
+    }

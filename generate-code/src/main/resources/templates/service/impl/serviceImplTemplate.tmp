@@ -2,6 +2,8 @@ package ${packagePath}
 
 
 import com.springcloud.common.utils.BeanCopyUtil;
+import com.springcloud.common.vo.DatePageVO;
+
 ${importEntity}
 ${importService}
 ${importDao}
@@ -12,9 +14,20 @@ ${importVO}
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.ArrayList;
+import javax.persistence.criteria.Predicate;
 
 
 /**
+ * ServiceImpl
  *
  * @author create by generate-code
  * @E-mail liaofuxing@outlook.com
@@ -35,6 +48,15 @@ public class ${className} implements ${entityServiceInterface} {
      */
      public ${entity} find${entity}ById(Integer id){
         return ${entityDaoParam}.findById(id).get();
+     }
+
+     /**
+      *
+      * find ${entity} list
+      * @return List<${entity}> ${entity} list
+      */
+     public List<${entity}> find${entity}List(){
+        return ${entityDaoParam}.findAll();
      }
 
 

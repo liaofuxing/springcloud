@@ -1,0 +1,22 @@
+   /**
+     * find page
+     *
+     * @param ${entityDtoParam} ${entityDtoParam}
+     * @return DatePageVO<${entityVO}
+     */
+    public DatePageVO<${entityVO}> findSystemUserPage(${entityDto} ${entityDtoParam}) {
+        Pageable pageable = PageRequest.of(${entityDtoParam}.getPage() - 1, ${entityDtoParam}.getPageSize(), Sort.Direction.ASC, "id");
+
+        Specification<${entity}> specification = (Specification<${entity}>) (root, criteriaQuery, criteriaBuilder) -> {
+            //分页条件组装
+            List<Predicate> list = new ArrayList<>();
+
+            ${paginationField}
+
+            return criteriaBuilder.and(list.toArray(new Predicate[0]));
+        };
+
+        Page<${entity}> ${entityParam}Page = ${entityDaoParam}.findAll(specification, pageable);
+        List<${entityVO}> ${entityVOParam}List = BeanCopyUtil.copyListProperties(${entityParam}Page.getContent(), ${entityVO}::new);
+        return new DatePageVO<>(${entityParam}Page.getTotalElements(), ${entityVOParam}List);
+    }

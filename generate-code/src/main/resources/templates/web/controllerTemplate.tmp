@@ -1,0 +1,86 @@
+package ${packagePath}
+
+
+import com.springcloud.common.enums.ExceptionEnums;
+import com.springcloud.common.exception.ExceptionUtils;
+import com.springcloud.common.utils.ResultVOUtils;
+import com.springcloud.common.vo.ResultVO;
+import com.springcloud.common.vo.DatePageVO;
+
+
+${importEntity}
+${importService}
+${importDto}
+${importVO}
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
+/**
+ * controller
+ *
+ * @author create by generate-code
+ * @E-mail liaofuxing@outlook.com
+ * @date ${generateDate}
+ *
+ **/
+@Controller
+@RequestMapping("${controllerRequestUrl}")
+public class ${className} {
+
+    @Autowired
+    public ${entityService} ${entityServiceParam};
+
+    /**
+     * find ${entity} List, the method is find ${entity} All to list
+     *
+     * @author liaofuxing
+     * @date 2019/03/10 4:39
+     * @E-mail liaofuxing@outlook.com
+     */
+    @PostMapping("/find${entity}List")
+    @ResponseBody
+    public ResultVO<List<${entity}>> find${entity}List() {
+        List<${entity}> ${entityParam}List = ${entityServiceParam}.find${entity}List();
+        return ResultVOUtils.success(${entityParam}List);
+    }
+
+    /**
+     * find ${entity} by id, the method is find ${entity} by id to "ResultVO<${entity}>"
+     *
+     */
+    @GetMapping("/find${entity}ById")
+    @ResponseBody
+    public ResultVO<${entity}> find${entity}ById(@RequestParam Integer id) {
+        ${entity} ${entityParam}ById = ${entityServiceParam}.find${entity}ById(id);
+        return ResultVOUtils.success(${entityParam}ById);
+    }
+
+    /**
+     * edit ${entity}
+     *
+     */
+    @PostMapping("/edit${entity}")
+    @ResponseBody
+    public ResultVO<Object> editSystemUser(@RequestBody ${entityDto} ${entityDtoParam}) {
+        ${entityServiceParam}.edit${entity}(${entityDtoParam});
+        return ResultVOUtils.success(null);
+    }
+
+    /**
+     * add ${entity}
+     *
+     */
+    @PostMapping("/add${entity}")
+    @ResponseBody
+    public ResultVO<Object> addSystemUser(@RequestBody ${entityDto} ${entityDtoParam}) {
+        ${entityServiceParam}.add${entity}(${entityDtoParam});
+        return ResultVOUtils.success(null);
+    }
+

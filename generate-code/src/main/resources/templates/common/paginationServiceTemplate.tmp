@@ -1,0 +1,7 @@
+  /**
+    * find page
+    *
+    * @param ${entityDtoParam} Dto
+    * @return DatePageVO<${entityVO}>
+    */
+    DatePageVO<${entityVO}> find${entity}Page(${entityDto} ${entityDtoParam});
