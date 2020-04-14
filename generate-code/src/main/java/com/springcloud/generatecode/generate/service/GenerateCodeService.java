@@ -14,9 +14,6 @@ public interface GenerateCodeService {
 
     void generateCode(GenerateCodeDto generateCodeDto, String token) throws SQLException, IOException;
 
-//    List<String> generateEntityCode(GenerateCodeDto generateCodeDto) throws SQLException, IOException;
-
     List<SelectFormatVO> getMysqlTableSelect() throws SQLException;
 
-//    Map<String, String> generateCodeFileDir(String packagePath, String filePathRoot);
 }

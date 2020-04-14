@@ -13,7 +13,7 @@ public class FieldInfo {
 
     private String javaJavaHumpColumnName;
 
-    private boolean paginationQueryCondition = false;
+    private Boolean paginationQueryCondition = false;
 
     public FieldInfo(){
 

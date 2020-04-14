@@ -13,8 +13,9 @@ public class GenerateSuffixConstants {
     public final static String DAO_CLASS_SUFFIX = "Dao";
     public final static String SERVICE_CLASS_SUFFIX = "Service";
     public final static String SERVICE_CLASS_SUFFIX_IMPL = "ServiceImpl";
-    public final static String DTO_CLASS_SUFFIX = "Dto";
     public final static String VO_CLASS_SUFFIX = "VO";
+    public final static String DTO_CLASS_SUFFIX = "Dto";
+    public final static String CONTROLLER_CLASS_SUFFIX = "Controller";
 
     public final static String ENTITY_PATH_SUFFIX = "entity";
     public final static String SERVICE_PATH_SUFFIX = "service";
@@ -23,6 +24,7 @@ public class GenerateSuffixConstants {
     public final static String DAO_PATH_SUFFIX = "dao";
     public final static String DTO_PATH_SUFFIX = "dto";
     public final static String VO_PATH_SUFFIX = "vo";
+    public final static String CONTROLLER_PATH_SUFFIX = "web";
 
     public final static String ZIP_PATH_SUFFIX = "zip";
 

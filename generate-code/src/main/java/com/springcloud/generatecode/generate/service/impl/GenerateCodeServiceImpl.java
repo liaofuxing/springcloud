@@ -37,6 +37,15 @@ import java.util.Map;
 @Service
 public class GenerateCodeServiceImpl implements GenerateCodeService {
 
+
+    private final String dtoClassSuffix = GenerateSuffixConstants.DTO_CLASS_SUFFIX;
+
+    private final String voClassSuffix = GenerateSuffixConstants.VO_CLASS_SUFFIX;
+
+    private final String daoClassSuffix = GenerateSuffixConstants.DAO_CLASS_SUFFIX;
+
+    private final String serviceClassSuffix = GenerateSuffixConstants.SERVICE_CLASS_SUFFIX;
+
     @Autowired
     private DataSource dataSource;
 
@@ -89,15 +98,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         }else {
             generateEntityCode(generateCodeDto, sourceDirPath, GenerateConstants.ENTITY_TEMPLATE_PATH);
 
-            generateEntityDtoCode(generateCodeDto, sourceDirPath);
-
-            generateEntityVOCode(generateCodeDto, sourceDirPath);
-
-            generateDaoCode(generateCodeDto, sourceDirPath);
-
-            generateServiceCode(generateCodeDto, sourceDirPath);
-
-            generateServiceImplCode(generateCodeDto, sourceDirPath);
+            generateCodeAll(generateCodeDto, sourceDirPath);
         }
 
         // zip OutputStream eg: this zip file  writer path : "F://xxx/xxx.zip"
@@ -107,6 +108,21 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                 + GenerateSuffixConstants.PATH_SIGN_SUFFIX
                 +token+GenerateSuffixConstants.PATH_SIGN_SUFFIX,
                 fos1, true);
+    }
+
+    public void generateCodeAll(GenerateCodeDto generateCodeDto, String sourceDirPath) throws IOException {
+
+        generateEntityDtoCode(generateCodeDto, sourceDirPath);
+
+        generateEntityVOCode(generateCodeDto, sourceDirPath);
+
+        generateDaoCode(generateCodeDto, sourceDirPath);
+
+        generateServiceCode(generateCodeDto, sourceDirPath);
+
+        generateServiceImplCode(generateCodeDto, sourceDirPath);
+
+        generateControllerCode(generateCodeDto, sourceDirPath);
     }
 
     public Map<String, String> generateCodeFileDir(String packagePath, String token) {
@@ -125,6 +141,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         mkdirPathList.add(generatePath + GenerateSuffixConstants.PATH_SIGN_SUFFIX + GenerateSuffixConstants.DAO_PATH_SUFFIX);
         mkdirPathList.add(generatePath + GenerateSuffixConstants.PATH_SIGN_SUFFIX + GenerateSuffixConstants.DTO_PATH_SUFFIX);
         mkdirPathList.add(generatePath + GenerateSuffixConstants.PATH_SIGN_SUFFIX + GenerateSuffixConstants.VO_PATH_SUFFIX);
+        mkdirPathList.add(generatePath + GenerateSuffixConstants.PATH_SIGN_SUFFIX + GenerateSuffixConstants.CONTROLLER_PATH_SUFFIX);
 
 
         // mkdirs dir
@@ -164,7 +181,6 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
      * 生成entity
      *
      * @param generateCodeDto 生成器Dto
-     * @return templateInner 实际生成java文件的字符流
      * @throws IOException 异常
      */
     public void generateEntityCode(GenerateCodeDto generateCodeDto, String sourceDirPath, String templatePath) throws IOException {
@@ -248,7 +264,6 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
      * 生成dao
      *
      * @param generateCodeDto 生成器Dto
-     * @return templateInner 实际生成java文件的字符流
      * @throws IOException 异常
      */
     public void generateDaoCode(GenerateCodeDto generateCodeDto, String sourceDirPath) throws IOException {
@@ -287,7 +302,14 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
                 if (str.contains(GenerateConstants.JPA_REPOSITORY)) {
                     String entityName = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(tableName);
-                    String jpaRepository = "JpaRepository<"+ entityName+ "," +"Integer>";
+                    // 需要分页
+                    String jpaRepository;
+                    if(generateCodeDto.getNeedPagination()){
+                        jpaRepository = "JpaRepository<"+ entityName+ "," +"Integer>," + "JpaSpecificationExecutor<"+ entityName +">";
+                    }else {
+                        jpaRepository = "JpaRepository<"+ entityName+ "," +"Integer>";
+                    }
+
                     str = str.replace(GenerateConstants.JPA_REPOSITORY, jpaRepository);
                 }
 
@@ -321,57 +343,42 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
      */
     public void generateServiceCode(GenerateCodeDto generateCodeDto, String sourceDirPath) throws IOException {
         String classSuffix = GenerateSuffixConstants.SERVICE_CLASS_SUFFIX;
-        String dtoClassSuffix = GenerateSuffixConstants.DTO_CLASS_SUFFIX;
-        String voClassSuffix = GenerateSuffixConstants.VO_CLASS_SUFFIX;
         String entity = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(generateCodeDto.getTableName());
         String className = entity + classSuffix;
-        String dtoClassName = entity + GenerateSuffixConstants.DTO_CLASS_SUFFIX;
-        String voClassName = entity + GenerateSuffixConstants.VO_CLASS_SUFFIX;
+        String dtoClassName = entity + dtoClassSuffix;
+        String voClassName = entity + voClassSuffix;
 
         String entityParam = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(generateCodeDto.getTableName());
 
-        FileReader fr = null;
-        BufferedReader bf = null;
-        List<String> templateInner = new ArrayList<>();
-        try {
-            Resource resource = resourceLoader.getResource(GenerateConstants.SERVICE_TEMPLATE_PATH);
-            File file = resource.getFile();
-            fr = new FileReader(file);
-            bf = new BufferedReader(fr);
-            String str;
+        List<String> template = getTemplate(GenerateConstants.SERVICE_TEMPLATE_PATH);
+        if(generateCodeDto.getNeedPagination()){
+            List<String> commonServicePaginationTemplate = getTemplate(GenerateConstants.COMMON_SERVICE_PAGINATION_TEMPLATE);
+            template.addAll(commonServicePaginationTemplate);
+        }
+        List<String> templateReplace = new ArrayList<>();
+        for (String templateLine: template) {
+            // 公共的模板项
+            templateLine = templateReplaceBasic(generateCodeDto, templateLine, className, GenerateSuffixConstants.SERVICE_PATH_SUFFIX);
 
-            // 按行读取字符串
-            while ((str = bf.readLine()) != null) {
+            // import 模板项 start
+            templateLine = templateImportService(generateCodeDto, entity, dtoClassName, voClassName, templateLine);
+            // import 模板项 end
 
-                // 公共的模板项
-                str = templateReplaceBasic(generateCodeDto, str, className, GenerateSuffixConstants.SERVICE_PATH_SUFFIX);
+            // template Replace start
+            templateLine = templateReplaceService(entity, dtoClassName, voClassName,  dtoClassSuffix, voClassSuffix, entityParam, templateLine);
+            // template Replace end
 
-                // import 模板项 start
-                str = templateImportService(generateCodeDto, entity, dtoClassName, voClassName, str);
-                // import 模板项 end
+            templateReplace.add(templateLine);
+        }
 
-                // template Replace start
-                str = templateReplaceService(entity, dtoClassName, voClassName,  dtoClassSuffix, voClassSuffix, entityParam, str);
-                // template Replace end
-
-                templateInner.add(str);
-            }
-            templateInner.add(GenerateConstants.JAVA_TXT_END_TAG);
+        templateReplace.add(GenerateConstants.JAVA_TXT_END_TAG);
             String writerPath = sourceDirPath
                     + GenerateSuffixConstants.SERVICE_PATH_SUFFIX
                     + GenerateSuffixConstants. PATH_SIGN_SUFFIX
                     + className
                     + GenerateSuffixConstants.JAVA_FILE_SUFFIX;
-            writerFile(writerPath, templateInner);
+            writerFile(writerPath, templateReplace);
 
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            assert bf != null;
-            bf.close();
-            fr.close();
-        }
     }
 
 
@@ -384,65 +391,125 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     public void generateServiceImplCode(GenerateCodeDto generateCodeDto, String sourceDirPath) throws IOException {
         // 类后缀
         String classSuffix = GenerateSuffixConstants.SERVICE_CLASS_SUFFIX_IMPL;
-        String dtoClassSuffix = GenerateSuffixConstants.DTO_CLASS_SUFFIX;
-        String voClassSuffix = GenerateSuffixConstants.VO_CLASS_SUFFIX;
-        String daoClassSuffix = GenerateSuffixConstants.DAO_CLASS_SUFFIX;
+
         String entity = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(generateCodeDto.getTableName());
         String className = entity + classSuffix;
-        String serviceClassName = entity + GenerateSuffixConstants.SERVICE_CLASS_SUFFIX;
-        String daoClassName = entity + GenerateSuffixConstants.DAO_CLASS_SUFFIX;
-        String dtoClassName = entity + GenerateSuffixConstants.DTO_CLASS_SUFFIX;
+        String serviceClassName = entity + serviceClassSuffix;
+        String daoClassName = entity + daoClassSuffix;
+        String dtoClassName = entity + dtoClassSuffix;
         String voClassName = entity + voClassSuffix;
 
         String entityParam = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(generateCodeDto.getTableName());
+        List<String> template = getTemplate(GenerateConstants.SERVICE_IMPL_TEMPLATE_PATH);
+        if(generateCodeDto.getNeedPagination()){
+            List<String> commonServiceImplPaginationTemplate = templateReplacePagination(generateCodeDto, entity, dtoClassName, voClassName, daoClassName, dtoClassSuffix, voClassSuffix, entityParam, serviceClassName);
+            template.addAll(commonServiceImplPaginationTemplate);
+        }
 
-        FileReader fr = null;
-        BufferedReader bf = null;
-        List<String> templateInner = new ArrayList<>();
-        try {
-            Resource resource = resourceLoader.getResource(GenerateConstants.SERVICE_IMPL_TEMPLATE_PATH);
-            File file = resource.getFile();
-            fr = new FileReader(file);
-            bf = new BufferedReader(fr);
-            String str;
+        List<String> templateReplace = new ArrayList<>();
+        for (String templateLine: template) {
+            // 公共的模板项 start
+            templateLine = templateReplaceBasic(generateCodeDto, templateLine, className, GenerateSuffixConstants.SERVICE_IMPL_CLASSPATH_SUFFIX);
+            // 公共的模板项 end
 
-            // 按行读取字符串
-            while ((str = bf.readLine()) != null) {
+            // import 模板项 start
+            templateLine = templateImportService(generateCodeDto, entity, dtoClassName, voClassName, templateLine);
 
-                // 公共的模板项 start
-                str = templateReplaceBasic(generateCodeDto, str, className, GenerateSuffixConstants.SERVICE_IMPL_CLASSPATH_SUFFIX);
-                // 公共的模板项 end
+            templateLine = templateImportServiceImpl(generateCodeDto, serviceClassName, daoClassName, templateLine);
+            // import 模板项 end
 
-                // import 模板项 start
-                str = templateImportService(generateCodeDto, entity, dtoClassName, voClassName, str);
+            // templateReplace start
+            templateLine = templateReplaceService(entity, dtoClassName, voClassName,  dtoClassSuffix, voClassSuffix, entityParam, templateLine);
 
-                str = templateImportServiceImpl(generateCodeDto, serviceClassName, daoClassName, str);
-                // import 模板项 end
+            templateLine = templateReplaceServiceImpl( daoClassName, serviceClassName, daoClassSuffix, entityParam, templateLine);
+            // templateReplace end
 
-                // templateReplace start
-                str = templateReplaceService(entity, dtoClassName, voClassName,  dtoClassSuffix, voClassSuffix, entityParam, str);
+            templateReplace.add(templateLine);
 
-                str = templateReplaceServiceImpl( daoClassName, serviceClassName, daoClassSuffix, entityParam, str);
-                // templateReplace end
+        }
 
-                templateInner.add(str);
-            }
-            templateInner.add(GenerateConstants.JAVA_TXT_END_TAG);
-            String writerPath = sourceDirPath
+
+        templateReplace.add(GenerateConstants.JAVA_TXT_END_TAG);
+        String writerPath = sourceDirPath
                     + GenerateSuffixConstants.SERVICE_IMPL_PATH_SUFFIX
                     + GenerateSuffixConstants. PATH_SIGN_SUFFIX
                     + className
                     + GenerateSuffixConstants.JAVA_FILE_SUFFIX;
-            writerFile(writerPath, templateInner);
+        writerFile(writerPath, templateReplace);
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            assert bf != null;
-            bf.close();
-            fr.close();
+    }
+
+    /**
+     * 生成 Controller
+     *
+     * @param generateCodeDto 生成器Dto
+     * @throws IOException 异常
+     */
+    public void generateControllerCode(GenerateCodeDto generateCodeDto, String sourceDirPath) throws IOException {
+        // 类后缀
+        String classSuffix = GenerateSuffixConstants.CONTROLLER_CLASS_SUFFIX;
+        String entity = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(generateCodeDto.getTableName());
+        String className = entity + classSuffix;
+        String serviceClassName = entity + serviceClassSuffix;
+        String daoClassName = entity + daoClassSuffix;
+        String dtoClassName = entity + dtoClassSuffix;
+        String voClassName = entity + voClassSuffix;
+
+        String entityParam = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(generateCodeDto.getTableName());
+        List<String> template = getTemplate(GenerateConstants.CONTROLLER_TEMPLATE_PATH);
+
+
+        if(generateCodeDto.getNeedPagination()){
+            List<String> templateMethod = getTemplate(GenerateConstants.COMMON_CONTROLLER_PAGINATION_TEMPLATE);
+            template.addAll(templateMethod);
         }
+
+        List<String> templateReplace = new ArrayList<>();
+        for (String templateLine: template) {
+            // 公共的模板项 start
+            templateLine = templateReplaceBasic(generateCodeDto, templateLine, className, GenerateSuffixConstants.CONTROLLER_PATH_SUFFIX);
+            // 公共的模板项 end
+
+
+            //Service 公共模板导入和替换，Controller 同样适用， 并添加特有模板替换即可
+            // import 模板项 start
+            templateLine = templateImportService(generateCodeDto, entity, dtoClassName, voClassName, templateLine);
+
+            templateLine = templateImportServiceImpl(generateCodeDto, serviceClassName, daoClassName, templateLine);
+            // import 模板项 end
+
+            // templateReplace start
+            templateLine = templateReplaceService(entity, dtoClassName, voClassName,  dtoClassSuffix, voClassSuffix, entityParam, templateLine);
+
+            templateLine = templateReplaceServiceImpl( daoClassName, serviceClassName, daoClassSuffix, entityParam, templateLine);
+            // templateReplace end
+
+            // 特有模板
+            if (templateLine.contains(GenerateConstants.ENTITY_SERVICE_PARAM)) {
+                String entityServiceParam = entityParam + serviceClassSuffix;
+                templateLine = templateLine.replace(GenerateConstants.ENTITY_SERVICE_PARAM, entityServiceParam);
+            }
+
+            if (templateLine.contains(GenerateConstants.CONTROLLER_REQUEST_URL)) {
+                String controllerRequestUrl =  GenerateSuffixConstants.PATH_SIGN_SUFFIX + entityParam;
+                templateLine = templateLine.replace(GenerateConstants.CONTROLLER_REQUEST_URL, controllerRequestUrl);
+            }
+
+            if (templateLine.contains(GenerateConstants.ENTITY_SERVICE)) {
+                templateLine = templateLine.replace(GenerateConstants.ENTITY_SERVICE, serviceClassName);
+            }
+
+            templateReplace.add(templateLine);
+        }
+
+        templateReplace.add(GenerateConstants.JAVA_TXT_END_TAG);
+        String writerPath = sourceDirPath
+                    + GenerateSuffixConstants.CONTROLLER_PATH_SUFFIX
+                    + GenerateSuffixConstants.PATH_SIGN_SUFFIX
+                    + className
+                    + GenerateSuffixConstants.JAVA_FILE_SUFFIX;
+        writerFile(writerPath, templateReplace);
     }
 
     /**
@@ -639,6 +706,99 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
             str = str.replace(GenerateConstants.CLASS_NAME, className);
         }
         return str;
+    }
+
+
+    public List<String> getTemplate(String templatePath) throws IOException {
+        FileReader fr = null;
+        BufferedReader bf = null;
+        List<String> template = new ArrayList<>();
+        try {
+            Resource resource = resourceLoader.getResource(templatePath);
+            File file = resource.getFile();
+            fr = new FileReader(file);
+            bf = new BufferedReader(fr);
+            // 按行读取字符串
+            String str;
+            while ((str = bf.readLine()) != null) {
+                template.add(str);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            assert bf != null;
+            bf.close();
+            fr.close();
+        }
+        return template;
+    }
+
+    /**
+     *
+     * Basic基础模板替换
+     *
+     * @param generateCodeDto 代码生成器参数
+     * @return str 处理完成的模板字符流
+     */
+    public List<String> templateReplacePagination(GenerateCodeDto generateCodeDto,
+                                                  String entity,
+                                                  String dtoClassName,
+                                                  String voClassName,
+                                                  String daoClassName,
+                                                  String dtoClassSuffix,
+                                                  String voClassSuffix,
+                                                  String entityParam,
+                                                  String serviceClassName) throws IOException {
+        List<String> template = getTemplate(GenerateConstants.COMMON_SERVICE_IMPL_PAGINATION_TEMPLATE);
+        List<String> templateReplace = new ArrayList<>();
+        for (String templateLine: template) {
+            templateLine = templateReplaceService(entity,
+                    dtoClassName,
+                    voClassName,
+                    dtoClassSuffix,
+                    voClassSuffix,
+                    entityParam,
+                    templateLine);
+            templateLine = templateReplaceServiceImpl(daoClassName,
+                    serviceClassName,
+                    daoClassSuffix,
+                    entityParam,
+                    templateLine);
+            templateReplace.add(templateLine);
+        }
+
+        List<String> paginationFieldList = getTemplate(GenerateConstants.COMMON_SERVICE_IMPL_PAGINATION_FIELD_TEMPLATE);
+
+        List<String> paginationFieldReplaceList = new ArrayList<>();
+        int indexOf = 0;
+        List<FieldInfo> tableFieldList = generateCodeDto.getTableFieldList();
+        for(int i= 0; i < templateReplace.size(); i++){
+            if("${paginationField}".equals(templateReplace.get(i).trim())){
+                indexOf = i;
+                for (FieldInfo fieldInfo: tableFieldList) {
+                    if(fieldInfo.getPaginationQueryCondition()){
+                        String fieldName = fieldInfo.getJavaJavaHumpColumnName();
+                        String getterFieldName = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(fieldName);
+                        for (String paginationField: paginationFieldList) {
+                            if (paginationField.contains(GenerateConstants.ENTITY_DAO_PARAM)) {
+                                paginationField = paginationField.replace(GenerateConstants.ENTITY_DAO_PARAM, dtoClassName);
+                            }
+                            if (paginationField.contains(GenerateConstants.GETTER_FIELD_NAME)) {
+                                paginationField = paginationField.replace(GenerateConstants.GETTER_FIELD_NAME, getterFieldName);
+                            }
+
+                            if (paginationField.contains(GenerateConstants.FIELD_NAME)) {
+                                paginationField = paginationField.replace(GenerateConstants.FIELD_NAME, "\""+fieldName+"\"");
+                            }
+                            paginationFieldReplaceList.add(paginationField);
+                        }
+                    }
+                }
+            }
+        }
+        templateReplace.addAll(indexOf + 1, paginationFieldReplaceList);
+        templateReplace.remove(indexOf);
+        return templateReplace;
     }
 
 

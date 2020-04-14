@@ -41,6 +41,31 @@ public class GenerateConstants {
     public static final String SERVICE_IMPL_TEMPLATE_PATH = "classpath:templates/service/impl/serviceImplTemplate.tmp";
 
     /**
+     * Controller Template Controller 模板路径
+     */
+    public static final String CONTROLLER_TEMPLATE_PATH = "classpath:templates/web/controllerTemplate.tmp";
+
+    /**
+     * common Service paginationServiceImplTemplate
+     */
+    public static final String COMMON_SERVICE_PAGINATION_TEMPLATE = "classpath:templates/common/paginationServiceTemplate.tmp";
+
+    /**
+     * common ServiceImpl paginationServiceImplTemplate
+     */
+    public static final String COMMON_SERVICE_IMPL_PAGINATION_TEMPLATE = "classpath:templates/common/paginationServiceImplTemplate.tmp";
+
+    /**
+     * common serviceImpl paginationField paginationFieldTemplate
+     */
+    public static final String COMMON_SERVICE_IMPL_PAGINATION_FIELD_TEMPLATE = "classpath:templates/common/paginationServiceImplFieldTemplate.tmp";
+
+    /**
+     * common controller pagination paginationControllerTemplate
+     */
+    public static final String COMMON_CONTROLLER_PAGINATION_TEMPLATE = "classpath:templates/common/paginationControllerTemplate.tmp";
+
+    /**
      * 生成时间
      */
     public static final String GENERATE_DATE = "${generateDate}";
@@ -86,6 +111,11 @@ public class GenerateConstants {
     public static final String ENTITY_DAO = "${entityDao}";
 
     /**
+     * service
+     */
+    public static final String ENTITY_SERVICE = "${entityService}";
+
+    /**
      * serviceInterface
      */
     public static final String ENTITY_SERVICE_INTERFACE = "${entityServiceInterface}";
@@ -111,7 +141,25 @@ public class GenerateConstants {
      */
     public static final String ENTITY_VO_PARAM = "${entityVOParam}";
 
+    /**
+     * serviceParam
+     */
+    public static final String ENTITY_SERVICE_PARAM = "${entityServiceParam}";
 
+    /**
+     * fieldName
+     */
+    public static final String FIELD_NAME = "${fieldName}";
+
+    /**
+     * getterFieldName
+     */
+    public static final String GETTER_FIELD_NAME = "${getterFieldName}";
+
+    /**
+     * paginationField
+     */
+    public static final String PAGINATION_FIELD = " ${paginationField}";
 
 
     /**
@@ -139,6 +187,12 @@ public class GenerateConstants {
      * importDao
      */
     public static final String IMPORT_DAO = "${importDao}";
+
+
+    /**
+     * controllerRequestUrl
+     */
+    public static final String CONTROLLER_REQUEST_URL = "${controllerRequestUrl}";
 
 
     /**
