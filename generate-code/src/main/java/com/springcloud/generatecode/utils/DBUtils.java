@@ -12,10 +12,10 @@ import java.util.List;
  */
 public class DBUtils {
 
-    private Connection conn;
+    private DataSource dataSource;
 
     public DBUtils(DataSource dataSource) throws SQLException {
-        this.conn = dataSource.getConnection();
+        this.dataSource = dataSource;
     }
 
     /**
@@ -25,14 +25,26 @@ public class DBUtils {
      *
      */
     public List<String> getTables() throws SQLException {
-        DatabaseMetaData metaData = conn.getMetaData();
-        ResultSet rs = metaData.getTables(conn.getCatalog(), "%", null, new String[]{"TABLE"});
-        List<String> tables = new ArrayList<>();
-        while (rs.next()) {
-            String tableName = rs.getString("TABLE_NAME");
-            tables.add(tableName);
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+            DatabaseMetaData metaData = conn.getMetaData();
+            rs = metaData.getTables(conn.getCatalog(), "%", null, new String[]{"TABLE"});
+            List<String> tables = new ArrayList<>();
+            while (rs.next()) {
+                String tableName = rs.getString("TABLE_NAME");
+                tables.add(tableName);
+            }
+            return tables;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            assert rs != null;
+            rs.close();
+            conn.close();
         }
-        return tables;
+        return null;
     }
 
     /**
@@ -43,19 +55,31 @@ public class DBUtils {
      *
      */
     public List<FieldInfo> getDBFields(String tableName) throws SQLException {
+        ResultSet rs = null;
+        Connection conn = null;
         String SQL = "select * from ";
-        PreparedStatement cs = conn.prepareStatement(SQL + tableName);
-        ResultSet rs = cs.executeQuery(SQL + tableName);
-        ResultSetMetaData data = rs.getMetaData();
-        List<FieldInfo> fields = new ArrayList<>();
-        for (int i = 1; i <= data.getColumnCount(); i++) {
-            String columnName = data.getColumnName(i);
-            //获得指定列的数据类型名
-            String columnTypeName = data.getColumnTypeName(i);
-            FieldInfo fieldInfo = new FieldInfo(columnName, columnTypeName);
-            fields.add(fieldInfo);
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement cs = conn.prepareStatement(SQL + tableName);
+            rs = cs.executeQuery(SQL + tableName);
+            ResultSetMetaData data = rs.getMetaData();
+            List<FieldInfo> fields = new ArrayList<>();
+            for (int i = 1; i <= data.getColumnCount(); i++) {
+                String columnName = data.getColumnName(i);
+                //获得指定列的数据类型名
+                String columnTypeName = data.getColumnTypeName(i);
+                FieldInfo fieldInfo = new FieldInfo(columnName, columnTypeName);
+                fields.add(fieldInfo);
+            }
+            return fields;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            assert rs != null;
+            rs.close();
+            conn.close();
         }
-        return fields;
+        return null;
     }
 
 }
