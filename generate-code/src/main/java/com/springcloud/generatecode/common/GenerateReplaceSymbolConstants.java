@@ -104,7 +104,7 @@ public class GenerateReplaceSymbolConstants {
     /**
      * paginationField
      */
-    public static final String PAGINATION_FIELD = " ${paginationField}";
+    public static final String PAGINATION_FIELD = "${paginationField}";
 
 
     /**

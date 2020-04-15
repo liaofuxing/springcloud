@@ -40,9 +40,6 @@ public class ${className} {
     /**
      * find ${entity} List, the method is find ${entity} All to list
      *
-     * @author liaofuxing
-     * @date 2019/03/10 4:39
-     * @E-mail liaofuxing@outlook.com
      */
     @PostMapping("/find${entity}List")
     @ResponseBody

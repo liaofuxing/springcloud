@@ -3,7 +3,7 @@
      *
      * @return ResultVO ResultVO<DatePageVO<${entityVO}>>
      */
-    @GetMapping("/get${entity}List")
+    @GetMapping("/get${entity}Page")
     @ResponseBody
     public ResultVO<DatePageVO<${entityVO}>> get${entity}List(${entityDto} ${entityDtoParam}) {
         DatePageVO<${entityVO}> ${entityVO}Page = ${entityServiceParam}.find${entity}Page(${entityDtoParam});

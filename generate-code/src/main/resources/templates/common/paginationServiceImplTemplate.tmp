@@ -2,7 +2,7 @@
      * find page
      *
      * @param ${entityDtoParam} ${entityDtoParam}
-     * @return DatePageVO<${entityVO}
+     * @return DatePageVO<${entityVO}>
      */
     public DatePageVO<${entityVO}> findSystemUserPage(${entityDto} ${entityDtoParam}) {
         Pageable pageable = PageRequest.of(${entityDtoParam}.getPage() - 1, ${entityDtoParam}.getPageSize(), Sort.Direction.ASC, "id");
