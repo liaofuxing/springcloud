@@ -3,6 +3,7 @@ package com.springcloud.generatecode.utils;
 import com.springcloud.generatecode.common.GenerateConstants;
 
 /**
+ *
  * 数据库字段(表名)转换java驼峰语法工具类
  *
  * @author liaofuxing
@@ -13,7 +14,7 @@ public class MysqlFieldConvertJavaHumpUtils {
 
     /**
      *
-     * 字段转换
+     * 将字段转换为java驼峰风格，首字母小写 eg：xxxYyy
      *
      * @param mysqlField mysql字段
      * @return javaHump java驼峰字符串
@@ -43,7 +44,8 @@ public class MysqlFieldConvertJavaHumpUtils {
     }
 
     /**
-     * 表名转换
+     *
+     * 将字段转换为表名，类名风格，首字母大写 eg：XxxYyy
      *
      * @param mysqlTableName mysql表名
      * @return tableNameBuilder.toString() 表名驼峰字符串

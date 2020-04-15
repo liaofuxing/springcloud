@@ -27,11 +27,11 @@ public class DBUtils {
     public List<String> getTables() throws SQLException {
         ResultSet rs = null;
         Connection conn = null;
+        List<String> tables = new ArrayList<>();
         try {
             conn = dataSource.getConnection();
             DatabaseMetaData metaData = conn.getMetaData();
             rs = metaData.getTables(conn.getCatalog(), "%", null, new String[]{"TABLE"});
-            List<String> tables = new ArrayList<>();
             while (rs.next()) {
                 String tableName = rs.getString("TABLE_NAME");
                 tables.add(tableName);
@@ -44,7 +44,7 @@ public class DBUtils {
             rs.close();
             conn.close();
         }
-        return null;
+        return tables;
     }
 
     /**
@@ -58,12 +58,13 @@ public class DBUtils {
         ResultSet rs = null;
         Connection conn = null;
         String SQL = "select * from ";
+        List<FieldInfo> fields = new ArrayList<>();
         try {
             conn = dataSource.getConnection();
             PreparedStatement cs = conn.prepareStatement(SQL + tableName);
             rs = cs.executeQuery(SQL + tableName);
             ResultSetMetaData data = rs.getMetaData();
-            List<FieldInfo> fields = new ArrayList<>();
+
             for (int i = 1; i <= data.getColumnCount(); i++) {
                 String columnName = data.getColumnName(i);
                 //获得指定列的数据类型名
@@ -79,7 +80,6 @@ public class DBUtils {
             rs.close();
             conn.close();
         }
-        return null;
+        return fields;
     }
-
 }

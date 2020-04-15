@@ -2,9 +2,7 @@ package com.springcloud.generatecode.generate.service.impl;
 
 import com.springcloud.common.utils.ZipUtils;
 import com.springcloud.common.vo.SelectFormatVO;
-import com.springcloud.generatecode.common.GenerateConstants;
-import com.springcloud.generatecode.common.GenerateMysqlType2JavaTypeEnums;
-import com.springcloud.generatecode.common.GenerateSuffixConstants;
+import com.springcloud.generatecode.common.*;
 import com.springcloud.generatecode.common.properties.GenerateProperties;
 import com.springcloud.generatecode.generate.dto.GenerateCodeDto;
 import com.springcloud.generatecode.generate.entity.FieldInfo;
@@ -28,11 +26,11 @@ import java.util.Map;
 
 /**
  *
- * 代码生成器Service
+ * 代码生成器 ServiceImpl
  *
  * @author liaofuxing
  * @E-mail liaofuxing@outlook.com
- * @date 2020/04/09 20:24
+ * @date 2020/04/13 20:24
  */
 @Service
 public class GenerateCodeServiceImpl implements GenerateCodeService {
@@ -94,9 +92,9 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         String sourceDirPath = pathMap.get("sourceDirPath");
         String zipDirPath = pathMap.get("zipDirPath");
         if(generateCodeDto.getOnlyGenerateJavaBean()) {
-            generateEntityCode(generateCodeDto, sourceDirPath, GenerateConstants.ENTITY_TEMPLATE_PATH);
+            generateEntityCode(generateCodeDto, sourceDirPath, GenerateTemplatePathConstants.ENTITY_TEMPLATE_PATH);
         }else {
-            generateEntityCode(generateCodeDto, sourceDirPath, GenerateConstants.ENTITY_TEMPLATE_PATH);
+            generateEntityCode(generateCodeDto, sourceDirPath, GenerateTemplatePathConstants.ENTITY_TEMPLATE_PATH);
 
             generateCodeAll(generateCodeDto, sourceDirPath);
         }
@@ -169,11 +167,11 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
 
     public void generateEntityDtoCode(GenerateCodeDto generateCodeDto, String sourceDirPath) throws IOException {
-        generateEntityCode(generateCodeDto, sourceDirPath, GenerateConstants.ENTITY_DTO_TEMPLATE_PATH);
+        generateEntityCode(generateCodeDto, sourceDirPath, GenerateTemplatePathConstants.ENTITY_DTO_TEMPLATE_PATH);
     }
 
     public void generateEntityVOCode(GenerateCodeDto generateCodeDto, String sourceDirPath) throws IOException {
-        generateEntityCode(generateCodeDto, sourceDirPath, GenerateConstants.ENTITY_VO_TEMPLATE_PATH);
+        generateEntityCode(generateCodeDto, sourceDirPath, GenerateTemplatePathConstants.ENTITY_VO_TEMPLATE_PATH);
     }
 
 
@@ -187,76 +185,57 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
         String className = "";
         String packagePath = "";
-        if (templatePath.equals(GenerateConstants.ENTITY_TEMPLATE_PATH)){
+        if (templatePath.equals(GenerateTemplatePathConstants.ENTITY_TEMPLATE_PATH)) {
             className = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(generateCodeDto.getTableName());
             packagePath = GenerateSuffixConstants.ENTITY_PATH_SUFFIX;
         }
-        if(templatePath.equals(GenerateConstants.ENTITY_DTO_TEMPLATE_PATH)){
+        if (templatePath.equals(GenerateTemplatePathConstants.ENTITY_DTO_TEMPLATE_PATH)) {
             className = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(generateCodeDto.getTableName()) + GenerateSuffixConstants.DTO_CLASS_SUFFIX;
             packagePath = GenerateSuffixConstants.DTO_PATH_SUFFIX;
         }
 
-        if(templatePath.equals(GenerateConstants.ENTITY_VO_TEMPLATE_PATH)){
+        if (templatePath.equals(GenerateTemplatePathConstants.ENTITY_VO_TEMPLATE_PATH)) {
             className = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(generateCodeDto.getTableName()) + GenerateSuffixConstants.VO_CLASS_SUFFIX;
             packagePath = GenerateSuffixConstants.VO_PATH_SUFFIX;
         }
 
-        FileReader fr = null;
-        BufferedReader bf = null;
-        List<String> templateInner = new ArrayList<>();
+        List<String> template = getTemplate(templatePath);
 
-        try {
-            Resource resource = resourceLoader.getResource(templatePath);
-            File file = resource.getFile();
-            fr = new FileReader(file);
-            bf = new BufferedReader(fr);
-            String str;
-
-            // 按行读取字符串
-            while ((str = bf.readLine()) != null) {
-
-                str = templateReplaceBasic(generateCodeDto, str, className, packagePath);
-
-                if (str.contains(GenerateConstants.TABLE_NAME)) {
-                    String tableName = generateCodeDto.getTableName();
-                    str = str.replace(GenerateConstants.TABLE_NAME, tableName);
-                }
-                templateInner.add(str);
+        List<String> templateReplace = new ArrayList<>();
+        for (String templateLine : template) {
+            templateLine = templateReplaceBasic(generateCodeDto, templateLine, className, packagePath);
+            if (templateLine.contains(GenerateReplaceSymbolConstants.TABLE_NAME)) {
+                String tableName = generateCodeDto.getTableName();
+                templateLine = templateLine.replace(GenerateReplaceSymbolConstants.TABLE_NAME, tableName);
             }
-
-            // mysql 列转化为java bean
-            for (FieldInfo fieldInfo : generateCodeDto.getTableFieldList()) {
-
-                if (!"id".equals(fieldInfo.getJavaJavaHumpColumnName())){
-                    String javaLineTxt = GenerateConstants.TAB_STRING
-                            + GenerateConstants.JAVA_SCOPE_PRIVATE
-                            + GenerateConstants.SPACE_STRING
-                            + fieldInfo.getJavaColumnType()
-                            + GenerateConstants.SPACE_STRING
-                            + fieldInfo.getJavaJavaHumpColumnName()
-                            + GenerateConstants.JAVA_GRAMMAR_END_TAG;
-                    templateInner.add(javaLineTxt);
-                }
-            }
-            templateInner.add(GenerateConstants.JAVA_TXT_END_TAG);
-
-
-            String writerPath = sourceDirPath
-                    + packagePath
-                    + GenerateSuffixConstants.PATH_SIGN_SUFFIX
-                    + className
-                    + GenerateSuffixConstants.JAVA_FILE_SUFFIX;
-
-            writerFile(writerPath, templateInner);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            assert bf != null;
-            bf.close();
-            fr.close();
+            templateReplace.add(templateLine);
         }
+
+        // mysql 列转化为java bean
+        for (FieldInfo fieldInfo : generateCodeDto.getTableFieldList()) {
+
+            if (!"id".equals(fieldInfo.getJavaJavaHumpColumnName())) {
+                String javaLineTxt = GenerateConstants.TAB_STRING
+                        + GenerateConstants.JAVA_SCOPE_PRIVATE
+                        + GenerateConstants.SPACE_STRING
+                        + fieldInfo.getJavaColumnType()
+                        + GenerateConstants.SPACE_STRING
+                        + fieldInfo.getJavaJavaHumpColumnName()
+                        + GenerateConstants.JAVA_GRAMMAR_END_TAG;
+                templateReplace.add(javaLineTxt);
+            }
+        }
+
+        templateReplace.add(GenerateConstants.JAVA_TXT_END_TAG);
+
+        String writerPath = sourceDirPath
+                + packagePath
+                + GenerateSuffixConstants.PATH_SIGN_SUFFIX
+                + className
+                + GenerateSuffixConstants.JAVA_FILE_SUFFIX;
+
+        writerFile(writerPath, templateReplace);
+
     }
 
 
@@ -272,66 +251,49 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         String entity = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(generateCodeDto.getTableName());
         String className = entity + classSuffix;
 
-        FileReader fr = null;
-        BufferedReader bf = null;
-        List<String> templateInner = new ArrayList<>();
-        String tableName = generateCodeDto.getTableName();
-        try {
-            Resource resource = resourceLoader.getResource(GenerateConstants.DAO_TEMPLATE_PATH);
-            File file = resource.getFile();
-            fr = new FileReader(file);
-            bf = new BufferedReader(fr);
-            String str;
+        List<String> template = getTemplate(GenerateTemplatePathConstants.DAO_TEMPLATE_PATH);
 
-            // 按行读取字符串
-            while ((str = bf.readLine()) != null) {
+        List<String> templateReplace = new ArrayList<>();
+        for (String templateLine : template) {
+            templateLine = templateReplaceBasic(generateCodeDto, templateLine, className, GenerateSuffixConstants.DAO_PATH_SUFFIX);
 
-                str = templateReplaceBasic(generateCodeDto, str, className, GenerateSuffixConstants.DAO_PATH_SUFFIX);
-
-                if (str.contains(GenerateConstants.IMPORT_ENTITY)) {
-                    String importEntity = GenerateConstants.JAVA_SCOPE_IMPORT
-                            + GenerateConstants.SPACE_STRING
-                            + generateCodeDto.getPackagePath()
-                            + GenerateSuffixConstants.POINT_PATH_SUFFIX
-                            + GenerateSuffixConstants.ENTITY_PATH_SUFFIX
-                            + GenerateSuffixConstants.POINT_PATH_SUFFIX
-                            + entity
-                            + GenerateConstants.JAVA_GRAMMAR_END_TAG;
-                    str = str.replace(GenerateConstants.IMPORT_ENTITY, importEntity);
-                }
-
-                if (str.contains(GenerateConstants.JPA_REPOSITORY)) {
-                    String entityName = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(tableName);
-                    // 需要分页
-                    String jpaRepository;
-                    if(generateCodeDto.getNeedPagination()){
-                        jpaRepository = "JpaRepository<"+ entityName+ "," +"Integer>," + "JpaSpecificationExecutor<"+ entityName +">";
-                    }else {
-                        jpaRepository = "JpaRepository<"+ entityName+ "," +"Integer>";
-                    }
-
-                    str = str.replace(GenerateConstants.JPA_REPOSITORY, jpaRepository);
-                }
-
-                templateInner.add(str);
+            if (templateLine.contains(GenerateReplaceSymbolConstants.IMPORT_ENTITY)) {
+                String importEntity = GenerateConstants.JAVA_SCOPE_IMPORT
+                        + GenerateConstants.SPACE_STRING
+                        + generateCodeDto.getPackagePath()
+                        + GenerateSuffixConstants.POINT_PATH_SUFFIX
+                        + GenerateSuffixConstants.ENTITY_PATH_SUFFIX
+                        + GenerateSuffixConstants.POINT_PATH_SUFFIX
+                        + entity
+                        + GenerateConstants.JAVA_GRAMMAR_END_TAG;
+                templateLine = templateLine.replace(GenerateReplaceSymbolConstants.IMPORT_ENTITY, importEntity);
             }
-            templateInner.add(GenerateConstants.JAVA_TXT_END_TAG);
 
-            String writerPath = sourceDirPath
-                    + GenerateSuffixConstants.DAO_PATH_SUFFIX
-                    + GenerateSuffixConstants.PATH_SIGN_SUFFIX
-                    + className
-                    + GenerateSuffixConstants.JAVA_FILE_SUFFIX;
+            if (templateLine.contains(GenerateReplaceSymbolConstants.JPA_REPOSITORY)) {
 
-            writerFile(writerPath, templateInner);
+                // 需要分页
+                String jpaRepository;
+                if (generateCodeDto.getNeedPagination()) {
+                    jpaRepository = "JpaRepository<" + entity + ", " + "Integer>, " + "JpaSpecificationExecutor<" + entity + ">";
+                } else {
+                    jpaRepository = "JpaRepository<" + entity + ", " + "Integer>";
+                }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            assert bf != null;
-            bf.close();
-            fr.close();
+                templateLine = templateLine.replace(GenerateReplaceSymbolConstants.JPA_REPOSITORY, jpaRepository);
+            }
+            templateReplace.add(templateLine);
         }
+
+        templateReplace.add(GenerateConstants.JAVA_TXT_END_TAG);
+
+        String writerPath = sourceDirPath
+                + GenerateSuffixConstants.DAO_PATH_SUFFIX
+                + GenerateSuffixConstants.PATH_SIGN_SUFFIX
+                + className
+                + GenerateSuffixConstants.JAVA_FILE_SUFFIX;
+
+        writerFile(writerPath, templateReplace);
+
     }
 
 
@@ -350,9 +312,9 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
         String entityParam = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(generateCodeDto.getTableName());
 
-        List<String> template = getTemplate(GenerateConstants.SERVICE_TEMPLATE_PATH);
+        List<String> template = getTemplate(GenerateTemplatePathConstants.SERVICE_TEMPLATE_PATH);
         if(generateCodeDto.getNeedPagination()){
-            List<String> commonServicePaginationTemplate = getTemplate(GenerateConstants.COMMON_SERVICE_PAGINATION_TEMPLATE);
+            List<String> commonServicePaginationTemplate = getTemplate(GenerateTemplatePathConstants.COMMON_SERVICE_PAGINATION_TEMPLATE);
             template.addAll(commonServicePaginationTemplate);
         }
         List<String> templateReplace = new ArrayList<>();
@@ -400,7 +362,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         String voClassName = entity + voClassSuffix;
 
         String entityParam = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(generateCodeDto.getTableName());
-        List<String> template = getTemplate(GenerateConstants.SERVICE_IMPL_TEMPLATE_PATH);
+        List<String> template = getTemplate(GenerateTemplatePathConstants.SERVICE_IMPL_TEMPLATE_PATH);
         if(generateCodeDto.getNeedPagination()){
             List<String> commonServiceImplPaginationTemplate = templateReplacePagination(generateCodeDto, entity, dtoClassName, voClassName, daoClassName, dtoClassSuffix, voClassSuffix, entityParam, serviceClassName);
             template.addAll(commonServiceImplPaginationTemplate);
@@ -457,11 +419,11 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         String voClassName = entity + voClassSuffix;
 
         String entityParam = MysqlFieldConvertJavaHumpUtils.mysqlFieldConvertJavaHump(generateCodeDto.getTableName());
-        List<String> template = getTemplate(GenerateConstants.CONTROLLER_TEMPLATE_PATH);
+        List<String> template = getTemplate(GenerateTemplatePathConstants.CONTROLLER_TEMPLATE_PATH);
 
 
         if(generateCodeDto.getNeedPagination()){
-            List<String> templateMethod = getTemplate(GenerateConstants.COMMON_CONTROLLER_PAGINATION_TEMPLATE);
+            List<String> templateMethod = getTemplate(GenerateTemplatePathConstants.COMMON_CONTROLLER_PAGINATION_TEMPLATE);
             template.addAll(templateMethod);
         }
 
@@ -486,18 +448,18 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
             // templateReplace end
 
             // 特有模板
-            if (templateLine.contains(GenerateConstants.ENTITY_SERVICE_PARAM)) {
+            if (templateLine.contains(GenerateReplaceSymbolConstants.ENTITY_SERVICE_PARAM)) {
                 String entityServiceParam = entityParam + serviceClassSuffix;
-                templateLine = templateLine.replace(GenerateConstants.ENTITY_SERVICE_PARAM, entityServiceParam);
+                templateLine = templateLine.replace(GenerateReplaceSymbolConstants.ENTITY_SERVICE_PARAM, entityServiceParam);
             }
 
-            if (templateLine.contains(GenerateConstants.CONTROLLER_REQUEST_URL)) {
+            if (templateLine.contains(GenerateReplaceSymbolConstants.CONTROLLER_REQUEST_URL)) {
                 String controllerRequestUrl =  GenerateSuffixConstants.PATH_SIGN_SUFFIX + entityParam;
-                templateLine = templateLine.replace(GenerateConstants.CONTROLLER_REQUEST_URL, controllerRequestUrl);
+                templateLine = templateLine.replace(GenerateReplaceSymbolConstants.CONTROLLER_REQUEST_URL, controllerRequestUrl);
             }
 
-            if (templateLine.contains(GenerateConstants.ENTITY_SERVICE)) {
-                templateLine = templateLine.replace(GenerateConstants.ENTITY_SERVICE, serviceClassName);
+            if (templateLine.contains(GenerateReplaceSymbolConstants.ENTITY_SERVICE)) {
+                templateLine = templateLine.replace(GenerateReplaceSymbolConstants.ENTITY_SERVICE, serviceClassName);
             }
 
             templateReplace.add(templateLine);
@@ -526,7 +488,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                                          String dtoClassName,
                                          String voClassName,
                                          String str) {
-        if (str.contains(GenerateConstants.IMPORT_ENTITY)) {
+        if (str.contains(GenerateReplaceSymbolConstants.IMPORT_ENTITY)) {
             String importEntity = GenerateConstants.JAVA_SCOPE_IMPORT
                     + GenerateConstants.SPACE_STRING
                     + generateCodeDto.getPackagePath()
@@ -535,10 +497,10 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                     + GenerateSuffixConstants.POINT_PATH_SUFFIX
                     + entity
                     + GenerateConstants.JAVA_GRAMMAR_END_TAG;
-            str = str.replace(GenerateConstants.IMPORT_ENTITY, importEntity);
+            str = str.replace(GenerateReplaceSymbolConstants.IMPORT_ENTITY, importEntity);
         }
 
-        if (str.contains(GenerateConstants.IMPORT_DTO)) {
+        if (str.contains(GenerateReplaceSymbolConstants.IMPORT_DTO)) {
             String importDto = GenerateConstants.JAVA_SCOPE_IMPORT
                     + GenerateConstants.SPACE_STRING
                     + generateCodeDto.getPackagePath()
@@ -547,10 +509,10 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                     + GenerateSuffixConstants.POINT_PATH_SUFFIX
                     + dtoClassName
                     + GenerateConstants.JAVA_GRAMMAR_END_TAG;
-            str = str.replace(GenerateConstants.IMPORT_DTO, importDto);
+            str = str.replace(GenerateReplaceSymbolConstants.IMPORT_DTO, importDto);
         }
 
-        if (str.contains(GenerateConstants.IMPORT_VO)) {
+        if (str.contains(GenerateReplaceSymbolConstants.IMPORT_VO)) {
 
             String importVo = GenerateConstants.JAVA_SCOPE_IMPORT
                     + GenerateConstants.SPACE_STRING
@@ -560,7 +522,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                     + GenerateSuffixConstants.POINT_PATH_SUFFIX
                     + voClassName
                     + GenerateConstants.JAVA_GRAMMAR_END_TAG;
-            str = str.replace(GenerateConstants.IMPORT_VO, importVo);
+            str = str.replace(GenerateReplaceSymbolConstants.IMPORT_VO, importVo);
         }
         return str;
     }
@@ -578,7 +540,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                                              String serviceClassName,
                                              String daoClassName,
                                              String str) {
-        if (str.contains(GenerateConstants.IMPORT_SERVICE)) {
+        if (str.contains(GenerateReplaceSymbolConstants.IMPORT_SERVICE)) {
 
             String importService = GenerateConstants.JAVA_SCOPE_IMPORT
                     + GenerateConstants.SPACE_STRING
@@ -588,10 +550,10 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                     + GenerateSuffixConstants.POINT_PATH_SUFFIX
                     + serviceClassName
                     + GenerateConstants.JAVA_GRAMMAR_END_TAG;
-            str = str.replace(GenerateConstants.IMPORT_SERVICE, importService);
+            str = str.replace(GenerateReplaceSymbolConstants.IMPORT_SERVICE, importService);
         }
 
-        if (str.contains(GenerateConstants.IMPORT_DAO)) {
+        if (str.contains(GenerateReplaceSymbolConstants.IMPORT_DAO)) {
 
             String importService = GenerateConstants.JAVA_SCOPE_IMPORT
                     + GenerateConstants.SPACE_STRING
@@ -601,7 +563,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                     + GenerateSuffixConstants.POINT_PATH_SUFFIX
                     + daoClassName
                     + GenerateConstants.JAVA_GRAMMAR_END_TAG;
-            str = str.replace(GenerateConstants.IMPORT_DAO, importService);
+            str = str.replace(GenerateReplaceSymbolConstants.IMPORT_DAO, importService);
         }
         return str;
     }
@@ -624,26 +586,26 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                                           String voClassSuffix,
                                           String entityParam,
                                           String str) {
-        if (str.contains(GenerateConstants.ENTITY)) {
-            str = str.replace(GenerateConstants.ENTITY, entity);
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY)) {
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY, entity);
         }
 
-        if (str.contains(GenerateConstants.ENTITY_DTO)) {
-            str = str.replace(GenerateConstants.ENTITY_DTO, dtoClassName);
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY_DTO)) {
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY_DTO, dtoClassName);
         }
 
-        if (str.contains(GenerateConstants.ENTITY_VO)) {
-            str = str.replace(GenerateConstants.ENTITY_VO, voClassName);
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY_VO)) {
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY_VO, voClassName);
         }
 
-        if (str.contains(GenerateConstants.ENTITY_DTO_PARAM)) {
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY_DTO_PARAM)) {
             String entityDtoParam = entityParam + dtoClassSuffix;
-            str = str.replace(GenerateConstants.ENTITY_DTO_PARAM, entityDtoParam);
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY_DTO_PARAM, entityDtoParam);
         }
 
-        if (str.contains(GenerateConstants.ENTITY_VO_PARAM)) {
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY_VO_PARAM)) {
             String entityVoParam = entityParam + voClassSuffix;
-            str = str.replace(GenerateConstants.ENTITY_VO_PARAM, entityVoParam);
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY_VO_PARAM, entityVoParam);
         }
         return str;
     }
@@ -663,21 +625,21 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                                               String entityParam,
                                               String str) {
 
-        if (str.contains(GenerateConstants.ENTITY_DAO)) {
-            str = str.replace(GenerateConstants.ENTITY_DAO, daoClassName);
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY_DAO)) {
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY_DAO, daoClassName);
         }
 
-        if (str.contains(GenerateConstants.ENTITY_SERVICE_INTERFACE)) {
-            str = str.replace(GenerateConstants.ENTITY_SERVICE_INTERFACE, serviceClassName);
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY_SERVICE_INTERFACE)) {
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY_SERVICE_INTERFACE, serviceClassName);
         }
 
-        if (str.contains(GenerateConstants.ENTITY_DAO_PARAM)) {
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY_DAO_PARAM)) {
             String entityDaoParam = entityParam + daoClassSuffix;
-            str = str.replace(GenerateConstants.ENTITY_DAO_PARAM, entityDaoParam);
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY_DAO_PARAM, entityDaoParam);
         }
 
-        if (str.contains(GenerateConstants.ENTITY_PARAM)) {
-            str = str.replace(GenerateConstants.ENTITY_PARAM, entityParam);
+        if (str.contains(GenerateReplaceSymbolConstants.ENTITY_PARAM)) {
+            str = str.replace(GenerateReplaceSymbolConstants.ENTITY_PARAM, entityParam);
         }
         return str;
     }
@@ -693,17 +655,17 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
      * @return str 处理完成的模板字符流
      */
     public String templateReplaceBasic(GenerateCodeDto generateCodeDto, String str, String className, String classPathSuffix){
-        if (str.contains(GenerateConstants.PACKAGE_PATH)) {
-            str = str.replace(GenerateConstants.PACKAGE_PATH, generateCodeDto.getPackagePath() + GenerateSuffixConstants.POINT_PATH_SUFFIX + classPathSuffix)
+        if (str.contains(GenerateReplaceSymbolConstants.PACKAGE_PATH)) {
+            str = str.replace(GenerateReplaceSymbolConstants.PACKAGE_PATH, generateCodeDto.getPackagePath() + GenerateSuffixConstants.POINT_PATH_SUFFIX + classPathSuffix)
                     + GenerateConstants.JAVA_GRAMMAR_END_TAG;
         }
-        if (str.contains(GenerateConstants.GENERATE_DATE)) {
+        if (str.contains(GenerateReplaceSymbolConstants.GENERATE_DATE)) {
             ZonedDateTime now = ZonedDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            str = str.replace(GenerateConstants.GENERATE_DATE, now.format(formatter));
+            str = str.replace(GenerateReplaceSymbolConstants.GENERATE_DATE, now.format(formatter));
         }
-        if (str.contains(GenerateConstants.CLASS_NAME)) {
-            str = str.replace(GenerateConstants.CLASS_NAME, className);
+        if (str.contains(GenerateReplaceSymbolConstants.CLASS_NAME)) {
+            str = str.replace(GenerateReplaceSymbolConstants.CLASS_NAME, className);
         }
         return str;
     }
@@ -749,7 +711,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                                                   String voClassSuffix,
                                                   String entityParam,
                                                   String serviceClassName) throws IOException {
-        List<String> template = getTemplate(GenerateConstants.COMMON_SERVICE_IMPL_PAGINATION_TEMPLATE);
+        List<String> template = getTemplate(GenerateTemplatePathConstants.COMMON_SERVICE_IMPL_PAGINATION_TEMPLATE);
         List<String> templateReplace = new ArrayList<>();
         for (String templateLine: template) {
             templateLine = templateReplaceService(entity,
@@ -767,28 +729,28 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
             templateReplace.add(templateLine);
         }
 
-        List<String> paginationFieldList = getTemplate(GenerateConstants.COMMON_SERVICE_IMPL_PAGINATION_FIELD_TEMPLATE);
+        List<String> paginationFieldList = getTemplate(GenerateTemplatePathConstants.COMMON_SERVICE_IMPL_PAGINATION_FIELD_TEMPLATE);
 
         List<String> paginationFieldReplaceList = new ArrayList<>();
         int indexOf = 0;
         List<FieldInfo> tableFieldList = generateCodeDto.getTableFieldList();
         for(int i= 0; i < templateReplace.size(); i++){
-            if("${paginationField}".equals(templateReplace.get(i).trim())){
+            if(GenerateReplaceSymbolConstants.PAGINATION_FIELD.equals(templateReplace.get(i).trim())){
                 indexOf = i;
                 for (FieldInfo fieldInfo: tableFieldList) {
                     if(fieldInfo.getPaginationQueryCondition()){
                         String fieldName = fieldInfo.getJavaJavaHumpColumnName();
                         String getterFieldName = MysqlFieldConvertJavaHumpUtils.mysqlTableNameConvertJavaHump(fieldName);
                         for (String paginationField: paginationFieldList) {
-                            if (paginationField.contains(GenerateConstants.ENTITY_DAO_PARAM)) {
-                                paginationField = paginationField.replace(GenerateConstants.ENTITY_DAO_PARAM, dtoClassName);
+                            if (paginationField.contains(GenerateReplaceSymbolConstants.ENTITY_DAO_PARAM)) {
+                                paginationField = paginationField.replace(GenerateReplaceSymbolConstants.ENTITY_DAO_PARAM, dtoClassName);
                             }
-                            if (paginationField.contains(GenerateConstants.GETTER_FIELD_NAME)) {
-                                paginationField = paginationField.replace(GenerateConstants.GETTER_FIELD_NAME, getterFieldName);
+                            if (paginationField.contains(GenerateReplaceSymbolConstants.GETTER_FIELD_NAME)) {
+                                paginationField = paginationField.replace(GenerateReplaceSymbolConstants.GETTER_FIELD_NAME, getterFieldName);
                             }
 
-                            if (paginationField.contains(GenerateConstants.FIELD_NAME)) {
-                                paginationField = paginationField.replace(GenerateConstants.FIELD_NAME, "\""+fieldName+"\"");
+                            if (paginationField.contains(GenerateReplaceSymbolConstants.FIELD_NAME)) {
+                                paginationField = paginationField.replace(GenerateReplaceSymbolConstants.FIELD_NAME, "\""+fieldName+"\"");
                             }
                             paginationFieldReplaceList.add(paginationField);
                         }
