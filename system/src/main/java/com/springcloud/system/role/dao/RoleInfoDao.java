@@ -1,6 +1,6 @@
 package com.springcloud.system.role.dao;
 
-import com.springcloud.system.role.etity.RoleInfo;
+import com.springcloud.system.role.entity.RoleInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

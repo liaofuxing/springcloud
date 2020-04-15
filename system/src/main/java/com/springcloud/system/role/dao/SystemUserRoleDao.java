@@ -1,7 +1,7 @@
 
 package com.springcloud.system.role.dao;
 
-import com.springcloud.system.role.etity.SystemUserRole;
+import com.springcloud.system.role.entity.SystemUserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.annotation.Resource;

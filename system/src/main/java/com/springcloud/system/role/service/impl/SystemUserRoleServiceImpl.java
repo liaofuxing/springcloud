@@ -2,7 +2,7 @@ package com.springcloud.system.role.service.impl;
 
 
 import com.springcloud.system.role.dao.SystemUserRoleDao;
-import com.springcloud.system.role.etity.SystemUserRole;
+import com.springcloud.system.role.entity.SystemUserRole;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

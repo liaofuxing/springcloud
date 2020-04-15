@@ -1,7 +1,7 @@
 package com.springcloud.system.role.service;
 
 
-import com.springcloud.system.role.etity.SystemUserRole;
+import com.springcloud.system.role.entity.SystemUserRole;
 
 import java.util.List;
 

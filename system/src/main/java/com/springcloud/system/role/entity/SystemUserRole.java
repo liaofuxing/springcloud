@@ -1,4 +1,4 @@
-package com.springcloud.system.role.etity;
+package com.springcloud.system.role.entity;
 
 import lombok.Data;
 

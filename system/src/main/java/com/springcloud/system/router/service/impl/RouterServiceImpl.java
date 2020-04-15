@@ -3,7 +3,7 @@ package com.springcloud.system.router.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.springcloud.common.enums.UserTokenEnums;
-import com.springcloud.system.role.etity.SystemUserRole;
+import com.springcloud.system.role.entity.SystemUserRole;
 import com.springcloud.system.role.service.SystemUserRoleService;
 import com.springcloud.system.router.dao.RouterDao;
 import com.springcloud.system.router.dto.Menu2RouterDto;
