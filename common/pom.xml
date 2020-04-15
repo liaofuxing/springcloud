@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.springcluod</groupId>
             <artifactId>redis-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.5-beta</version>
         </dependency>
 
     </dependencies>
