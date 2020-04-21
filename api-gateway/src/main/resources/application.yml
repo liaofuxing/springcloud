@@ -39,7 +39,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
   redis:
     host: 192.168.31.207
     port: 6379
@@ -60,7 +59,6 @@ zuul:
       serviceId: system
     mall:
       path: /mall/**
-      # 路由的目标服务名
       serviceId: mall
     generate:
       path: /generate/**

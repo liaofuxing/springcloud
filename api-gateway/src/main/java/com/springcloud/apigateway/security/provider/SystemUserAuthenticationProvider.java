@@ -1,28 +1,20 @@
 package com.springcloud.apigateway.security.provider;
 
 import com.springcloud.apigateway.security.service.SystemUserDetailsService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.SpringSecurityMessageSource;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
-import org.springframework.security.core.userdetails.*;
-import org.springframework.security.core.userdetails.cache.NullUserCache;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 public class SystemUserAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
-
 
 
 
@@ -60,6 +52,7 @@ public class SystemUserAuthenticationProvider extends AbstractUserDetailsAuthent
 
     // ~ Methods
     // ========================================================================================================
+
 
     @SuppressWarnings("deprecation")
     protected void additionalAuthenticationChecks(UserDetails userDetails,

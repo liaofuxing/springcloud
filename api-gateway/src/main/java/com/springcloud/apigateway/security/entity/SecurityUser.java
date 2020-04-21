@@ -49,6 +49,7 @@ public class SecurityUser implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 //        Collection<GrantedAuthority> authorities = new ArrayList<>();

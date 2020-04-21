@@ -1,141 +1,65 @@
 package com.springcloud.apigateway.security.provider;
 
 import com.springcloud.apigateway.security.service.UserSmsDetailsService;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsPasswordService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.Assert;
 
-public class UserSmsAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public class UserSmsAuthenticationProvider implements AuthenticationProvider {
 
-
-    private static final String USER_NOT_FOUND_PASSWORD = "userNotFoundPassword";
-
-    private PasswordEncoder passwordEncoder;
-
-    private volatile String userNotFoundEncodedPassword;
 
     private UserSmsDetailsService userSmsDetailsService;
 
-    private UserDetailsPasswordService userDetailsPasswordService;
-
-    public UserSmsAuthenticationProvider() {
-        setPasswordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder());
-    }
-
-
-    @SuppressWarnings("deprecation")
-    protected void additionalAuthenticationChecks(UserDetails userDetails,
-                                                  UsernamePasswordAuthenticationToken authentication)
-            throws AuthenticationException {
-        if (authentication.getCredentials() == null) {
-            logger.debug("Authentication failed: no credentials provided");
-
-            throw new BadCredentialsException(messages.getMessage(
-                    "AbstractUserDetailsAuthenticationProvider.badCredentials",
-                    "Bad credentials"));
-        }
-
-        String presentedPassword = authentication.getCredentials().toString();
-
-        if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
-            logger.debug("Authentication failed: password does not match stored value");
-
-            throw new BadCredentialsException(messages.getMessage(
-                    "AbstractUserDetailsAuthenticationProvider.badCredentials",
-                    "Bad credentials"));
-        }
-    }
-
-    protected void doAfterPropertiesSet() {
-        Assert.notNull(this.userSmsDetailsService, "A UserDetailsService must be set");
-    }
-
-    protected final UserDetails retrieveUser(String username,
-                                             UsernamePasswordAuthenticationToken authentication)
-            throws AuthenticationException {
-        prepareTimingAttackProtection();
-        try {
-            UserDetails loadedUser = this.getUserDetailsService().loadUserByUsername(username);
-            if (loadedUser == null) {
-                throw new InternalAuthenticationServiceException(
-                        "UserDetailsService returned null, which is an interface contract violation");
-            }
-            return loadedUser;
-        }
-        catch (UsernameNotFoundException ex) {
-            mitigateAgainstTimingAttack(authentication);
-            throw ex;
-        }
-        catch (InternalAuthenticationServiceException ex) {
-            throw ex;
-        }
-        catch (Exception ex) {
-            throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
-        }
-    }
+    private StringRedisTemplate redisTemplate;
 
     @Override
-    protected Authentication createSuccessAuthentication(Object principal,
-                                                         Authentication authentication, UserDetails user) {
-        boolean upgradeEncoding = this.userDetailsPasswordService != null
-                && this.passwordEncoder.upgradeEncoding(user.getPassword());
-        if (upgradeEncoding) {
-            String presentedPassword = authentication.getCredentials().toString();
-            String newPassword = this.passwordEncoder.encode(presentedPassword);
-            user = this.userDetailsPasswordService.updatePassword(user, newPassword);
-        }
-        return super.createSuccessAuthentication(principal, authentication, user);
-    }
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
+        //调用自定义的userDetailsService认证
+        UserDetails user = userSmsDetailsService.loadUserByUsername((String) authenticationToken.getPrincipal());
 
-    private void prepareTimingAttackProtection() {
-        if (this.userNotFoundEncodedPassword == null) {
-            this.userNotFoundEncodedPassword = this.passwordEncoder.encode(USER_NOT_FOUND_PASSWORD);
+        if (user == null) {
+            throw new InternalAuthenticationServiceException("无法获取用户信息");
         }
-    }
+        // 应该在这里处理登录逻辑
+        String smsCode = redisTemplate.opsForValue().get("SMS_CODE:"+ authenticationToken.getPrincipal());
+        if (smsCode == null || !smsCode.equals(authenticationToken.getSmsCode())) {
+            throw new InternalAuthenticationServiceException("验证码错误");
+        }
 
-    private void mitigateAgainstTimingAttack(UsernamePasswordAuthenticationToken authentication) {
-        if (authentication.getCredentials() != null) {
-            String presentedPassword = authentication.getCredentials().toString();
-            this.passwordEncoder.matches(presentedPassword, this.userNotFoundEncodedPassword);
-        }
+        //如果user不为空重新构建SmsCodeAuthenticationToken（已认证）
+        SmsCodeAuthenticationToken authenticationResult = new SmsCodeAuthenticationToken(user, user.getAuthorities());
+        authenticationResult.setDetails(authenticationToken.getDetails());
+        return authenticationResult;
+
     }
 
     /**
-     * Sets the PasswordEncoder instance to be used to encode and validate passwords. If
-     * not set, the password will be compared using {@link PasswordEncoderFactories#createDelegatingPasswordEncoder()}
-     *
-     * @param passwordEncoder must be an instance of one of the {@code PasswordEncoder}
-     * types.
+     * 只有Authentication为SmsCodeAuthenticationToken使用此Provider认证
+     * @param authentication
+     * @return
      */
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        Assert.notNull(passwordEncoder, "passwordEncoder cannot be null");
-        this.passwordEncoder = passwordEncoder;
-        this.userNotFoundEncodedPassword = null;
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return SmsCodeAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    protected PasswordEncoder getPasswordEncoder() {
-        return passwordEncoder;
-    }
-
-    public void setUserDetailsService(UserSmsDetailsService userDetailsService) {
-        this.userSmsDetailsService = userDetailsService;
-    }
-
-    protected UserSmsDetailsService getUserDetailsService() {
+    public UserSmsDetailsService getUserSmsDetailsService() {
         return userSmsDetailsService;
     }
 
-    public void setUserDetailsPasswordService(
-            UserDetailsPasswordService userDetailsPasswordService) {
-        this.userDetailsPasswordService = userDetailsPasswordService;
+    public void setUserSmsDetailsService(UserSmsDetailsService userSmsDetailsService) {
+        this.userSmsDetailsService = userSmsDetailsService;
+    }
+
+    public StringRedisTemplate getRedisTemplate() {
+        return redisTemplate;
+    }
+
+    public void setRedisTemplate(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
     }
 }

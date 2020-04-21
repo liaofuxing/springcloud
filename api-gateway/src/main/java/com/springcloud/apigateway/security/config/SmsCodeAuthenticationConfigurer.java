@@ -1,7 +1,11 @@
 package com.springcloud.apigateway.security.config;
+
 import com.springcloud.apigateway.security.filter.SmsCodeAuthenticationFilter;
+import com.springcloud.apigateway.security.provider.UserSmsAuthenticationProvider;
+import com.springcloud.apigateway.security.service.UserSmsDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,16 +30,29 @@ public class SmsCodeAuthenticationConfigurer extends SecurityConfigurerAdapter<D
     @Autowired
     private AuthenticationFailureHandler defaultAuthenticationFailureHandler;
 
+//    @Autowired
+//    private UserSmsAuthenticationProvider userSmsAuthenticationProvider;
+    @Autowired
+    private UserSmsDetailsService userSmsDetailsService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
+        // 自定义过滤器
         SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter();
         smsCodeAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(defaultAuthenticationSuccessHandler);
         smsCodeAuthenticationFilter.setAuthenticationFailureHandler(defaultAuthenticationFailureHandler);
 
-        http.addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // 自定义userSmsAuthenticationProvider， 并为Provider 设置 userSmsDetailsService
+        UserSmsAuthenticationProvider userSmsAuthenticationProvider = new UserSmsAuthenticationProvider();
+        userSmsAuthenticationProvider.setUserSmsDetailsService(userSmsDetailsService);
+        userSmsAuthenticationProvider.setRedisTemplate(redisTemplate);
+        http.authenticationProvider(userSmsAuthenticationProvider)
+                .addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 }

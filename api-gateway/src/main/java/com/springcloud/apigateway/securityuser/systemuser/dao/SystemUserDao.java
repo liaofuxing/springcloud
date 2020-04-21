@@ -14,4 +14,6 @@ public interface SystemUserDao extends JpaRepository<SystemUser, Integer> {
 
     SystemUser findSystemUserByUsername(String username);
 
+
+    SystemUser findSystemUserByPhone(String username);
 }

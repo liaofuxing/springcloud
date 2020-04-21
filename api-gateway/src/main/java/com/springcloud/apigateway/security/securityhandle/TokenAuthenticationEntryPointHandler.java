@@ -1,4 +1,4 @@
-package com.springcloud.apigateway.security.filter;
+package com.springcloud.apigateway.security.securityhandle;
 
 import com.alibaba.fastjson.JSON;
 import com.springcloud.common.enums.StatusCodeEnums;
@@ -15,13 +15,13 @@ import java.io.IOException;
  * 凭证失效
  */
 @Component
-public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class TokenAuthenticationEntryPointHandler implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         int status = StatusCodeEnums.CREDENTIALS_EXPIRED.getCode();
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().print(JSON.toJSONString(ResultVOUtils.credentials_expired(null)));
+        response.getWriter().print(JSON.toJSONString(ResultVOUtils.credentials_expired(StatusCodeEnums.getName(status))));
         response.flushBuffer();
     }
 }

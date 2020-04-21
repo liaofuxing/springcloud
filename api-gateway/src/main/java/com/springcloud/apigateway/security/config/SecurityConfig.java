@@ -1,20 +1,13 @@
 package com.springcloud.apigateway.security.config;
 
 
-import com.springcloud.apigateway.security.filter.TokenAuthenticationEntryPoint;
+import com.springcloud.apigateway.security.securityhandle.TokenAuthenticationEntryPointHandler;
 import com.springcloud.apigateway.security.filter.TokenAuthorizationFilter;
-import com.springcloud.apigateway.security.provider.SystemUserAuthenticationProvider;
-import com.springcloud.apigateway.security.provider.UserSmsAuthenticationProvider;
 import com.springcloud.apigateway.security.securityhandle.TokenAccessDeniedHandler;
 import com.springcloud.apigateway.security.securityhandle.TokenLogoutSuccessHandler;
-import com.springcloud.apigateway.security.service.SystemUserDetailsService;
-import com.springcloud.apigateway.security.service.UserSmsDetailsService;
-import com.springcloud.apigateway.security.service.impl.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -32,30 +25,13 @@ import org.springframework.social.security.SpringSocialConfigurer;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String[] excludedAuthPages = {"/sms/*",
+    private static final String[] excludedAuthPages = {"/user/sendSmsCode",
             "/user/register","/css/**",
             "/js/**",
             "/images/**",
             "/webjars/springfox-swagger-ui/**"
     };
 
-    @Autowired
-    private UserDetailServiceImpl userDetailsServiceImpl;
-
-    @Autowired
-    private UserSmsDetailsService userSmsDetailsServiceImpl;
-
-    @Autowired
-    private SystemUserDetailsService systemUserDetailsServiceImpl;
-
-    @Autowired
-    private SystemUserAuthenticationProvider systemUserAuthenticationProvider;
-
-    @Autowired
-    private DaoAuthenticationProvider daoAuthenticationProvider;
-
-    @Autowired
-    private UserSmsAuthenticationProvider userSmsAuthenticationProvider;
 
     /**
      * 权限鉴定过滤器
@@ -64,10 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private TokenAuthorizationFilter authorizationFilter;
 
     /**
-     * 未登录结果处理
+     * 凭证过期
      */
     @Autowired
-    private TokenAuthenticationEntryPoint authenticationEntryPoint;
+    private TokenAuthenticationEntryPointHandler tokenAuthenticationEntryPointHandler;
 
     /**
      * 权限不足结果处理
@@ -121,7 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .apply(smsCodeAuthenticationConfigurer)
                 .and()
                 //权限不足结果处理
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
+                .exceptionHandling().authenticationEntryPoint(tokenAuthenticationEntryPointHandler).accessDeniedHandler(accessDeniedHandler)
                 .and()
                 //设置登出url
                 .logout().logoutUrl("/user/logout")
@@ -139,18 +115,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterAfter(authorizationFilter, LogoutFilter.class);
     }
 
-    //配置多个authenticationProvider
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth
-                .authenticationProvider(systemUserAuthenticationProvider)
-                .authenticationProvider(userSmsAuthenticationProvider);
-                //.authenticationProvider(daoAuthenticationProvider)
-
-
-    }
-
 
     //密码加密器，在授权时，框架为我们解析用户名密码时，密码会通过加密器加密在进行比较
     //将密码加密器交给spring管理，在注册时，密码也是需要加密的，再存入数据库中
@@ -158,35 +122,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-
-
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userDetailsServiceImpl);
-        return daoAuthenticationProvider;
-    }
-
-    @Bean
-    public UserSmsAuthenticationProvider UserSmsAuthenticationProvider(){
-
-        UserSmsAuthenticationProvider userSmsAuthenticationProvider = new UserSmsAuthenticationProvider();
-        userSmsAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
-        userSmsAuthenticationProvider.setUserDetailsService(userSmsDetailsServiceImpl);
-        return userSmsAuthenticationProvider;
-    }
-
-    @Bean
-    public SystemUserAuthenticationProvider systemUserAuthenticationProvider(){
-
-        SystemUserAuthenticationProvider systemUserAuthenticationProvider = new SystemUserAuthenticationProvider();
-        systemUserAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
-        systemUserAuthenticationProvider.setUserDetailsService(systemUserDetailsServiceImpl);
-        return systemUserAuthenticationProvider;
     }
 
 

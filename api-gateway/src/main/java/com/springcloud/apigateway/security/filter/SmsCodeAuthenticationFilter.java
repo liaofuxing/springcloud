@@ -2,12 +2,13 @@ package com.springcloud.apigateway.security.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.springcloud.apigateway.security.provider.SmsCodeAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,16 +25,15 @@ import java.io.InputStreamReader;
  * @date 2020/02/28 20:21
  */
 public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-	private boolean postOnly = true;
 
 	public SmsCodeAuthenticationFilter() {
-		super(new AntPathRequestMatcher("/user/smsCode-login", "POST"));
+		super(new AntPathRequestMatcher("/user/phoneLogin", "POST"));
 	}
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 
-			if (postOnly && !request.getMethod().equals("POST")) {
+		if (!request.getMethod().equals("POST")) {
 				throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
 			}
 
@@ -53,8 +53,19 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 			String phone = jsonObject.getString("phone");
 			String smsCode = jsonObject.getString("smsCode");
 
-			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(phone, smsCode);
+//			String phone = request.getParameter("phone");
+//			String smsCode = request.getParameter("smsCode");
+
+		//UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(phone, smsCode);
+			//创建SmsCodeAuthenticationToken(未认证)
+			SmsCodeAuthenticationToken authenticationToken = new SmsCodeAuthenticationToken(phone, smsCode);
+			//设置用户信息
+			setDetails(request, authenticationToken);
 			return this.getAuthenticationManager().authenticate(authenticationToken);
+		}
+
+		protected void setDetails(HttpServletRequest request, SmsCodeAuthenticationToken authRequest) {
+			authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
 		}
 
 }

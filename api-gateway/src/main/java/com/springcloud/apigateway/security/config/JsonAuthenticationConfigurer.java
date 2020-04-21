@@ -1,11 +1,14 @@
 package com.springcloud.apigateway.security.config;
 
 import com.springcloud.apigateway.security.filter.JsonAuthenticationFilter;
+import com.springcloud.apigateway.security.provider.SystemUserAuthenticationProvider;
+import com.springcloud.apigateway.security.service.SystemUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -27,16 +30,25 @@ public class JsonAuthenticationConfigurer extends SecurityConfigurerAdapter<Defa
     @Autowired
     private AuthenticationFailureHandler defaultAuthenticationFailureHandler;
 
+//    @Autowired
+//    private SystemUserAuthentcationProvider systemUserAuthenticationProvider;
+    @Autowired
+    private SystemUserDetailsService systemUserDetailsService;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
+        // 自定义过滤器
         JsonAuthenticationFilter jsonAuthenticationFilter = new JsonAuthenticationFilter();
         jsonAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
         jsonAuthenticationFilter.setAuthenticationSuccessHandler(defaultAuthenticationSuccessHandler);
         jsonAuthenticationFilter.setAuthenticationFailureHandler(defaultAuthenticationFailureHandler);
 
-        http.addFilterAfter(jsonAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // 自定义systemUserAuthenticationProvider， 并为Provider 设置 systemUserDetailsService
+        SystemUserAuthenticationProvider systemUserAuthenticationProvider = new SystemUserAuthenticationProvider();
+        systemUserAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        systemUserAuthenticationProvider.setUserDetailsService(systemUserDetailsService);
+        http.authenticationProvider(systemUserAuthenticationProvider)
+                .addFilterAfter(jsonAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 }
