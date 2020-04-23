@@ -1,4 +1,4 @@
-package com.springcloud.apigateway.security.securityhandle;
+package com.springcloud.apigateway.security.securityhandler;
 
 import com.alibaba.fastjson.JSON;
 import com.springcloud.common.enums.StatusCodeEnums;
