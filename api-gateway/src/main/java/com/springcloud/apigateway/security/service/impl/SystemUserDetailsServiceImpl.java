@@ -19,8 +19,8 @@ public class SystemUserDetailsServiceImpl implements SystemUserDetailsService {
     @Autowired
     private SystemUserRoleDao systemUserRoleDao;
 
-    @Override
-    public SecurityUser loadUserBySystemUsername(String username) throws UsernameNotFoundException {
+
+    public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
         SystemUser  systemUser = systemUserDao.findSystemUserByUsername(username);
 
         if (systemUser == null){

@@ -1,13 +1,7 @@
 package com.springcloud.apigateway.security.service.impl;
 
-import com.springcloud.apigateway.security.entity.SecurityUser;
-import com.springcloud.apigateway.securityuser.malluser.dao.MallUserDao;
-import com.springcloud.apigateway.securityuser.malluser.entity.MallUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.security.SocialUser;
@@ -22,27 +16,12 @@ import org.springframework.stereotype.Service;
  * @date 2020/02/18 11:50
  */
 @Service
-public class UserDetailServiceImpl implements UserDetailsService, SocialUserDetailsService {
+public class UserDetailServiceImpl implements  SocialUserDetailsService {
 
-    @Autowired
-    private MallUserDao mallUserDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        MallUser mallUser = mallUserDao.findSystemUserByUsername(username);
-
-        if (mallUser == null){
-            UsernameNotFoundException usernameNotFoundException = new UsernameNotFoundException("用户名不存在");
-            usernameNotFoundException.printStackTrace();
-            throw usernameNotFoundException;
-        }
-        return  new SecurityUser(mallUser);
-    }
 
     @Override
     public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
