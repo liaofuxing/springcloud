@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
- * @author: liaofuxing
- * @E-mail: liaofuxing@outlook.com
- * @date: 2020/02/15 14:18
+ * @author liaofuxing
+ * @E-mail liaofuxing@outlook.com
+ * @date 2020/02/15 14:18
  **/
 @Controller
 @RequestMapping("/user")
 public class SmsCodeController {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private StringRedisTemplate redisTemplate;
