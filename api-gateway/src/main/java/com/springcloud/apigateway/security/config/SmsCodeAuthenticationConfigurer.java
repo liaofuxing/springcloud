@@ -28,10 +28,8 @@ public class SmsCodeAuthenticationConfigurer extends SecurityConfigurerAdapter<D
     private AuthenticationSuccessHandler defaultAuthenticationSuccessHandler;
 
     @Autowired
-    private AuthenticationFailureHandler defaultAuthenticationFailureHandler;
+    private AuthenticationFailureHandler smsLoginAuthenticationFailureHandler;
 
-//    @Autowired
-//    private UserSmsAuthenticationProvider userSmsAuthenticationProvider;
     @Autowired
     private UserSmsDetailsService userSmsDetailsService;
 
@@ -45,7 +43,7 @@ public class SmsCodeAuthenticationConfigurer extends SecurityConfigurerAdapter<D
         SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter();
         smsCodeAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(defaultAuthenticationSuccessHandler);
-        smsCodeAuthenticationFilter.setAuthenticationFailureHandler(defaultAuthenticationFailureHandler);
+        smsCodeAuthenticationFilter.setAuthenticationFailureHandler(smsLoginAuthenticationFailureHandler);
 
         // 自定义userSmsAuthenticationProvider， 并为Provider 设置 userSmsDetailsService
         UserSmsAuthenticationProvider userSmsAuthenticationProvider = new UserSmsAuthenticationProvider();

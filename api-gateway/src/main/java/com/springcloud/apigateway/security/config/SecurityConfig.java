@@ -1,10 +1,10 @@
 package com.springcloud.apigateway.security.config;
 
 
-import com.springcloud.apigateway.security.securityhandle.TokenAuthenticationEntryPointHandler;
+import com.springcloud.apigateway.security.securityhandler.TokenAuthenticationEntryPointHandler;
 import com.springcloud.apigateway.security.filter.TokenAuthorizationFilter;
-import com.springcloud.apigateway.security.securityhandle.TokenAccessDeniedHandler;
-import com.springcloud.apigateway.security.securityhandle.TokenLogoutSuccessHandler;
+import com.springcloud.apigateway.security.securityhandler.TokenAccessDeniedHandler;
+import com.springcloud.apigateway.security.securityhandler.TokenLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,6 +76,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SmsCodeAuthenticationConfigurer smsCodeAuthenticationConfigurer;
 
+    /**
+     * 商城用户登录配置器（预留）
+     */
+    @Autowired
+    private MallUserAuthenticationConfigurer mallUserAuthenticationConfigurer;
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring(). antMatchers("/swagger-ui.html")
@@ -95,6 +101,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .apply(springSocialConfigurer)
                 .and()
                 .apply(smsCodeAuthenticationConfigurer)
+                .and()
+                .apply(mallUserAuthenticationConfigurer)
                 .and()
                 //权限不足结果处理
                 .exceptionHandling().authenticationEntryPoint(tokenAuthenticationEntryPointHandler).accessDeniedHandler(accessDeniedHandler)

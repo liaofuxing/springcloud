@@ -30,10 +30,8 @@ public class JsonAuthenticationConfigurer extends SecurityConfigurerAdapter<Defa
     @Autowired
     private AuthenticationFailureHandler defaultAuthenticationFailureHandler;
 
-//    @Autowired
-//    private SystemUserAuthentcationProvider systemUserAuthenticationProvider;
     @Autowired
-    private SystemUserDetailsService systemUserDetailsService;
+    private SystemUserDetailsService systemUserDetailsServiceImpl;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -46,9 +44,9 @@ public class JsonAuthenticationConfigurer extends SecurityConfigurerAdapter<Defa
         // 自定义systemUserAuthenticationProvider， 并为Provider 设置 systemUserDetailsService
         SystemUserAuthenticationProvider systemUserAuthenticationProvider = new SystemUserAuthenticationProvider();
         systemUserAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
-        systemUserAuthenticationProvider.setUserDetailsService(systemUserDetailsService);
+        systemUserAuthenticationProvider.setSystemUserDetailsService(systemUserDetailsServiceImpl);
         http.authenticationProvider(systemUserAuthenticationProvider)
-                .addFilterAfter(jsonAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterAfter(jsonAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 }
