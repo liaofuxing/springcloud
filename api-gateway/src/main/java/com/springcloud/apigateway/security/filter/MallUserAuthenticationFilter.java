@@ -2,7 +2,7 @@ package com.springcloud.apigateway.security.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.springcloud.apigateway.security.provider.SmsCodeAuthenticationToken;
+import com.springcloud.apigateway.security.provider.MallUserAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -24,10 +24,9 @@ import java.io.InputStreamReader;
  * @author liaofuxing
  * @date 2020/02/28 20:21
  */
-public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-
-    public SmsCodeAuthenticationFilter() {
-        super(new AntPathRequestMatcher("/user/phoneLogin", "POST"));
+public class MallUserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    public MallUserAuthenticationFilter() {
+        super(new AntPathRequestMatcher("/user/mallUserLogin", "POST"));
     }
 
     @Override
@@ -50,18 +49,18 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         }
 
         JSONObject jsonObject = JSON.parseObject(sb.toString());
-        String phone = jsonObject.getString("phone");
-        String smsCode = jsonObject.getString("smsCode");
+        String username = jsonObject.getString("username");
+        String password = jsonObject.getString("password");
 
 
         //创建SmsCodeAuthenticationToken(未认证)
-        SmsCodeAuthenticationToken authenticationToken = new SmsCodeAuthenticationToken(phone, smsCode);
+        MallUserAuthenticationToken authenticationToken = new MallUserAuthenticationToken(username, password);
         //设置用户信息
         setDetails(request, authenticationToken);
         return this.getAuthenticationManager().authenticate(authenticationToken);
     }
 
-    protected void setDetails(HttpServletRequest request, SmsCodeAuthenticationToken authRequest) {
+    protected void setDetails(HttpServletRequest request, MallUserAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 

@@ -5,28 +5,27 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
+public class MallUserAuthenticationToken extends AbstractAuthenticationToken {
     private static final long serialVersionUID = 2383092775910246006L;
 
     /**
-     * 手机号
+     * 用户名
      */
     private final Object principal;
 
     /**
-     * 验证码
+     * 密码
      */
-    private String smsCode;
+    private Object credentials;;
 
     /**
      * SmsCodeAuthenticationFilter中构建的未认证的Authentication
-     * @param phone 手机号
-     * @param smsCode 验证码
+     * @param username
      */
-    public SmsCodeAuthenticationToken(String phone, String smsCode) {
+    public MallUserAuthenticationToken(String username, String password) {
         super(null);
-        this.principal = phone;
-        this.smsCode = smsCode;
+        this.principal = username;
+        this.credentials = password;
         setAuthenticated(false);
     }
 
@@ -35,8 +34,8 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
      * @param principal
      * @param authorities
      */
-    public SmsCodeAuthenticationToken(Object principal,
-                                      Collection<? extends GrantedAuthority> authorities) {
+    public MallUserAuthenticationToken(Object principal,
+                                       Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         super.setAuthenticated(true); // must use super, as we override
@@ -44,7 +43,7 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return this.credentials;
     }
 
     @Override
@@ -52,12 +51,8 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
         return this.principal;
     }
 
-    public String getSmsCode() {
-        return smsCode;
-    }
-
-    public void setSmsCode(String smsCode) {
-        this.smsCode = smsCode;
+    public void setCredentials(Object credentials) {
+        this.credentials = credentials;
     }
 
     /**

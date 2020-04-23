@@ -44,6 +44,7 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
                 // redis 中存在用户信息,将凭证有效时间延长
                 redisUtils.expire(UserTokenEnums.USER_INFO.getCode() + token, 30, TimeUnit.MINUTES);
                 redisUtils.expire(UserTokenEnums.SECURITY_TOKEN.getCode() + userMap.get("username"), 30, TimeUnit.MINUTES);
+                // 设置一个已认证的 authentication
                 authentication = new UsernamePasswordAuthenticationToken(securityUser,
                         null, securityUser.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

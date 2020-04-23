@@ -1,5 +1,6 @@
 package com.springcloud.apigateway.security.provider;
 
+import com.springcloud.apigateway.common.AuthenticationChecks;
 import com.springcloud.apigateway.security.service.UserSmsDetailsService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -8,6 +9,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * 短信验证码登录验证器
+ *
+ * @author liaofuxing
+ * @date 2020/04/24 01:50
+ */
 public class UserSmsAuthenticationProvider implements AuthenticationProvider {
 
 
@@ -24,11 +31,9 @@ public class UserSmsAuthenticationProvider implements AuthenticationProvider {
         if (user == null) {
             throw new InternalAuthenticationServiceException("无法获取用户信息");
         }
-        // 应该在这里处理登录逻辑
-        String smsCode = redisTemplate.opsForValue().get("SMS_CODE:"+ authenticationToken.getPrincipal());
-        if (smsCode == null || !smsCode.equals(authenticationToken.getSmsCode())) {
-            throw new InternalAuthenticationServiceException("验证码错误");
-        }
+
+        // 校验验证码
+        AuthenticationChecks.smsCodeAuthenticationChecks(authenticationToken, redisTemplate);
 
         //如果user不为空重新构建SmsCodeAuthenticationToken（已认证）
         SmsCodeAuthenticationToken authenticationResult = new SmsCodeAuthenticationToken(user, user.getAuthorities());

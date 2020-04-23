@@ -1,163 +1,83 @@
 package com.springcloud.apigateway.security.provider;
 
+import com.springcloud.apigateway.common.AuthenticationChecks;
 import com.springcloud.apigateway.security.service.SystemUserDetailsService;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsPasswordService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.Assert;
 
-public class SystemUserAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+/**
+ * 短信验证码登录验证器
+ *
+ * @author liaofuxing
+ * @date 2020/04/24 01:50
+ */
+public class SystemUserAuthenticationProvider implements AuthenticationProvider {
 
-
-
-    // ~ Static fields/initializers
-    // =====================================================================================
-
-    /**
-     * The plaintext password used to perform
-     * PasswordEncoder#matches(CharSequence, String)}  on when the user is
-     * not found to avoid SEC-2056.
-     */
-    private static final String USER_NOT_FOUND_PASSWORD = "userNotFoundPassword";
-
-    // ~ Instance fields
-    // ================================================================================================
-
-    private PasswordEncoder passwordEncoder;
-
-    /**
-     * The password used to perform
-     * {@link PasswordEncoder#matches(CharSequence, String)} on when the user is
-     * not found to avoid SEC-2056. This is necessary, because some
-     * {@link PasswordEncoder} implementations will short circuit if the password is not
-     * in a valid format.
-     */
-    private volatile String userNotFoundEncodedPassword;
+    protected final Log logger = LogFactory.getLog(getClass());
 
     private SystemUserDetailsService systemUserDetailsService;
 
-    private UserDetailsPasswordService userDetailsPasswordService;
+    private PasswordEncoder passwordEncoder;
 
-    public SystemUserAuthenticationProvider() {
-        setPasswordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder());
-    }
-
-    // ~ Methods
-    // ========================================================================================================
-
-
-    @SuppressWarnings("deprecation")
-    protected void additionalAuthenticationChecks(UserDetails userDetails,
-                                                  UsernamePasswordAuthenticationToken authentication)
-            throws AuthenticationException {
-        if (authentication.getCredentials() == null) {
-            logger.debug("Authentication failed: no credentials provided");
-
-            throw new BadCredentialsException(messages.getMessage(
-                    "AbstractUserDetailsAuthenticationProvider.badCredentials",
-                    "Bad credentials"));
-        }
-
-        String presentedPassword = authentication.getCredentials().toString();
-
-        if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
-            logger.debug("Authentication failed: password does not match stored value");
-
-            throw new BadCredentialsException(messages.getMessage(
-                    "AbstractUserDetailsAuthenticationProvider.badCredentials",
-                    "Bad credentials"));
-        }
-    }
-
-    protected void doAfterPropertiesSet() {
-        Assert.notNull(this.systemUserDetailsService, "A UserDetailsService must be set");
-    }
-
-    protected final UserDetails retrieveUser(String username,
-                                             UsernamePasswordAuthenticationToken authentication)
-            throws AuthenticationException {
-        prepareTimingAttackProtection();
-        try {
-            UserDetails loadedUser = this.getUserDetailsService().loadUserBySystemUsername(username);
-            if (loadedUser == null) {
-                throw new InternalAuthenticationServiceException(
-                        "UserDetailsService returned null, which is an interface contract violation");
-            }
-            return loadedUser;
-        }
-        catch (UsernameNotFoundException ex) {
-            mitigateAgainstTimingAttack(authentication);
-            throw ex;
-        }
-        catch (InternalAuthenticationServiceException ex) {
-            throw ex;
-        }
-        catch (Exception ex) {
-            throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
-        }
-    }
+    private StringRedisTemplate redisTemplate;
 
     @Override
-    protected Authentication createSuccessAuthentication(Object principal,
-                                                         Authentication authentication, UserDetails user) {
-        boolean upgradeEncoding = this.userDetailsPasswordService != null
-                && this.passwordEncoder.upgradeEncoding(user.getPassword());
-        if (upgradeEncoding) {
-            String presentedPassword = authentication.getCredentials().toString();
-            String newPassword = this.passwordEncoder.encode(presentedPassword);
-            user = this.userDetailsPasswordService.updatePassword(user, newPassword);
-        }
-        return super.createSuccessAuthentication(principal, authentication, user);
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) authentication;
+        String username = (String) authenticationToken.getPrincipal();
+        //调用自定义的userDetailsService认证
+        UserDetails userDetails = systemUserDetailsService.loadUserByUsername(username);
+
+        AuthenticationChecks.additionalAuthenticationChecks(userDetails, authenticationToken, passwordEncoder);
+
+        //如果user不为空重新构建UsernamePasswordAuthenticationToken（已认证）
+        UsernamePasswordAuthenticationToken authenticationResult = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
+        authenticationResult.setDetails(authenticationToken.getDetails());
+        return authenticationResult;
+
     }
 
-    private void prepareTimingAttackProtection() {
-        if (this.userNotFoundEncodedPassword == null) {
-            this.userNotFoundEncodedPassword = this.passwordEncoder.encode(USER_NOT_FOUND_PASSWORD);
-        }
-    }
-
-    private void mitigateAgainstTimingAttack(UsernamePasswordAuthenticationToken authentication) {
-        if (authentication.getCredentials() != null) {
-            String presentedPassword = authentication.getCredentials().toString();
-            this.passwordEncoder.matches(presentedPassword, this.userNotFoundEncodedPassword);
-        }
-    }
 
     /**
-     * Sets the PasswordEncoder instance to be used to encode and validate passwords. If
-     * not set, the password will be compared using {@link PasswordEncoderFactories#createDelegatingPasswordEncoder()}
+     * 只有 Authentication 为 MallUserAuthenticationToken 使用此 Provider 认证
+     * @param authentication Provider
      *
-     * @param passwordEncoder must be an instance of one of the {@code PasswordEncoder}
-     * types.
+     * @return boolean
      */
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        Assert.notNull(passwordEncoder, "passwordEncoder cannot be null");
-        this.passwordEncoder = passwordEncoder;
-        this.userNotFoundEncodedPassword = null;
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    protected PasswordEncoder getPasswordEncoder() {
+
+    public PasswordEncoder getPasswordEncoder() {
         return passwordEncoder;
     }
 
-    public void setUserDetailsService(SystemUserDetailsService userDetailsService) {
-        this.systemUserDetailsService = userDetailsService;
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
-    protected SystemUserDetailsService getUserDetailsService() {
+    public SystemUserDetailsService getSystemUserDetailsService() {
         return systemUserDetailsService;
     }
 
-    public void setUserDetailsPasswordService(
-            UserDetailsPasswordService userDetailsPasswordService) {
-        this.userDetailsPasswordService = userDetailsPasswordService;
+    public void setSystemUserDetailsService(SystemUserDetailsService systemUserDetailsService) {
+        this.systemUserDetailsService = systemUserDetailsService;
+    }
+
+    public StringRedisTemplate getRedisTemplate() {
+        return redisTemplate;
+    }
+
+    public void setRedisTemplate(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
     }
 }

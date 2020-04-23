@@ -39,7 +39,7 @@ public class JsonAuthenticationFilter extends AbstractAuthenticationProcessingFi
 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setExpandEntityReferences(false);
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			try (InputStream inputStream = request.getInputStream(); BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
 				String str;
 				while ((str = bufferedReader.readLine()) != null) {
