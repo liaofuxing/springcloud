@@ -86,6 +86,26 @@ public class ResultVOUtils {
         return  new ResultVO<>(StatusCodeEnums.UNAUTHORIZED.getCode(), StatusCodeEnums.UNAUTHORIZED.getName(), object);
     }
 
+    /**
+     * 短信登录 手机号不正确  50006
+     * @param object object
+     *
+     * @return <T> ResultVO<T>
+     */
+    public static <T> ResultVO<T> sms_not_find_phone(T object) {
+        return  new ResultVO<>(StatusCodeEnums.SMS_NOT_FIND_PHONE.getCode(), StatusCodeEnums.SMS_NOT_FIND_PHONE.getName(), object);
+    }
+
+    /**
+     * 短信登录 验证码不正确  50007
+     * @param object object
+     *
+     * @return <T> ResultVO<T>
+     */
+    public static <T> ResultVO<T> sms_code_error(T object) {
+        return  new ResultVO<>(StatusCodeEnums.SMS_CODE_ERROR.getCode(), StatusCodeEnums.SMS_CODE_ERROR.getName(), object);
+    }
+
     //接口请求
 
 }

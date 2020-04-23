@@ -10,7 +10,10 @@ public enum StatusCodeEnums {
     LOGOUT_SUCCESS("注销成功",50002),
     CREDENTIALS_EXPIRED("凭证过期",50003),
     ERROR("系统出错", 50000),
-    UNAUTHORIZED("未授权", 50004);
+    UNAUTHORIZED("未授权", 50004),
+
+    SMS_NOT_FIND_PHONE("手机号不正确",50006),
+    SMS_CODE_ERROR("验证码错误",50007);
     // 成员变量
     private String name;
     private int code;
