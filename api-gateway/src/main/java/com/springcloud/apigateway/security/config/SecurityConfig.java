@@ -26,7 +26,8 @@ import org.springframework.social.security.SpringSocialConfigurer;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] excludedAuthPages = {"/user/sendSmsCode",
-            "/user/register","/css/**",
+            "/user/register",
+            "/css/**",
             "/js/**",
             "/images/**",
             "/webjars/springfox-swagger-ui/**"

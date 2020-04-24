@@ -1,9 +1,12 @@
 package com.springcloud.common.enums;
 
 public enum UserTokenEnums {
-    SECURITY_TOKEN("用户token", "SECURITY_TOKEN:"),
 
-    USER_INFO("用户信息", "USER_INFO:"),
+    SYSTEM_SECURITY_TOKEN("运营平台用户token", "SYSTEM_SECURITY_TOKEN:"),
+    SYSTEM_USER_INFO("运营平台用户信息", "SYSTEM_USER_INFO:"),
+
+    MALL_SECURITY_TOKEN("商城用户token", "MALL_SECURITY_TOKEN"),
+    MALL_USER_INFO("商城用户信息", "MALL_USER_INFO:"),
     ;
 
     // 成员变量

@@ -5,6 +5,7 @@ import com.springcloud.apigateway.security.entity.SecurityUser;
 import com.springcloud.apigateway.securityuser.malluser.entity.MallUser;
 import com.springcloud.apigateway.securityuser.malluser.service.MallUserService;
 import com.springcloud.common.entity.LoginResponseData;
+import com.springcloud.common.enums.UserTokenEnums;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcluod.rediscore.utils.RedisUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -40,10 +41,9 @@ public class MallUserAuthenticationSuccessHandler implements AuthenticationSucce
            String token = UUID.randomUUID().toString();
 
            MallUser mallUserByUsername = mallUserService.findSystemUserByUsername(user.getUsername());
-           String userInfoJsonStr = JSON.toJSONString(mallUserByUsername);
            //将用户信息存入存入redis
-           redisUtils.setEx("USER_INFO:" + token, userInfoJsonStr,30, TimeUnit.MINUTES);
-           redisUtils.setEx("SECURITY_TOKEN:" + user.getUsername(), token,30, TimeUnit.MINUTES);
+           redisUtils.setEx(UserTokenEnums.MALL_USER_INFO.getCode() + token, JSON.toJSONString(mallUserByUsername),30, TimeUnit.MINUTES);
+           redisUtils.setEx(UserTokenEnums.MALL_SECURITY_TOKEN.getCode() + user.getUsername(), token,30, TimeUnit.MINUTES);
            response.setStatus(200);
            response.setContentType("application/json;charset=UTF-8");
            LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);

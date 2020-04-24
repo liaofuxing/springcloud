@@ -5,6 +5,7 @@ import com.springcloud.apigateway.security.entity.SecurityUser;
 import com.springcloud.apigateway.securityuser.systemuser.entity.SystemUser;
 import com.springcloud.apigateway.securityuser.systemuser.service.SystemUserService;
 import com.springcloud.common.entity.LoginResponseData;
+import com.springcloud.common.enums.UserTokenEnums;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcluod.rediscore.utils.RedisUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -42,8 +43,8 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
            SystemUser systemUserByUsername = systemUserService.findSystemUserByUsername(user.getUsername());
            String userInfoJsonStr = JSON.toJSONString(systemUserByUsername);
            //将用户信息存入存入redis
-           redisUtils.setEx("USER_INFO:" + token, userInfoJsonStr,30, TimeUnit.MINUTES);
-           redisUtils.setEx("SECURITY_TOKEN:" + user.getUsername(), token,30, TimeUnit.MINUTES);
+           redisUtils.setEx(UserTokenEnums.SYSTEM_USER_INFO.getCode() + token, userInfoJsonStr,30, TimeUnit.MINUTES);
+           redisUtils.setEx(UserTokenEnums.SYSTEM_SECURITY_TOKEN.getCode() + user.getUsername(), token,30, TimeUnit.MINUTES);
            response.setStatus(200);
            response.setContentType("application/json;charset=UTF-8");
            LoginResponseData responseData = new LoginResponseData(user.getUsername(), token);

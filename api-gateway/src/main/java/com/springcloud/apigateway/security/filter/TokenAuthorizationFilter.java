@@ -37,13 +37,13 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
         if (!StringUtils.isEmpty(token)) {
             //用token从redis中获取用户信息，构造一个SecurityUser
             RedisUtils redisUtils = new RedisUtils(redisTemplate);
-            String userInfoStr = redisUtils.get(UserTokenEnums.USER_INFO.getCode() + token);
+            String userInfoStr = redisUtils.get(UserTokenEnums.SYSTEM_USER_INFO.getCode() + token);
             if (userInfoStr != null) {
                 Map<String, String> userMap = (Map<String, String>) JSONObject.parse(userInfoStr);
                 SecurityUser securityUser = new SecurityUser(userMap.get("username"), userMap.get("password"));
                 // redis 中存在用户信息,将凭证有效时间延长
-                redisUtils.expire(UserTokenEnums.USER_INFO.getCode() + token, 30, TimeUnit.MINUTES);
-                redisUtils.expire(UserTokenEnums.SECURITY_TOKEN.getCode() + userMap.get("username"), 30, TimeUnit.MINUTES);
+                redisUtils.expire(UserTokenEnums.SYSTEM_USER_INFO.getCode() + token, 30, TimeUnit.MINUTES);
+                redisUtils.expire(UserTokenEnums.SYSTEM_SECURITY_TOKEN.getCode() + userMap.get("username"), 30, TimeUnit.MINUTES);
                 // 设置一个已认证的 authentication
                 authentication = new UsernamePasswordAuthenticationToken(securityUser,
                         null, securityUser.getAuthorities());

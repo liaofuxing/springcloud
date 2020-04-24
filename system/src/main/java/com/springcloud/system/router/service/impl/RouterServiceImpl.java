@@ -209,7 +209,7 @@ public class RouterServiceImpl implements RouterService {
      */
     public List<Integer> getMenuRoleByLoginUser(String token) {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
-        String userInfoStr = redisUtils.get(UserTokenEnums.USER_INFO.getCode() + token);
+        String userInfoStr = redisUtils.get(UserTokenEnums.SYSTEM_USER_INFO.getCode() + token);
         JSONObject jsonObject = JSONObject.parseObject(userInfoStr);
         SystemUser systemUser = JSON.toJavaObject(jsonObject, SystemUser.class);
 

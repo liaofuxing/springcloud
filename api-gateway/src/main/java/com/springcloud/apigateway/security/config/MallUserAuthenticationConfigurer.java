@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 /**
- * 短信验证码登录配置器
+ * 商城用户登录配置器
  *
  * @author liaofuxing
  * @date 2020/02/28 20:13
@@ -41,8 +41,7 @@ public class MallUserAuthenticationConfigurer extends SecurityConfigurerAdapter<
         mallUserAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
         mallUserAuthenticationFilter.setAuthenticationSuccessHandler(mallUserAuthenticationSuccessHandler);
         mallUserAuthenticationFilter.setAuthenticationFailureHandler(defaultAuthenticationFailureHandler);
-
-        // 自定义userSmsAuthenticationProvider， 并为Provider 设置 userSmsDetailsService
+        // 自定义mallUserAuthenticationProvider， 并为Provider 设置 mallUserDetailsServiceImpl
         MallUserAuthenticationProvider mallUserAuthenticationProvider = new MallUserAuthenticationProvider();
         mallUserAuthenticationProvider.setMallUserDetailsService(mallUserDetailsServiceImpl);
         mallUserAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());

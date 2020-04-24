@@ -206,7 +206,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Override
     public List<SystemUserVO> userOnline() {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
-        Set<String> keys = redisUtils.keys(UserTokenEnums.USER_INFO.getCode()+"*");
+        Set<String> keys = redisUtils.keys(UserTokenEnums.SYSTEM_USER_INFO.getCode()+"*");
         List<Integer> idList = new ArrayList<>();
         for (String key: keys) {
             String userInfoStr = redisUtils.get(key);
@@ -228,9 +228,9 @@ public class SystemUserServiceImpl implements SystemUserService {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
         Optional<SystemUser> byId = systemUserDao.findById(userId);
         SystemUser systemUser = byId.get();
-        String token = redisUtils.get(UserTokenEnums.SECURITY_TOKEN.getCode() + systemUser.getUsername());
-        redisUtils.delete(UserTokenEnums.USER_INFO.getCode() + token);
-        redisUtils.delete(UserTokenEnums.SECURITY_TOKEN.getCode() + systemUser.getUsername());
+        String token = redisUtils.get(UserTokenEnums.SYSTEM_SECURITY_TOKEN.getCode() + systemUser.getUsername());
+        redisUtils.delete(UserTokenEnums.SYSTEM_USER_INFO.getCode() + token);
+        redisUtils.delete(UserTokenEnums.SYSTEM_SECURITY_TOKEN.getCode() + systemUser.getUsername());
         return this.userOnline();
     }
 

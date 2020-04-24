@@ -30,15 +30,15 @@ public class TokenLogoutSuccessHandler implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException , ServletException {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
         String requestToken = request.getHeader("token");
-        String userInfoStr = redisUtils.get(UserTokenEnums.USER_INFO.getCode() + requestToken);
+        String userInfoStr = redisUtils.get(UserTokenEnums.SYSTEM_USER_INFO.getCode() + requestToken);
 
         SystemUser user = JSON.toJavaObject( JSONObject.parseObject(userInfoStr), SystemUser.class);
 
-        String token = redisUtils.get(UserTokenEnums.SECURITY_TOKEN.getCode() + user.getUsername());
+        String token = redisUtils.get(UserTokenEnums.SYSTEM_SECURITY_TOKEN.getCode() + user.getUsername());
         if(!StringUtils.isEmpty(token)){
             // 将redis 上的缓存信息设置为即将过期
-            redisUtils.expire(UserTokenEnums.USER_INFO.getCode() + token, 0 , TimeUnit.MICROSECONDS);
-            redisUtils.expire(UserTokenEnums.SECURITY_TOKEN.getCode() + user.getUsername(), 0 , TimeUnit.MICROSECONDS);
+            redisUtils.expire(UserTokenEnums.SYSTEM_USER_INFO.getCode() + token, 0 , TimeUnit.MICROSECONDS);
+            redisUtils.expire(UserTokenEnums.SYSTEM_SECURITY_TOKEN.getCode() + user.getUsername(), 0 , TimeUnit.MICROSECONDS);
         }
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().print(JSON.toJSONString(ResultVOUtils.logout_success(null)));
