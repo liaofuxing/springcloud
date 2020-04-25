@@ -1,5 +1,6 @@
 package com.springcloud.generatecode.generate.web;
 
+import com.springcloud.common.enums.UserTokenEnums;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
 import com.springcloud.common.vo.SelectFormatVO;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -45,7 +49,7 @@ public class GenerateCodeController {
     @PostMapping("/generateCode")
     @ResponseBody
     public void generateCode(@RequestBody GenerateCodeDto generateCodeDto, HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        String token = request.getHeader("token");
+        String token = request.getHeader(UserTokenEnums.TOKEN.getCode());
         generateCodeService.generateCode(generateCodeDto, token);
         File file = new File(generateProperties.getGenerateFileRootPath() + token + "zip"+ "/"+generateCodeDto.getTableName()+".zip");
         FileInputStream fis = null;

@@ -32,7 +32,7 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws IOException, ServletException {
         //从请求头中取出token
-        String token = request.getHeader("token");
+        String token = request.getHeader(UserTokenEnums.TOKEN.getCode());
         UsernamePasswordAuthenticationToken authentication;
         if (!StringUtils.isEmpty(token)) {
             //用token从redis中获取用户信息，构造一个SecurityUser

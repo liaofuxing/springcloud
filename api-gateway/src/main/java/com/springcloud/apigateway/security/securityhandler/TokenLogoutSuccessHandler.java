@@ -29,7 +29,7 @@ public class TokenLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException , ServletException {
         RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
-        String requestToken = request.getHeader("token");
+        String requestToken = request.getHeader(UserTokenEnums.TOKEN.getCode());
         String userInfoStr = redisUtils.get(UserTokenEnums.SYSTEM_USER_INFO.getCode() + requestToken);
 
         SystemUser user = JSON.toJavaObject( JSONObject.parseObject(userInfoStr), SystemUser.class);

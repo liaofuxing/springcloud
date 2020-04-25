@@ -36,7 +36,7 @@ public class SystemUserController {
     @GetMapping("/info")
     @ResponseBody
     public String getUserInfoByToken(HttpServletRequest request, HttpServletResponse response){
-        String token = request.getHeader("token");
+        String token = request.getHeader(UserTokenEnums.TOKEN.getCode());
         String userInfoStr = stringRedisTemplate.opsForValue().get(UserTokenEnums.SYSTEM_USER_INFO.getCode() + token);
         ResultVO<SystemUser> resultVO;
         if(!StringUtils.isEmpty(userInfoStr)){

@@ -697,7 +697,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
     /**
      *
-     * Basic基础模板替换
+     * 分页模板替换
      *
      * @param generateCodeDto 代码生成器参数
      * @return str 处理完成的模板字符流

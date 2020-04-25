@@ -1,19 +1,25 @@
 package com.springcloud.apigateway.common;
 
 import com.springcloud.apigateway.security.provider.SmsCodeAuthenticationToken;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * 密码校验器
+ *
+ * @author liaofuxing
+ * @date 2020/02/18 11:50
+ *
+ */
 public class AuthenticationChecks {
 
-    protected static final Log logger = LogFactory.getLog(AuthenticationChecks.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationChecks.class);
 
     /**
      * 默认的密码校验方法
@@ -28,7 +34,7 @@ public class AuthenticationChecks {
                                                       PasswordEncoder passwordEncoder)
             throws AuthenticationException {
         if (authentication.getCredentials() == null) {
-            logger.debug("Authentication failed: no credentials provided");
+            LOGGER.debug("Authentication failed: no credentials provided");
 
             throw new BadCredentialsException("错误的凭证");
         }
@@ -36,7 +42,7 @@ public class AuthenticationChecks {
         String presentedPassword = authentication.getCredentials().toString();
 
         if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
-            logger.debug("Authentication failed: password does not match stored value");
+            LOGGER.debug("Authentication failed: password does not match stored value");
 
             throw new BadCredentialsException("密码不正确");
         }
@@ -47,14 +53,16 @@ public class AuthenticationChecks {
      *
      * @param authentication  MallUserAuthenticationToken
      * @param redisTemplate  rides 操作工具
-     * @throws AuthenticationException
+     * @throws AuthenticationException 校验失败异常
      */
     public static void smsCodeAuthenticationChecks(SmsCodeAuthenticationToken authentication,
                                                    StringRedisTemplate redisTemplate) throws AuthenticationException {
         // 应该在这里处理登录逻辑
         String smsCode = redisTemplate.opsForValue().get("SMS_CODE:"+ authentication.getPrincipal());
         if (smsCode == null || !smsCode.equals(authentication.getSmsCode())) {
-            throw new InternalAuthenticationServiceException("验证码错误");
+            LOGGER.debug("Authentication failed: smsCode error");
+
+            throw new BadCredentialsException("验证码错误");
         }
     }
 }

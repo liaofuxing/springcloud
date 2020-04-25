@@ -1,11 +1,12 @@
 package com.springcloud.system.router.web;
 
+import com.springcloud.common.enums.UserTokenEnums;
 import com.springcloud.common.utils.ResultVOUtils;
 import com.springcloud.common.vo.ResultVO;
 import com.springcloud.system.router.dto.Menu2RouterDto;
+import com.springcloud.system.router.service.RouterService;
 import com.springcloud.system.router.vo.Router2TreeVO;
 import com.springcloud.system.router.vo.RouterVO;
-import com.springcloud.system.router.service.RouterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class RouterController {
     @ResponseBody
     public ResultVO<List<RouterVO>> getRouters(HttpServletRequest request) {
         LOGGER.info("收到请求...");
-        String token = request.getHeader("token");
+        String token = request.getHeader(UserTokenEnums.TOKEN.getCode());
         List<RouterVO> routerVos = routerService.getRouters(token);
         if (!routerVos.isEmpty()) {
             return ResultVOUtils.success(routerVos);
