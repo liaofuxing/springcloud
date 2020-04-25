@@ -62,19 +62,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     /**
      * 根据userId 查询角色
      *
-     * @param userId
-     * @return
+     * @param userId userId
+     * @return Department
      */
     @Override
     public Department findDepartmentByUserId(Integer userId) {
         SystemUserDepartment systemUserDepartmentBySystemUserId = systemUserDepartmentService.findSystemUserDepartmentBySystemUserId(userId);
         Optional<Department> byId = departmentRepository.findById(systemUserDepartmentBySystemUserId.getDepartmentId());
-        return byId.get();
+        return byId.orElse(null);
     }
 
-    /**
-     * 分页查询
-     */
+
     /**
      * 角色分页查询
      *
@@ -113,7 +111,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void editDepartment(DepartmentDto departmentDto) {
         Optional<Department> byId = departmentRepository.findById(departmentDto.getId());
-        Department departmentDB = byId.get();
+        Department departmentDB = byId.orElse(new Department());
         BeanCopyUtil.copyProperties(departmentDto, departmentDB);
 //        BeanUtils.copyProperties(departmentDto, departmentDB);
         departmentRepository.save(departmentDB);

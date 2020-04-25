@@ -106,13 +106,13 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     public RoleInfo findRoleInfoByUserId(Integer userId) {
         SystemUserRole systemUserRoleBySystemUserId = systemUserRoleService.findSystemUserRoleBySystemUserId(userId);
         Optional<RoleInfo> byId = roleInfoRepository.findById(systemUserRoleBySystemUserId.getRoleId());
-        return byId.get();
+        return byId.orElse(null);
     }
 
     /**
      * 新增角色
      *
-     * @param roleInfoDto
+     * @param roleInfoDto roleInfoDto
      */
     @Transactional
     @Override
@@ -129,13 +129,13 @@ public class RoleInfoServiceImpl implements RoleInfoService {
     /**
      * 编辑角色
      *
-     * @param roleInfoDto
+     * @param roleInfoDto roleInfoDto
      */
     @Transactional
     @Override
     public void editRole(RoleInfoDto roleInfoDto) {
         Optional<RoleInfo> byId = roleInfoRepository.findById(roleInfoDto.getId());
-        RoleInfo roleInfoDB = byId.get();
+        RoleInfo roleInfoDB = byId.orElse(new RoleInfo());
         BeanUtils.copyProperties(roleInfoDto, roleInfoDB);
         roleInfoRepository.save(roleInfoDB);
 

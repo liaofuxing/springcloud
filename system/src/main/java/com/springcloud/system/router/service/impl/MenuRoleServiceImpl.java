@@ -49,9 +49,9 @@ public class MenuRoleServiceImpl implements MenuRoleService {
 
 
     /**
+     * 根据 roleId 查询角色和菜单关系
      *
-     *
-     * @return
+     * @return MenuRole 菜单和角色中间表
      */
     public MenuRole findMenuRole(Integer roleId) {
         return menuRoleDao.findByRoleId(roleId);
@@ -59,8 +59,8 @@ public class MenuRoleServiceImpl implements MenuRoleService {
 
     /**
      *
+     * 新增角色和菜单关系
      *
-     * @return
      */
     @Transactional
     public void addMenuRole(MenuRole menuRole) {

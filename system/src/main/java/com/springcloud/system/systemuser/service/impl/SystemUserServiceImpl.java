@@ -74,8 +74,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     //@Cacheable(value = "spring-cloud-system", key = "'user_'+#systemUserId")
     @Override
     public SystemUser findSystemUserById(Integer systemUserId) {
-        System.out.println("测试缓存");
-        return systemUserDao.findById(systemUserId).get();
+        return systemUserDao.findById(systemUserId).orElse(null);
     }
 
     /**

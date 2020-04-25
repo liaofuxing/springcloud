@@ -24,7 +24,7 @@ public class CommodityCategoryServiceImpl implements CommodityCategoryService {
      */
     @Override
     public CommodityCategory findCommodityCategoryById(Integer categoryId) {
-        return commodityCategoryRepository.findById(categoryId).get();
+        return commodityCategoryRepository.findById(categoryId).orElse(null);
     }
 
     /**
